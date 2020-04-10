@@ -1,0 +1,4 @@
+web:
+  image: vanmirror/vans:dev
+  ports:
+    - "8085:3000"
