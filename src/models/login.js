@@ -1,5 +1,6 @@
 import router from 'umi/router';
 import { notification } from 'antd';
+import Cookies from 'js-cookie';
 import { login } from '@/services/login';
 
 
@@ -19,6 +20,8 @@ export default {
       try {
         const { username, password, remember } = payload;
         const { code, data } = yield call(login, { username, password });
+        const { token } = data;
+        Cookies.set('token', token, { expires: 7 });
         if (code) {
           if (remember) {
             localStorage.setItem('username', username);
@@ -30,7 +33,7 @@ export default {
             description: '登录成功',
             placement: 'topRight',
           });
-          router.push('/index');
+          router.push('/dashboard');
         }
       } catch (err) {
         console.log(err);

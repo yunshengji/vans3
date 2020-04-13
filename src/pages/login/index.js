@@ -29,7 +29,7 @@ class Login extends React.Component {
     return (
       <div className={styles.root}>
         <div className={styles.formWrap}>
-          <img src={require('@/assets/system-name.png')} alt="万铭星系统"/>
+          <img src="system-name.png" alt="万铭星系统"/>
           <Form onSubmit={this.handleSubmit}>
             <Form.Item>
               {getFieldDecorator('username', { rules: [{ required: true, message: '请输入用户名！' }] })(
