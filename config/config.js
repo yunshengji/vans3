@@ -9,7 +9,7 @@ export default {
       path: '/',
       component: '../layouts/BasicLayout',
       routes: [
-        { path: '/dashboard', component: '../pages/dashboard' },
+        { path: '/dashboard', component: './dashboard' },
       ],
     },
   ],
@@ -17,7 +17,7 @@ export default {
     ['umi-plugin-react', {
       antd: true,
       dva: true,
-      dynamicImport: { webpackChunkName: true, loadingComponent: '../src/components/routeLoading' },
+      dynamicImport: { webpackChunkName: true, loadingComponent: './components/RouteLoading' },
       dll: true,
     }],
   ],

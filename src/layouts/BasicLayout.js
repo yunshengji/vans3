@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'umi/link';
 import { connect } from 'dva';
 import { Layout, Menu, Icon } from 'antd';
 import styles from './BasicLayout.less';
@@ -19,33 +20,27 @@ class BasicLayout extends React.Component {
       isCollapsed: collapsed,
     }));
   };
-  // TODO:Logo改为链接
   // TODO:403、404、500页面
   // TODO:Header通知消息、用户头像、注销、个人中心、个人设置等
-  // TODO:用户信息存储global模型中，登录成功的钩子函数请求数据并更新
   // TODO:自定义BasicLayout以使其自由适配无需纵向满屏的页面
   // TODO:导航栏图标和功能具名化
-  // TODO:解决部署后网页图标失效的问题
+
+  // TODO:解决部署后网页图标失效的问题 Fixed
+  // TODO:Logo改为链接 Fixed
+  // TODO:用户信息存储global模型中，登录成功的钩子函数请求数据并更新
 
   render() {
     return (
       <Layout>
-        <Sider width="220"
-               collapsible
-               breakpoint="lg"
-               onCollapse={this.onCollapse}>
-          <div className={styles.logo}>
+        <Sider width="220" collapsible breakpoint="lg" onCollapse={this.onCollapse}>
+          <Link className={styles.logo} to="/">
             {
               this.state.isCollapsed ?
                 <img src="/logo.png" alt="W"/> :
                 <img src="/system-name.png" alt="W"/>
             }
-          </div>
-          <Menu
-            className={styles.menu}
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={['1']}>
+          </Link>
+          <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
               <Icon type="user"/>
               <span>工作台</span>

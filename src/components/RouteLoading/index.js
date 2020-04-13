@@ -2,7 +2,7 @@ import React from 'react';
 import { Spin } from 'antd';
 import styles from './index.less';
 
-class PageLoading extends React.Component {
+class RouteLoading extends React.Component {
   render() {
     return (
       <div className={styles.root}>
@@ -12,4 +12,4 @@ class PageLoading extends React.Component {
   }
 }
 
-export default PageLoading;
+export default RouteLoading;
