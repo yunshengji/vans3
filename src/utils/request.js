@@ -1,9 +1,7 @@
-/**
- * request 网络请求工具
- * 更详细的 api 文档: https://github.com/umijs/umi-request
- */
 import { extend } from 'umi-request';
+import { history } from 'umi';
 import { notification } from 'antd';
+import { prefix } from '../../config/api';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -22,36 +20,55 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
 /**
  * 异常处理程序
  */
-
 const errorHandler = error => {
   const { response } = error;
 
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
+    const { pathname } = window.location;
+    switch (status) {
+      case 401:
+        history.push(`/Login?from=${pathname}`);
+        notification.info({
+          message: '认证失败',
+          description: '登录信息已过期，请重新登录',
+        });
+        break;
+      case 403:
+        history.push(`/403?from=${pathname}`);
+        break;
+      case 404:
+        history.push(`/404?from=${pathname}`);
+        break;
+      case 500:
+        history.push(`/500?from=${pathname}`);
+        break;
+      default:
+        notification.warn({
+          message: `请求错误 ${status}: ${url}`,
+          description: errorText,
+        });
+        break;
+    }
   } else if (!response) {
     notification.error({
-      description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
+      description: '您的网络发生异常，无法连接服务器',
     });
   }
 
   return response;
 };
-/**
- * 配置request请求时的默认参数
- */
 
 const request = extend({
   errorHandler,
-  // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  prefix,
+  timeout: 3000,
+  credentials: 'include', // 默认请求带上cookie
 });
 export default request;

@@ -1,7 +1,8 @@
 import React from 'react';
-import Link from 'umi/link';
+import {Link} from 'umi';
 import { connect } from 'dva';
 import { Layout, Menu, Icon } from 'antd';
+import GlobalHeader from '@/components/GlobalHeader';
 import styles from './BasicLayout.less';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -15,19 +16,21 @@ class BasicLayout extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({ type: 'Global/eGetMe' });
+  }
+
   onCollapse = (collapsed) => {
     this.setState(() => ({
       isCollapsed: collapsed,
     }));
   };
-  // TODO:403、404、500页面
-  // TODO:Header通知消息、用户头像、注销、个人中心、个人设置等
-  // TODO:自定义BasicLayout以使其自由适配无需纵向满屏的页面
-  // TODO:导航栏图标和功能具名化
 
-  // TODO:解决部署后网页图标失效的问题 Fixed
-  // TODO:Logo改为链接 Fixed
-  // TODO:用户信息存储global模型中，登录成功的钩子函数请求数据并更新
+  // TODO:Header通知消息
+  // TODO:导航栏图标和功能具名化，点击进行路由跳转
+  // TODO:npx npx npx
+
 
   render() {
     return (
@@ -37,7 +40,7 @@ class BasicLayout extends React.Component {
             {
               this.state.isCollapsed ?
                 <img src="/logo.png" alt="W"/> :
-                <img src="/system-name.png" alt="W"/>
+                <img src="/system-name.svg" alt="W"/>
             }
           </Link>
           <Menu className={styles.menu} theme="dark" mode="inline" defaultSelectedKeys={['1']}>
@@ -59,12 +62,16 @@ class BasicLayout extends React.Component {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout>
-          <Header className={styles.header}/>
+        <Layout className={styles.main}>
+          <Header className={styles.header}>
+            <GlobalHeader/>
+          </Header>
           <Content className={styles.content}>
             {this.props.children}
           </Content>
-          <Footer style={{ textAlign: 'center' }}>万铭星系统 ©2020 万铭技术部出品</Footer>
+          <Footer style={{ textAlign: 'center' }}>
+            万铭星系统 <Icon type="copyright"/> 2020 万铭技术部出品
+          </Footer>
         </Layout>
       </Layout>
     );
@@ -72,6 +79,7 @@ class BasicLayout extends React.Component {
 
 }
 
-export default connect(({ settings }) => ({
-  ...settings,
+export default connect(({ loading, Global }) => ({
+  loading,
+  // Global,
 }))(BasicLayout);

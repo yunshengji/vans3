@@ -1,15 +1,15 @@
 export default {
   treeShaking: true,
   routes: [
-    {
-      path: '/login',
-      component: './login',
-    },
+    { path: '/Login', component: './Login' },
     {
       path: '/',
       component: '../layouts/BasicLayout',
       routes: [
-        { path: '/dashboard', component: './dashboard' },
+        { path: '/403', component: './403' },
+        { path: '/404', component: './404' },
+        { path: '/500', component: './500' },
+        { path: '/Dashboard', component: './Dashboard' },
       ],
     },
   ],
