@@ -49,7 +49,7 @@ export default {
         message: 'success',
         data: {
           username: 'dengqiyao',
-          nickname: 'Jayden Deng',
+          nickname: '郑晓媛',
           avatar: 'https://secure.gravatar.com/avatar/d99aea9fb2d3789b950b80483d37e37a?s=220&r=X&d=mm',
           role: 'admin',
         },

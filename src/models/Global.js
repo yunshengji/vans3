@@ -21,7 +21,6 @@ export default {
       try {
         const { data } = yield call(GetMe);
         yield put({ type: 'rUpdateState', payload: data });
-        console.log(data);
       } catch (err) {
         console.log(err);
       }

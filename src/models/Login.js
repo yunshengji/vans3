@@ -1,5 +1,5 @@
-import {router} from 'umi';
-import { notification } from 'antd';
+import { router } from 'umi';
+import { message } from 'antd';
 import Cookies from 'js-cookie';
 import { Login } from '@/services/Login';
 
@@ -28,13 +28,10 @@ export default {
           } else {
             localStorage.removeItem('username');
           }
-          notification.success({
-            message: 'Notification Message',
-            description: '登录成功',
-          });
+          message.success('登录成功！');
           const query = new URLSearchParams(window.location.search);
           const from = query.get('from');
-          router.push(from || '/Dashboard');
+          router.push(from || '/dashboard');
         }
       } catch (err) {
         console.log(err);

@@ -1,5 +1,5 @@
 import { extend } from 'umi-request';
-import { history } from 'umi';
+import { router } from 'umi';
 import { notification } from 'antd';
 import { prefix } from '../../config/api';
 
@@ -33,24 +33,21 @@ const errorHandler = error => {
     const { pathname } = window.location;
     switch (status) {
       case 401:
-        history.push(`/Login?from=${pathname}`);
+        router.push(`/login?from=${pathname}`);
         notification.info({
           message: '认证失败',
           description: '登录信息已过期，请重新登录',
         });
         break;
       case 403:
-        history.push(`/403?from=${pathname}`);
-        break;
-      case 404:
-        history.push(`/404?from=${pathname}`);
+        router.push(`/403?from=${pathname}`);
         break;
       case 500:
-        history.push(`/500?from=${pathname}`);
+        router.push(`/500?from=${pathname}`);
         break;
       default:
         notification.warn({
-          message: `请求错误 ${status}: ${url}`,
+          message: `请求错误：${status}\n路径：${url}`,
           description: errorText,
         });
         break;
