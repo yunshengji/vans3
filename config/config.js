@@ -6,9 +6,9 @@ export default {
       path: '/',
       component: '../layouts/BasicLayout',
       routes: [
-        { path: '/403', component: './403' },
-        { path: '/404', component: './404' },
-        { path: '/500', component: './500' },
+        { path: '/403', component: './Exception/403' },
+        { path: '/404', component: './Exception//404' },
+        { path: '/500', component: './Exception//500' },
         { path: '/Dashboard', component: './Dashboard' },
       ],
     },
