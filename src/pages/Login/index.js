@@ -16,7 +16,7 @@ class Login extends React.Component {
       if (!err) {
         const { username, password, remember } = values;
         dispatch({
-          type: 'Login/eLogin',
+          type: 'login/eLogin',
           payload: { username, password, remember },
         });
       }
@@ -74,5 +74,5 @@ class Login extends React.Component {
 const WrappedLogin = Form.create({ name: 'login' })(Login);
 
 export default connect(({ loading }) => ({
-  submitting: loading.effects['Login/eLogin'],
+  submitting: loading.effects['login/eLogin'],
 }))(WrappedLogin);

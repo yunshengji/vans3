@@ -1,12 +1,12 @@
 import { router } from 'umi';
 import { message } from 'antd';
 import Cookies from 'js-cookie';
-import { Login } from '@/services/Login';
+import { Login } from '@/services/login';
 
 
 export default {
 
-  namespace: 'Login',
+  namespace: 'login',
 
   state: {},
 

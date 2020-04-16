@@ -13,3 +13,29 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
+
+.globalDrawerMenu {
+  .ant-drawer-body {
+    padding: 0;
+
+    .globalDrawerMenuWrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: auto;
+
+      > a {
+        padding: 20px 40px;
+        background-color: #001429;
+
+        img {
+          width: 100%;
+        }
+      }
+
+      > ul {
+        flex: 1;
+      }
+    }
+  }
+}

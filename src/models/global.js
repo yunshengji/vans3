@@ -1,11 +1,13 @@
-import { GetMe } from '@/services/Global';
+import { GetMe } from '@/services/global';
 
 
 export default {
 
-  namespace: 'Global',
+  namespace: 'global',
 
   state: {
+    menuCollapsed: false,
+    drawerMenuVisible: false,
     // User info
     nickname: '',
     avatar: '',

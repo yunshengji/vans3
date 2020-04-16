@@ -9,6 +9,13 @@ class GlobalHeader extends React.Component {
   state = {
     loading: false,
   };
+  controlDrawerMenuVisible = (drawerMenuVisible) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'global/rUpdateState',
+      payload: { drawerMenuVisible },
+    });
+  };
   logout = () => {
     Cookies.remove('token');
     this.setState(() => ({ loading: true }));
@@ -18,7 +25,7 @@ class GlobalHeader extends React.Component {
   };
 
   render() {
-    const { nickname, avatar } = this.props;
+    const { drawerMenuVisible, nickname, avatar } = this.props;
     const menu = (
       <Menu>
         <Menu.Item>
@@ -46,26 +53,39 @@ class GlobalHeader extends React.Component {
       <div className={styles.root}>
         <Spin size="large" tip="正在退出登录 ..." spinning={true} className={styles.loading}
               style={{ display: this.state.loading ? 'flex' : 'none' }}/>
-        <Badge count={15} overflowCount={10} offset={[5, -5]} className={styles.badge}>
-          <Icon type="bell" className={styles.icon}/>
-        </Badge>
-        {
-          (nickname && avatar) ?
-            <Dropdown overlay={menu}>
-              <div className={styles.dropdown}>
-                <Avatar src={avatar}/>
-                <span>{nickname}</span>
-              </div>
-            </Dropdown>
+        <div className={styles.leftWrapper}>
+          <img src="/logo.png" alt="W"/>
+          <span className={styles.controlDrawerMenu}>
+          {drawerMenuVisible ?
+            <Icon type="menu-fold" onClick={this.controlDrawerMenuVisible.bind(this, false)}/>
             :
-            <Spin/>
-        }
+            <Icon type="menu-unfold" onClick={this.controlDrawerMenuVisible.bind(this, true)}/>
+          }
+        </span>
+        </div>
+        <div className={styles.rightWrapper}>
+          <Badge count={15} overflowCount={10} offset={[5, -5]} className={styles.badge}>
+            <Icon type="bell" className={styles.icon}/>
+          </Badge>
+          {
+            (nickname && avatar) ?
+              <Dropdown overlay={menu}>
+                <div className={styles.dropdown}>
+                  <Avatar src={avatar}/>
+                  <span>{nickname}</span>
+                </div>
+              </Dropdown>
+              :
+              <Spin/>
+          }
+        </div>
       </div>
     );
   }
 }
 
-export default connect(({ Global }) => ({
-  nickname: Global.nickname,
-  avatar: Global.avatar,
+export default connect(({ global }) => ({
+  drawerMenuVisible: global.drawerMenuVisible,
+  nickname: global.nickname,
+  avatar: global.avatar,
 }))(GlobalHeader);
