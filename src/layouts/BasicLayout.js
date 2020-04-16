@@ -34,7 +34,7 @@ class BasicLayout extends React.Component {
   };
 
   onSelect = ({ item, key }) => {
-    router.push(key);
+    router.push(`/${key}`);
   };
 
   render() {
@@ -49,9 +49,10 @@ class BasicLayout extends React.Component {
                 <img src="/system-name.png" alt="万铭"/>
             }
           </Link>
-          <Menu className={styles.menu} theme="dark" mode="inline" selectedKeys={[this.props.history.location.pathname]}
+          <Menu className={styles.menu} theme="dark" mode="inline"
+                selectedKeys={[this.props.history.location.pathname.split('/')[1]]}
                 onSelect={this.onSelect}>
-            <Menu.Item key="/dashboard">
+            <Menu.Item key="dashboard">
               <Icon type="dashboard"/><span>工作台</span>
             </Menu.Item>
             <SubMenu key="project"
