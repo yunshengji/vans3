@@ -2,104 +2,97 @@
   margin-left: .5em;
 }
 
-.root {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
+.header {
+  background: #6391FF;
+  padding: 0 20px;
+  z-index: 2;
+  box-shadow: 2px 0 4px rgba(0, 20, 40, 0.08);
 
-  .loading {
-    position: fixed;
-    z-index: 10;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, .4);
-
-    > * {
-      margin: 10px 0;
-    }
-  }
-
-  .leftWrapper {
+  .wrapper {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    height: 100%;
 
-    > img {
-      display: none;
-      width: 30px;
-      margin-right: 25px;
-    }
+    .loading {
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, .4);
 
-    .controlDrawerMenu {
-      display: none;
-      font-size: 20px;
-
-      * {
-        display: none;
+      > * {
+        margin: 10px 0;
       }
-
     }
 
-    @media (max-width: 768px) {
+    .leftWrapper {
+      display: flex;
+      align-items: center;
+
       > img {
-        display: inline;
+        display: none;
+        width: 30px;
+        margin-right: 25px;
       }
 
       .controlDrawerMenu {
-        display: inline-block;
+        display: none;
+        font-size: 20px;
 
         * {
-          display: inline-block;
+          display: none;
         }
-      }
-    }
 
-
-  }
-
-  .rightWrapper {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-
-    .badge {
-      margin-right: 2em;
-
-      &:hover {
-        cursor: pointer;
-      }
-
-      .icon {
-        font-size: 18px;
-      }
-    }
-
-    .dropdown {
-      padding: 0 1em;
-      transition: background-color .3s;
-
-      &:hover {
-        border-radius: 2px;
-        cursor: pointer;
-        background: rgba(0, 0, 0, .025);
-      }
-
-      > span:last-of-type {
-        margin-left: .8em;
-        color: #666;
       }
 
       @media (max-width: 768px) {
-        padding: 0 5px;
-        span:last-of-type {
-          display: none;
+        > img {
+          display: inline;
         }
+
+        .controlDrawerMenu {
+          display: inline-block;
+
+          * {
+            display: inline-block;
+          }
+        }
+      }
+
+
+    }
+
+    .rightWrapperBigScreen {
+      color: #FFF;
+      transition: color .3s;
+
+      &:hover {
+        cursor: pointer;
+        color: #EEE;
+      }
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    .rightWrapperSmallScreen {
+      @media (min-width: 768px) {
+        display: none;
+      }
+
+      .dropdown {
+        padding: 0 1em;
+
       }
     }
   }
+
 }
+

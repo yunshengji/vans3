@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, router } from 'umi';
 import { connect } from 'dva';
-import { Avatar, Dropdown, Menu, Icon, Spin, Badge } from 'antd';
+import { Avatar, Dropdown, Menu, Icon, Spin, Button, Layout } from 'antd';
 import Cookies from 'js-cookie';
 import styles from './index.less';
+
+const { Header } = Layout;
 
 class GlobalHeader extends React.Component {
   state = {
@@ -25,15 +27,9 @@ class GlobalHeader extends React.Component {
   };
 
   render() {
-    const { drawerMenuVisible, nickname, avatar } = this.props;
+    const { drawerMenuVisible, avatar } = this.props;
     const menu = (
       <Menu>
-        <Menu.Item>
-          <Link to="/me/center">
-            <Icon type="user"/>
-            <span className={styles.item}>个人中心</span>
-          </Link>
-        </Menu.Item>
         <Menu.Item>
           <Link to="/me/setting">
             <Icon type="setting"/>
@@ -50,42 +46,44 @@ class GlobalHeader extends React.Component {
       </Menu>
     );
     return (
-      <div className={styles.root}>
-        <Spin size="large" tip="正在退出登录 ..." spinning={true} className={styles.loading}
-              style={{ display: this.state.loading ? 'flex' : 'none' }}/>
-        <div className={styles.leftWrapper}>
-          <img src="/logo.png" alt="W"/>
-          <span className={styles.controlDrawerMenu}>
-          {drawerMenuVisible ?
-            <Icon type="menu-fold" onClick={this.controlDrawerMenuVisible.bind(this, false)}/>
-            :
-            <Icon type="menu-unfold" onClick={this.controlDrawerMenuVisible.bind(this, true)}/>
-          }
-        </span>
+      <Header className={styles.header}>
+        <div className={styles.wrapper}>
+          <Spin size="large" tip="正在退出登录 ..." spinning={true} className={styles.loading}
+                style={{ display: this.state.loading ? 'flex' : 'none' }}/>
+          <div className={styles.leftWrapper}>
+            <img src="/system-icon.svg" alt="万铭"/>
+            <span className={styles.controlDrawerMenu}>
+              {drawerMenuVisible ?
+                <Icon type="menu-fold" style={{ color: '#FFF' }}
+                      onClick={this.controlDrawerMenuVisible.bind(this, false)}/>
+                :
+                <Icon type="menu-unfold" style={{ color: '#FFF' }}
+                      onClick={this.controlDrawerMenuVisible.bind(this, true)}/>
+              }
+            </span>
+          </div>
+          <span className={styles.rightWrapperBigScreen} onClick={this.logout}>
+              退出登录
+          </span>
+          <div className={styles.rightWrapperSmallScreen}>
+            {
+              (avatar) ?
+                <Dropdown overlay={menu}>
+                  <div className={styles.dropdown}>
+                    <Avatar src={avatar}/>
+                  </div>
+                </Dropdown>
+                :
+                <Spin/>
+            }
+          </div>
         </div>
-        <div className={styles.rightWrapper}>
-          <Badge count={15} overflowCount={10} offset={[5, -5]} className={styles.badge}>
-            <Icon type="bell" className={styles.icon}/>
-          </Badge>
-          {
-            (nickname && avatar) ?
-              <Dropdown overlay={menu}>
-                <div className={styles.dropdown}>
-                  <Avatar src={avatar}/>
-                  <span>{nickname}</span>
-                </div>
-              </Dropdown>
-              :
-              <Spin/>
-          }
-        </div>
-      </div>
+      </Header>
     );
   }
 }
 
 export default connect(({ global }) => ({
   drawerMenuVisible: global.drawerMenuVisible,
-  nickname: global.nickname,
   avatar: global.avatar,
 }))(GlobalHeader);
