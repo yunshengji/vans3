@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
-export async function GetMe(params) {
-  return request('/api/Me', {
+export async function GetMe() {
+  return request('/api/me', {
     method: 'GET'
   });
 }

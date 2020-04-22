@@ -30,7 +30,7 @@ class GlobalSiderDrawer extends React.Component {
     const { drawerMenuVisible } = this.props;
     return (
       <Drawer placement="left" closable={false} width={200} visible={drawerMenuVisible} onClose={this.onClose}
-              className="globalSiderDrawer">
+              id="globalSiderDrawer">
         <div className="globalSiderDrawerWrapper">
           <Link to="/">
             <img src="/system-name.svg" alt="万铭"/>

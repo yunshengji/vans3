@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, router } from 'umi';
 import { connect } from 'dva';
-import { Avatar, Dropdown, Menu, Icon, Spin, Button, Layout } from 'antd';
+import { Avatar, Dropdown, Menu, Icon, Spin, Layout } from 'antd';
 import Cookies from 'js-cookie';
 import styles from './index.less';
 

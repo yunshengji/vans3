@@ -31,7 +31,7 @@ export default {
       });
     }, 1200);
   },
-  'POST /api/Login': (req, res) => {
+  'POST /api/login': (req, res) => {
     setTimeout(() => {
       res.send({
         code: 1,
@@ -42,7 +42,7 @@ export default {
       });
     }, 1200);
   },
-  'GET /api/Me': (req, res) => {
+  'GET /api/me': (req, res) => {
     setTimeout(() => {
       res.send({
         code: 1,
@@ -52,6 +52,63 @@ export default {
           nickname: '郑晓媛',
           avatar: 'https://secure.gravatar.com/avatar/d99aea9fb2d3789b950b80483d37e37a?s=220&r=X&d=mm',
           role: 'admin',
+        },
+      });
+    }, 1200);
+  },
+  'GET /api/projects': (req, res) => {
+    setTimeout(() => {
+      res.send({
+        code: 1,
+        message: 'success',
+        data: {
+          list: [
+            {
+              name: '长城贴瓷砖',
+              principal: '汪先生',
+              created_at: '2020年4月5日',
+              updated_at: '2020年4月5日',
+              type: '专项债',
+              priority: 4,
+            },
+            {
+              name: '长城贴瓷砖1',
+              principal: '汪先生',
+              created_at: '2020年4月5日',
+              updated_at: '2020年4月5日',
+              type: '专项债',
+              priority: 4,
+            },
+            {
+              name: '长城贴瓷砖2',
+              principal: '鸡先生',
+              created_at: '2020年4月5日',
+              updated_at: '2020年4月5日',
+              type: '十四五规划',
+              priority: 2,
+            },
+            {
+              name: '长城贴瓷砖3',
+              principal: '汪先生',
+              created_at: '2020年4月5日',
+              updated_at: '2020年4月5日',
+              type: 'PPP项目',
+              priority: 3,
+            },
+            {
+              name: '长城贴瓷砖4',
+              principal: '汪先生',
+              created_at: '2020年4月5日',
+              updated_at: '2020年4月5日',
+              type: '中期评估项目',
+              priority: 1,
+            },
+          ],
+          pagination: {
+            total: 68,
+            current: 1,
+            pageSize: 10,
+          },
         },
       });
     }, 1200);
