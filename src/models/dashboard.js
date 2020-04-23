@@ -1,4 +1,4 @@
-import { GetProjectsList } from '@/services/project';
+import { GetProjectsList } from '@/services/projects';
 
 
 export default {
@@ -10,9 +10,8 @@ export default {
       list: [],
       pagination: {
         total: 0,
-        current: 0,
+        current: 1,
         pageSize: 10,
-        showTotal: total => `共 ${total} 条`,
       },
     },
   },
@@ -25,7 +24,7 @@ export default {
   effects: {
     * eGetProjectsData({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetProjectsList);
+        const { data } = yield call(GetProjectsList, payload);
         yield put({ type: 'rUpdateProjectsData', payload: data });
       } catch (err) {
         console.log(err);

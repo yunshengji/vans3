@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, router, withRouter } from 'umi';
-import { Avatar, Icon, Layout, Menu, Spin } from 'antd';
+import { Avatar, Layout, Menu, Spin } from 'antd';
 import { connect } from 'dva';
+import styles from './index.less';
 
 const { Sider } = Layout;
 
-class GlobalSider extends React.Component {
+class GlobalSide extends React.Component {
   onCollapse = (menuCollapsed) => {
     const { dispatch } = this.props;
     dispatch({
@@ -21,7 +22,8 @@ class GlobalSider extends React.Component {
     const { menuCollapsed, avatar, nickname } = this.props;
     const selectKeys = this.props.history.location.pathname.split('/')[1];
     return (
-      <Sider width="180" collapsible breakpoint="lg" theme="light" onCollapse={this.onCollapse} id="globalSider">
+      <Sider width="180" collapsible breakpoint="lg" theme="light" onCollapse={this.onCollapse}
+             className={styles.globalSide}>
         <Link className="systemName" to="/dashboard">
           {
             menuCollapsed ?
@@ -31,20 +33,23 @@ class GlobalSider extends React.Component {
         </Link>
         <Link className="userWrapper" to="/setting">
           {
-            (avatar) ?
+            avatar ?
               <div className="userContainer">
                 <Avatar size={48} src={avatar}/>
-                <div className="username">
-                  <p>姓名</p>
-                  <p>{nickname}</p>
-                </div>
+                {
+                  menuCollapsed ?
+                    null :
+                    <div className="username">
+                      <p>姓名</p>
+                      <p>{nickname}</p>
+                    </div>
+                }
               </div>
               :
               <Spin/>
           }
         </Link>
-        <Menu mode="inline" selectedKeys={[selectKeys]}
-              onSelect={this.onSelect} className="menu">
+        <Menu mode="inline" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
           <Menu.Item key="dashboard">
             <img src={selectKeys === 'dashboard' ? '/menu/dashboard-reverse.svg' : '/menu/dashboard.svg'} alt="消息"/>
             <span>工作台</span>
@@ -84,4 +89,4 @@ export default withRouter(connect(({ global }) => ({
   menuCollapsed: global.menuCollapsed,
   avatar: global.avatar,
   nickname: global.nickname,
-}))(GlobalSider));
+}))(GlobalSide));

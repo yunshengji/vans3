@@ -1,0 +1,54 @@
+.globalSideDrawer {
+  :global {
+    .ant-drawer-body {
+      padding: 0;
+
+      .globalSideDrawerWrapper {
+        display: flex;
+        flex-direction: column;
+        height: 80vh;
+        overflow: auto;
+
+        > a {
+          padding: 25px;
+          background-color: #3F78FF;
+
+          img {
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .ant-menu {
+      padding-top: 20px;
+      border-right: none;
+
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        img {
+          width: 15px;
+          margin-right: .8em;
+        }
+      }
+    }
+
+    .ant-menu-item {
+      width: 120px;
+      margin: 10px auto;
+      border-radius: 12px;
+    }
+
+    .ant-menu-item-selected {
+      color: #FFF;
+      background-color: #3F78FF !important;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+}

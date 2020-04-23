@@ -10,10 +10,28 @@
       background-color: #FFF;
     }
 
-    .createProject {
-      padding: 20px;
-      display: flex;
-      justify-content: flex-end;
+    .leftContainer {
+      .createProject {
+        padding: 20px;
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+
+    .rightContainer {
+      :global {
+        .ant-tabs-nav-scroll {
+          text-align: center;
+        }
+      }
+
+      .tab {
+        padding: 15px;
+      }
+
+      .dialogSubmit {
+        margin-top: 20px;
+      }
     }
   }
 }

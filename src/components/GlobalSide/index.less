@@ -1,0 +1,106 @@
+.globalSide {
+  :global {
+    @media (max-width: 768px) {
+      display: none;
+    }
+    box-shadow: 0 1px 2px rgba(0, 20, 40, 0.08);
+
+    .systemName {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #3F78FF;
+      background-image: linear-gradient(to right, #3F78FF, #5C87EE);
+
+      img {
+        height: 30px;
+      }
+    }
+
+    .userWrapper {
+      margin-bottom: 35px;
+      padding: 20px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid #EEE;
+
+      .userContainer {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+
+        .username {
+          margin-left: 1em;
+        }
+
+        p {
+          margin: 0;
+
+          &:first-of-type {
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 16px;
+            font-weight: 500;
+          }
+
+          &:last-of-type {
+            color: rgba(0, 0, 0, 0.5);
+          }
+        }
+      }
+    }
+
+    .ant-menu {
+      border: none;
+
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+
+        img {
+          width: 15px;
+          margin-right: .8em;
+        }
+      }
+    }
+
+    .ant-menu-item {
+      width: 130px;
+      margin-left: 8px;
+      border-radius: 20px;
+
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+
+    .ant-menu-item-selected {
+      color: #FFF;
+      background-color: #3F78FF !important;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .ant-menu-inline-collapsed {
+      li {
+        span {
+          display: none;
+        }
+
+        img {
+          width: 18px;
+        }
+      }
+    }
+
+    .ant-menu-inline-collapsed .ant-menu-item {
+      width: auto;
+      margin-left: 0;
+    }
+  }
+}

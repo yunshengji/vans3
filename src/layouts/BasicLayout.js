@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import { Layout, Icon } from 'antd';
 import styles from './BasicLayout.less';
 import GlobalHeader from '@/components/GlobalHeader';
-import GlobalSider from '@/components/GlobalSider';
-import GlobalSiderDrawer from '@/components/GlobalSiderDrawer';
+import GlobalSide from '@/components/GlobalSide';
+import GlobalSideDrawer from '@/components/GlobalSideDrawer';
 
 const { Content, Footer } = Layout;
 
@@ -18,8 +18,8 @@ class BasicLayout extends React.Component {
   render() {
     return (
       <Layout>
-        <GlobalSider/>
-        <GlobalSiderDrawer/>
+        <GlobalSide/>
+        <GlobalSideDrawer/>
         <Layout className={styles.main}>
           <GlobalHeader/>
           <Content className={styles.content}>{this.props.children}</Content>
