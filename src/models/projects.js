@@ -3,7 +3,7 @@ import { GetProjectsList } from '@/services/projects';
 
 export default {
 
-  namespace: 'dashboard',
+  namespace: 'projects',
 
   state: {
     projectsData: {

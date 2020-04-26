@@ -1,29 +1,28 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Row, Col, Button, Table, Tag, Tooltip, Form, Input, Select, Pagination } from 'antd';
-import PageHeader from '@/pages/User/components/PageHeader';
+import { Row, Col, Button, Table, Tag, Tooltip, Form, Input, Pagination } from 'antd';
+import PageHeader from '@/pages/Contacts/components/PageHeader';
 import styles from './index.less';
 
 const { Column } = Table;
-const { Option } = Select;
 
-class User extends React.Component {
+class Contacts extends React.Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch({ type: 'users/eGetUsersData' });
+    dispatch({ type: 'contacts/eGetContactsData' });
   }
 
   projectsPaginationChange = (page, pageSize) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'users/eGetUsersData',
+      type: 'contacts/eGetContactsData',
       payload: { page, pageSize },
     });
   };
 
   render() {
-    const { fetchingUsersData, usersList, usersListPagination } = this.props;
+    const { fetchingContactsData, contactsList, contactsListPagination } = this.props;
     return (
       <div className={styles.root}>
         <PageHeader/>
@@ -32,7 +31,7 @@ class User extends React.Component {
             <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 16 }}>
               <Row gutter={[20]}>
                 <Col xl={6} md={12} sm={24}>
-                  <Form.Item label="用户名">
+                  <Form.Item label="联系人姓名">
                     <Input placeholder="请输入"/>
                   </Form.Item>
                 </Col>
@@ -69,22 +68,17 @@ class User extends React.Component {
           <Col span={24}>
             <div className={styles.userContainer}>
               <div className={styles.plusPanel}>
-                <Tooltip title="创建新用户">
+                <Tooltip title="创建联系人">
                   <Button icon="plus"/>
                 </Tooltip>
               </div>
               <div style={{ width: '100%', overflow: 'auto' }}>
-                <Table size="middle" tableLayout="fixed" pagination={false} dataSource={usersList}
-                       loading={fetchingUsersData} rowKey={record => record.name}>
-                  <Column title="用户名" dataIndex="name"/>
-                  <Column title="账号" dataIndex="username"/>
-                  <Column title="身份" dataIndex="role" width="200" render={role => (<Tag>{role}</Tag>)}
-                          filterMultiple={false}
-                          filters={[
-                            { text: '管理员', value: '管理员' },
-                            { text: '运营', value: 'operation' },
-                            { text: '销售', value: 'seller' }]}
-                  />
+                <Table size="middle" tableLayout="fixed" pagination={false} dataSource={contactsList}
+                       loading={fetchingContactsData} rowKey={record => record.contacts_name}>
+                  <Column title="联系人姓名" dataIndex="contacts_name"/>
+                  <Column title="性别" dataIndex="sex"/>
+                  <Column title="公司名称" dataIndex="company"/>
+                  <Column title="职位" dataIndex="job"/>
                   <Column title="手机号码" dataIndex="phone"/>
                   <Column title="邮箱" dataIndex="email"/>
                   <Column title="创建日期" dataIndex="created_at" sorter={(a, b) => a.age - b.age}/>
@@ -96,9 +90,9 @@ class User extends React.Component {
                 </Table>
               </div>
               <div className="paginationWrapper">
-                <Pagination showQuickJumper defaultCurrent={1} total={usersListPagination.total}
-                            current={usersListPagination.current} pageSize={usersListPagination.pageSize}
-                            showTotal={() => `共 ${usersListPagination.total} 条`}
+                <Pagination showQuickJumper defaultCurrent={1} total={contactsListPagination.total}
+                            current={contactsListPagination.current} pageSize={contactsListPagination.pageSize}
+                            showTotal={() => `共 ${contactsListPagination.total} 条`}
                             onChange={this.projectsPaginationChange}/>
               </div>
             </div>
@@ -110,8 +104,8 @@ class User extends React.Component {
 }
 
 
-export default connect(({ loading, users }) => ({
-  fetchingUsersData: loading.effects['users/eGetUsersData'],
-  usersList: users.usersData.list,
-  usersListPagination: users.usersData.pagination,
-}))(User);
+export default connect(({ loading, contacts }) => ({
+  fetchingContactsData: loading.effects['contacts/eGetContactsData'],
+  contactsList: contacts.contactsData.list,
+  contactsListPagination: contacts.contactsData.pagination,
+}))(Contacts);

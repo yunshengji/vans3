@@ -1,5 +1,5 @@
 import React from 'react';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb, Button } from 'antd';
 import { Link } from 'umi';
 import styles from './PageHeader.less';
 
@@ -7,7 +7,6 @@ class PageHeader extends React.Component {
 
   render() {
     const routes = [
-      { path: '/dashboard', breadcrumbName: '工作台' },
       { breadcrumbName: '项目库' },
     ];
     return (
@@ -30,6 +29,11 @@ class PageHeader extends React.Component {
             }
           })}
         </Breadcrumb>
+        <Button type="primary" size="small">
+          <Link to="">
+            新建项目
+          </Link>
+        </Button>
       </div>
     );
   }

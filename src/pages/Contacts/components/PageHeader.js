@@ -1,13 +1,14 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import { Link } from 'umi';
-import styles from './index.less';
+import styles from './PageHeader.less';
 
 class PageHeader extends React.Component {
 
   render() {
     const routes = [
       { path: '/dashboard', breadcrumbName: '工作台' },
+      { breadcrumbName: '联系人列表' },
     ];
     return (
       <div className={styles.root}>

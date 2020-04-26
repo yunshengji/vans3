@@ -50,12 +50,8 @@ class GlobalSide extends React.Component {
           }
         </Link>
         <Menu mode="inline" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
-          <Menu.Item key="dashboard">
-            <img src={selectKeys === 'dashboard' ? '/menu/dashboard-reverse.svg' : '/menu/dashboard.svg'} alt="消息"/>
-            <span>工作台</span>
-          </Menu.Item>
           <Menu.Item key="projects">
-            <img src={selectKeys === 'projects' ? '/menu/projects-reverse.svg' : '/menu/projects.svg'} alt="项目库"/>
+            <img src={selectKeys === 'projects' ? '/menu/dashboard-reverse.svg' : '/menu/dashboard.svg'} alt="项目库"/>
             <span>项目库</span>
           </Menu.Item>
           <Menu.Item key="contracts">

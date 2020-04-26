@@ -172,7 +172,7 @@ export default {
             {
               username: 'dengqiyao',
               name: 'Jayden',
-              role: '管理员',
+              role: '技术部',
               phone: '133888888990',
               email: 'jiyunsheng66@gmail.com',
               created_at: '2020-4-5',
@@ -217,6 +217,41 @@ export default {
           ],
           pagination: {
             total: 68,
+            current: 2,
+            pageSize: 10,
+          },
+        },
+      });
+    }, 1200);
+  },
+  'GET /api/contacts': (req, res) => {
+    setTimeout(() => {
+      res.send({
+        code: 1,
+        message: 'success',
+        data: {
+          list: [
+            {
+              contacts_name: '小习',
+              sex: '男',
+              company: '中南海',
+              job: '租客',
+              phone: '133888888990',
+              email: 'WEINI@gmail.com',
+              created_at: '2020-4-5',
+            },
+            {
+              contacts_name: '哈哈',
+              sex: '女',
+              company: '秦城',
+              job: '霸主',
+              phone: '133888888990',
+              email: 'haha@gmail.com',
+              created_at: '2020-4-5',
+            },
+          ],
+          pagination: {
+            total: 23,
             current: 2,
             pageSize: 10,
           },

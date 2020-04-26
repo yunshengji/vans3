@@ -13,13 +13,14 @@ body {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   font-family: STFangsong, sans-serif;
+  font-weight: bold;
 }
 
 // 覆盖 ant design 表头样式
 thead.ant-table-thead {
   > tr {
     > th {
-      background-color: transparent;
+      background-color: #F7FAFB;
 
       span.ant-table-column-title {
         font-weight: 400;
@@ -33,5 +34,35 @@ thead.ant-table-thead {
 .paginationWrapper {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: 3em 2em 1em;
 }
+
+//input {
+//  background-color: #F5F9FA !important;
+//  border-color: rgba(100, 100, 100, .08) !important;
+//}
+//
+//.ant-select-search__field {
+//  background-color: rgba(0, 0, 0, 0) !important;
+//}
+
+.ant-form-item-label label {
+  color: #A9ADB7 !important;
+}
+
+.actionGroup {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+
+  > :not(:only-of-type) {
+    &:not(:first-of-type) {
+      margin-left: 1em;
+    }
+  }
+
+  .redButton {
+    color: #F27651;
+  }
+}
+
