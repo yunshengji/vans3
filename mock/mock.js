@@ -153,4 +153,75 @@ export default {
       });
     }, 1200);
   },
+  'GET /api/users': (req, res) => {
+    setTimeout(() => {
+      res.send({
+        code: 1,
+        message: 'success',
+        data: {
+          list: [
+            {
+              username: 'jiyunsheng',
+              name: 'Gee',
+              role: '管理员',
+              phone: '133888888990',
+              email: 'jiyunsheng66@gmail.com',
+              created_at: '2020-4-5',
+              updated_at: '2020-4-5',
+            },
+            {
+              username: 'dengqiyao',
+              name: 'Jayden',
+              role: '管理员',
+              phone: '133888888990',
+              email: 'jiyunsheng66@gmail.com',
+              created_at: '2020-4-5',
+              updated_at: '2020-4-5',
+            },
+            {
+              username: 'huangtianci',
+              name: '黄',
+              role: '管理员',
+              phone: '133888888990',
+              email: 'jiyunsheng66@gmail.com',
+              created_at: '2020-4-5',
+              updated_at: '2020-4-5',
+            },
+            {
+              username: 'yaofengjun',
+              name: '姚凤军',
+              role: '管理员',
+              phone: '133888888990',
+              email: 'jiyunsheng66@gmail.com',
+              created_at: '2020-4-5',
+              updated_at: '2020-4-5',
+            },
+            {
+              username: 'wangyucheng',
+              name: '汪兄',
+              role: '管理员',
+              phone: '133888888990',
+              email: 'jiyunsheng66@gmail.com',
+              created_at: '2020-4-5',
+              updated_at: '2020-4-5',
+            },
+            {
+              username: 'zhengxiaoyuan',
+              name: '郑晓媛',
+              role: '管理员',
+              phone: '133888888990',
+              email: 'jiyunsheng66@gmail.com',
+              created_at: '2020-4-5',
+              updated_at: '2020-4-5',
+            },
+          ],
+          pagination: {
+            total: 68,
+            current: 2,
+            pageSize: 10,
+          },
+        },
+      });
+    }, 1200);
+  },
 };

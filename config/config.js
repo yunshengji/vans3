@@ -10,6 +10,8 @@ export default {
         { path: '/404', component: './Exception/404' },
         { path: '/500', component: './Exception/500' },
         { path: '/dashboard', component: './Dashboard' },
+        { path: '/projects', component: './ProjectLibrary' },
+        { path: '/users', component: './User' },
       ],
     },
   ],
