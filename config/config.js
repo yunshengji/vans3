@@ -1,7 +1,7 @@
 export default {
   treeShaking: true,
   routes: [
-    { path: '/login', component: './Login' },
+    { path: '/login', component: './Users/Login' },
     {
       path: '/',
       component: '../layouts/BasicLayout',
@@ -9,9 +9,28 @@ export default {
         { path: '/403', component: './Exception/403' },
         { path: '/404', component: './Exception/404' },
         { path: '/500', component: './Exception/500' },
-        { path: '/projects', component: './Projects' },
-        { path: '/contacts', component: './Contacts' },
-        { path: '/users', component: './User' },
+        { path: '/contacts', component: './Contacts/List' },
+        {
+          path: '/projects',
+          routes: [
+            { path: '/projects', component: './Projects/List' },
+            { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
+          ],
+        },
+        {
+          path: '/workDiaries',
+          routes: [
+            { path: '/workDiaries', component: './WorkDiaries/List' },
+            { path: '/workDiaries/create', component: './WorkDiaries/CreateWorkDiary' },
+          ],
+        },
+        {
+          path: '/users',
+          routes: [
+            { path: '/users', component: './Users/List' },
+            { path: '/users/setting', component: './Users/Setting' },
+          ],
+        },
       ],
     },
   ],

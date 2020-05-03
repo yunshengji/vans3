@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export async function Login(data) {
-  return request('/api/login', {
+  return request('/login', {
     method: 'POST',
     data,
   });

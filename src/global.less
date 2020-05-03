@@ -1,22 +1,8 @@
-* {
-  &::after, &::before {
-    box-sizing: border-box;
-  }
-}
-
-#root {
-  min-height: 100vh;
-  display: flex;
-}
-
 body {
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   font-family: STFangsong, sans-serif;
-  font-weight: bold;
+  //font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
 }
 
-// 覆盖 ant design 表头样式
 thead.ant-table-thead {
   > tr {
     > th {
@@ -30,13 +16,6 @@ thead.ant-table-thead {
   }
 }
 
-// 扩展 ant design 分页样式
-.paginationWrapper {
-  display: flex;
-  justify-content: center;
-  padding: 3em 2em 1em;
-}
-
 //input {
 //  background-color: #F5F9FA !important;
 //  border-color: rgba(100, 100, 100, .08) !important;
@@ -46,16 +25,67 @@ thead.ant-table-thead {
 //  background-color: rgba(0, 0, 0, 0) !important;
 //}
 
-.ant-form-item-label label {
+.ant-form-item-label > label {
   color: #A9ADB7 !important;
+}
+
+.headerWrapper {
+  display: flex;
+  justify-content: flex-start;
+  padding: 22px 15px;
+  background-color: #FFF;
+}
+
+.headerWrapperWithCreate {
+  display: flex;
+  justify-content: space-between;
+  padding: 22px 15px;
+  background-color: #FFF;
+}
+
+.contentWrapper {
+  margin: 20px 20px 0;
+  padding: 20px;
+  border-radius: 2px;
+  background-color: #FFF;
+
+  h3 {
+    margin-bottom: 1.5em;
+    padding-left: .5em;
+    border-left: 4px solid #356DF9;
+    font-weight: normal;
+  }
+
+  .searchWrapper {
+    margin: 2em 0;
+    text-align: center;
+  }
+
+  .ant-table-wrapper {
+    overflow: auto;
+
+    .ant-table {
+      min-width: 800px;
+    }
+  }
+
+  .paginationWrapper {
+    display: flex;
+    justify-content: center;
+    padding: 3em 2em 1em;
+  }
 }
 
 .actionGroup {
   display: flex;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: flex-start;
 
-  > :not(:only-of-type) {
+  > button {
+    padding: 0;
+  }
+
+  > button:not(:only-of-type) {
     &:not(:first-of-type) {
       margin-left: 1em;
     }
@@ -63,6 +93,13 @@ thead.ant-table-thead {
 
   .redButton {
     color: #F27651;
+
+    &:hover {
+      color: #f97953;
+    }
+
+    &:focus {
+      color: #F27651;
+    }
   }
 }
-

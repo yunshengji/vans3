@@ -66,82 +66,72 @@ export default {
             {
               name: '长城贴瓷砖',
               principal: '汪先生',
+              area: '成都',
               created_at: '2020-4-5',
               updated_at: '2020-4-5',
               type: '专项债',
+              industry: '水利',
               priority: 4,
             },
             {
               name: '长城贴瓷砖1',
               principal: '汪先生',
+              area: '达州',
               created_at: '2020-4-5',
               updated_at: '2020-4-5',
               type: '专项债',
+              industry: '高标准农田',
               priority: 4,
             },
             {
               name: '长城贴瓷砖2',
               principal: '鸡先生',
+              area: '巴中',
               created_at: '2020-4-5',
               updated_at: '2020-4-5',
               type: '十四五规划',
+              industry: '园区规划',
               priority: 2,
             },
             {
               name: '长城贴瓷砖3',
               principal: '汪先生',
+              area: '资阳',
               created_at: '2020-4-5',
               updated_at: '2020-4-5',
               type: 'PPP项目',
+              industry: '市政',
               priority: 3,
             },
             {
               name: '长城贴瓷砖4',
               principal: '汪先生',
+              area: '乐山',
               created_at: '2020-4-5',
               updated_at: '2020-4-5',
               type: '中期评估项目',
+              industry: '市政',
               priority: 1,
             },
             {
               name: '长城贴瓷砖5',
               principal: '汪先生',
+              area: '绵阳',
               created_at: '2020-4-5',
               updated_at: '2020-4-5',
               type: '中期评估项目',
+              industry: '市政',
               priority: 1,
             },
             {
               name: '长城贴瓷砖6',
               principal: '汪先生',
+              area: '泸州',
               created_at: '2020-4-5',
               updated_at: '2020-4-5',
               type: '中期评估项目',
-              priority: 1,
-            },
-            {
-              name: '长城贴瓷砖7',
-              principal: '汪先生',
-              created_at: '2020-4-5',
-              updated_at: '2020-4-5',
-              type: '中期评估项目',
-              priority: 1,
-            },
-            {
-              name: '长城贴瓷砖8',
-              principal: '汪先生',
-              created_at: '2020-4-5',
-              updated_at: '2020-4-5',
-              type: '中期评估项目',
-              priority: 1,
-            },
-            {
-              name: '长城贴瓷砖9',
-              principal: '汪先生',
-              created_at: '2020-4-5',
-              updated_at: '2020-4-5',
-              type: '中期评估项目',
-              priority: 1,
+              industry: '水利',
+              priority: 2,
             },
           ],
           pagination: {
@@ -224,7 +214,42 @@ export default {
       });
     }, 1200);
   },
-  'GET /api/contacts': (req, res) => {
+  'GET /api/customers': (req, res) => {
+    setTimeout(() => {
+      res.send({
+        code: 1,
+        message: 'success',
+        data: {
+          list: [
+            {
+              contacts_name: '小习',
+              sex: '男',
+              company: '中南海',
+              job: '租客',
+              phone: '133888888990',
+              email: 'WEINI@gmail.com',
+              created_at: '2020-4-5',
+            },
+            {
+              contacts_name: '哈哈',
+              sex: '女',
+              company: '秦城',
+              job: '霸主',
+              phone: '133888888990',
+              email: 'haha@gmail.com',
+              created_at: '2020-4-5',
+            },
+          ],
+          pagination: {
+            total: 23,
+            current: 2,
+            pageSize: 10,
+          },
+        },
+      });
+    }, 1200);
+  },
+  'GET /api/contractors': (req, res) => {
     setTimeout(() => {
       res.send({
         code: 1,
