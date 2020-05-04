@@ -1,4 +1,8 @@
-import { GetCustomersList, GetContractorsList } from '@/services/contacts';
+import {
+  CreateCustomer, DeleteCustomer, EditCustomer, GetCustomers,
+  GetContractorsList,
+} from '@/services/contacts';
+import { message } from 'antd';
 
 export default {
 
@@ -7,23 +11,19 @@ export default {
   state: {
     activeKey: 'customers',
 
-    customersModalVisible: false,
-    customersEditModalVisible: false,
-    customersEditForm: {},
+    createCustomerModalVisible: false,
+    editCustomerModalVisible: false,
+    editCustomerForm: {},
+    customers: {
+      total: 0,
+      current: 1,
+      pageSize: 10,
+      list: [],
+    },
 
     contractorsModalVisible: false,
     contractorsEditModalVisible: false,
     contractorsEditForm: {},
-
-    customers: {
-      list: [],
-      pagination: {
-        total: 0,
-        current: 1,
-        pageSize: 10,
-      },
-    },
-
     contractors: {
       list: [],
       pagination: {
@@ -40,9 +40,30 @@ export default {
   },
 
   effects: {
+    * eCreateCustomer({ payload }, { select, call, put }) {
+      try {
+        const { msg } = yield call(CreateCustomer, payload);
+        message.success(msg);
+        yield put({ type: 'rUpdateState', payload: { createCustomerModalVisible: false } });
+        const { customers: { current, pageSize } } = yield select(state => state.contactsList);
+        yield put({ type: 'eGetCustomers', payload: { page: current, page_size: pageSize } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eDeleteCustomer({ id, payload }, { select, call, put }) {
+      try {
+        const { msg } = yield call(DeleteCustomer, id, payload);
+        message.success(msg);
+        const { customers: { current, pageSize } } = yield select(state => state.contactsList);
+        yield put({ type: 'eGetCustomers', payload: { page: current, page_size: pageSize } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
     * eGetCustomers({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetCustomersList, payload);
+        const { data } = yield call(GetCustomers, payload);
         yield put({ type: 'rUpdateCustomers', payload: data });
       } catch (err) {
         console.log(err);

@@ -11,7 +11,6 @@ class CreateUserModal extends React.Component {
       type: 'usersList/rUpdateState',
       payload: { createUserModalVisible: false },
     });
-    this.props.form.resetFields();
   };
 
   submitCreatedUser = () => {

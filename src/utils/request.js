@@ -5,10 +5,11 @@ import Cookies from 'js-cookie';
 import { prefix } from '../../config/api';
 
 const errorHandler = error => {
-  const { data, response } = error;
-  const { msg = '参数错误' } = data;
+  console.log('错误了');
+  const { response } = error;
 
   if (response && response.status) {
+    const { msg = '参数错误' } = error.data;
     const { status, statusText, url } = response;
     const { pathname } = window.location;
     switch (status) {

@@ -137,7 +137,7 @@ class WorkDiariesList extends React.Component {
                         },
                       }],
                     })(
-                      <BraftEditor controls={controls} contentStyle={{ height: '35vh' }}
+                      <BraftEditor controls={controls} contentStyle={{ height: '30vh' }}
                                    className={styles.editWrapper}
                                    placeholder="请输入正文内容"/>,
                     )}

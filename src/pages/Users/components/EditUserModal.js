@@ -11,7 +11,6 @@ class EditUserModal extends React.Component {
       type: 'usersList/rUpdateState',
       payload: { editUserModalVisible: false },
     });
-    this.props.form.resetFields();
   };
 
   submitCreatedUser = () => {
@@ -33,7 +32,8 @@ class EditUserModal extends React.Component {
     const { getFieldDecorator } = form;
     return (
       <React.Fragment>
-        <Modal title="编辑用户" width={420} visible={editUserModalVisible} confirmLoading={submittingUser}
+        <Modal title="编辑用户" width={420} visible={editUserModalVisible} afterClose={() => this.props.form.resetFields()}
+               confirmLoading={submittingUser}
                onOk={this.submitCreatedUser} onCancel={this.hideCreateUserModal}>
           <Form layout="horizontal" labelCol={{ xs: 5 }} wrapperCol={{ xs: 17 }}>
             <Form.Item label="姓名">
