@@ -17,13 +17,7 @@ export default {
             { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
           ],
         },
-        {
-          path: '/workDiaries',
-          routes: [
-            { path: '/workDiaries', component: './WorkDiaries/List' },
-            { path: '/workDiaries/create', component: './WorkDiaries/CreateWorkDiary' },
-          ],
-        },
+        { path: '/workDiaries', component: './WorkDiaries/List' },
         {
           path: '/users',
           routes: [

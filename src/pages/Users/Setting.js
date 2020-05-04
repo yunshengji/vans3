@@ -85,7 +85,7 @@ class Setting extends React.Component {
                 <Form layout="horizontal">
                   <Form.Item label="头像">
                     <Upload {...props}>
-                      <Avatar size={200} src={avatarPreview || profile.avatar}/>
+                      <Avatar size={150} src={avatarPreview || profile.avatar}/>
                     </Upload>
                   </Form.Item>
                   <Form.Item label="头像">

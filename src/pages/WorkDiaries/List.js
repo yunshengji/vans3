@@ -1,57 +1,63 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import {
-  Row,
-  List, Input,
-  Col,
-  Button,
-  Pagination,
-  Skeleton, Form,
-  Modal,
-  message, Rate,
-  Breadcrumb,
-} from 'antd';
+import { Row, List, Input, Col, Button, Pagination, Form, Spin, Rate, Breadcrumb } from 'antd';
 import moment from 'moment';
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import styles from './List.less';
-
-const { confirm } = Modal;
-
+import EditWorkDiaryDrawer from './components/EditWorkDiaryDrawer';
 
 class WorkDiariesList extends React.Component {
 
   componentDidMount() {
-    this.props.dispatch({ type: 'workDiariesList/eGetWorkDiaries' });
+    const { dispatch, current, pageSize } = this.props;
+    dispatch({
+      type: 'workDiariesList/eGetWorkDiaries',
+      payload: { page: current, page_size: pageSize },
+    });
   }
 
-  showDeleteConfirm = ({ name, principal }) => {
-    confirm({
-      title: '确定删除此工作日志',
-      okText: '删除',
-      okType: 'danger',
-      cancelText: '取消',
-      onOk() {
-        message.success('删除成功');
-      },
+  workDiariesPaginationChange = (page, pageSize) => {
+    this.props.dispatch({
+      type: 'workDiariesList/eGetWorkDiaries',
+      payload: { page, page_size: pageSize },
     });
   };
-  usersPaginationChange = (page, pageSize) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'WorkDiariesList/eGetUsers',
-      payload: { page, pageSize },
+  handleSubmit = e => {
+    const { form, dispatch } = this.props;
+    form.validateFields((err, values) => {
+      if (!err) {
+        dispatch({
+          type: 'workDiariesList/eCreateWorkDiary',
+          payload: {
+            title: values.title,
+            points: values.points,
+            content: values.content.toRAW(),
+          },
+        });
+      }
+    });
+  };
+  showEditDrawer = item => {
+    item.displayContent = BraftEditor.createEditorState(item.content);
+    this.props.dispatch({
+      type: 'workDiariesList/rUpdateState',
+      payload: {
+        editWorkDiaryDrawerVisible: true,
+        editWorkDiary: item,
+      },
     });
   };
 
   render() {
-    const { fetchingWorkDiaries, routes, form, total, current, pageSize, workDiariesList } = this.props;
+    const { fetchingWorkDiaries, submittingWorkDiary, routes, form, editWorkDiaryDrawerVisible, total, current, pageSize, workDiariesList } = this.props;
     const { getFieldDecorator } = form;
-    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator'];
+    const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
     return (
       <React.Fragment>
-        <div className="headerWrapperWithCreate">
+        {editWorkDiaryDrawerVisible && <EditWorkDiaryDrawer/>}
+        <div className="headerWrapper">
           <Breadcrumb>
             {routes.map((item, index) => {
               const { path, breadcrumbName } = item;
@@ -70,63 +76,77 @@ class WorkDiariesList extends React.Component {
               }
             })}
           </Breadcrumb>
-          <Button type="primary" size="small" onClick={this.showCreateUserModal}>新建日志</Button>
         </div>
         <div className="contentWrapper">
           <Row gutter={[80]}>
-            <Col md={9} sm={24}>
-              <h3 style={{ marginBottom: '2em' }}>日志列表</h3>
-              <List itemLayout="vertical" dataSource={workDiariesList}
-                    renderItem={item => (
-                      <List.Item className={styles.listItem}>
-                        <Skeleton avatar title={false} loading={item.loading} active>
+            <Col md={8} sm={24}>
+              <h3 style={{ marginBottom: '1.5em' }}>日志列表</h3>
+              <Spin spinning={Boolean(fetchingWorkDiaries)}>
+                <List itemLayout="vertical" dataSource={workDiariesList}
+                      renderItem={item => (
+                        <List.Item className={styles.listItem}
+                                   onClick={() => {
+                                     this.showEditDrawer(item);
+                                   }}>
                           <List.Item.Meta
-                            title={moment(1000 * item.created_at).format('YYYY-MM-DD') + '' + item.title}
+                            title={moment(1000 * item.created_at).format('YYYY-MM-DD HH:mm') + ' ' + item.title}
                             description={
                               <React.Fragment>
-                                重要性：<Rate disabled count={3} defaultValue={item.points}/>
+                                重要性：<Rate disabled count={3} value={item.points}/>
                               </React.Fragment>}/>
-                          <div className={styles.content}>
-                            {item.content}
-                          </div>
-                        </Skeleton>
-                      </List.Item>
-                    )}
-              />
+                          <div className={styles.content}
+                               dangerouslySetInnerHTML={{ __html: BraftEditor.createEditorState(item.content).toHTML() }}/>
+                        </List.Item>
+                      )}
+                />
+              </Spin>
               <div className="paginationWrapper">
-                <Pagination showQuickJumper defaultCurrent={1} total={total} current={current} pageSize={pageSize}
-                            showTotal={() => `共 ${total} 条`} onChange={this.usersPaginationChange}/>
+                <Pagination defaultCurrent={1} total={total} current={current} pageSize={pageSize}
+                            onChange={this.workDiariesPaginationChange}/>
               </div>
             </Col>
-            <Col md={15} sm={24}>
-              <Form onSubmit={this.handleSubmit}>
-                <Form.Item label="日志标题">
-                  {getFieldDecorator('title', {})(
-                    <Input placeholder="请输入标题"/>,
-                  )}
-                </Form.Item>
-                <Form.Item label="日志正文">
-                  {getFieldDecorator('content', {
-                    validateTrigger: 'onBlur',
-                    rules: [{
-                      required: true,
-                      validator: (_, value, callback) => {
-                        if (value.isEmpty()) {
-                          callback('请输入正文内容');
-                        } else {
-                          callback();
-                        }
-                      },
-                    }],
-                  })(
-                    <BraftEditor controls={controls} placeholder="请输入正文内容"
-                                 contentStyle={{ boxShadow: '0 0 2px 2px rgba(0,0,0,.04)' }}/>,
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">提交</Button>
-                </Form.Item>
-              </Form>
+            <Col md={16} sm={24}>
+              <h3 style={{ marginBottom: '1.5em' }}>写日志</h3>
+              <Spin spinning={Boolean(submittingWorkDiary)}>
+                <Form onSubmit={this.handleSubmit}>
+                  <Form.Item label="日志标题">
+                    {getFieldDecorator('title', {
+                      initialValue: '',
+                    })(
+                      <Input placeholder="请输入标题"/>,
+                    )}
+                  </Form.Item>
+                  <Form.Item label="重要性">
+                    {getFieldDecorator('points', {
+                      initialValue: 0,
+                    })(
+                      <Rate count={3}/>,
+                    )}
+                  </Form.Item>
+                  <Form.Item label="日志正文">
+                    {getFieldDecorator('content', {
+                      validateTrigger: 'onBlur',
+                      rules: [{
+                        required: true,
+                        validator: (_, value, callback) => {
+                          if (value.isEmpty()) {
+                            callback('请输入正文内容');
+                          } else {
+                            callback();
+                          }
+                        },
+                      }],
+                    })(
+                      <BraftEditor controls={controls} contentStyle={{ height: '35vh' }}
+                                   className={styles.editWrapper}
+                                   placeholder="请输入正文内容"/>,
+                    )}
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" onClick={this.handleSubmit}>提交</Button>
+                  </Form.Item>
+                </Form>
+              </Spin>
             </Col>
           </Row>
         </div>
@@ -138,13 +158,12 @@ class WorkDiariesList extends React.Component {
 const WrappedForm = Form.create({ name: 'createWorkDiary' })(WorkDiariesList);
 
 export default connect(({ loading, workDiariesList }) => ({
-  fetchingWorkDiaries: loading.effects['WorkDiariesList/eGetWorkDiaries'],
-  workDiariesList: workDiariesList.workDiaries.list,
-  workDiariesListPagination: workDiariesList.workDiaries.pagination,
+  fetchingWorkDiaries: loading.effects['workDiariesList/eGetWorkDiaries'],
+  submittingWorkDiary: loading.effects['workDiariesList/eCreateWorkDiary'],
   routes: workDiariesList.routes,
-  createUserModalVisible: workDiariesList.createUserModalVisible,
+  editWorkDiaryDrawerVisible: workDiariesList.editWorkDiaryDrawerVisible,
   total: workDiariesList.workDiaries.total,
   current: workDiariesList.workDiaries.current,
   pageSize: workDiariesList.workDiaries.pageSize,
-  usersList: workDiariesList.workDiaries.list,
+  workDiariesList: workDiariesList.workDiaries.list,
 }))(WrappedForm);
