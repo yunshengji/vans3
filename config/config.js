@@ -5,26 +5,18 @@ export default {
     {
       path: '/',
       component: '../layouts/BasicLayout',
+      Routes: ['src/components/AuthToken'],
       routes: [
+        { path: '/', redirect: '/users' },
         { path: '/403', component: './Exception/403' },
         { path: '/404', component: './Exception/404' },
         { path: '/500', component: './Exception/500' },
-        { path: '/contacts', component: './Contacts/List' },
-        {
-          path: '/projects',
-          routes: [
-            { path: '/projects', component: './Projects/List' },
-            { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
-          ],
-        },
+        { path: '/projects', component: './Projects/List' },
+        { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
         { path: '/workDiaries', component: './WorkDiaries/List' },
-        {
-          path: '/users',
-          routes: [
-            { path: '/users', component: './Users/List' },
-            { path: '/users/setting', component: './Users/Setting' },
-          ],
-        },
+        { path: '/contacts', component: './Contacts/List' },
+        { path: '/users', component: './Users/List' },
+        { path: '/users/setting', component: './Users/Setting' },
       ],
     },
   ],

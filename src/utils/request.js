@@ -5,7 +5,6 @@ import Cookies from 'js-cookie';
 import { prefix } from '../../config/api';
 
 const errorHandler = error => {
-  console.log('错误了');
   const { response } = error;
 
   if (response && response.status) {
@@ -48,6 +47,7 @@ const errorHandler = error => {
 
   return response;
 };
+
 const request = extend({
   prefix,
   timeout: 3000,
@@ -57,16 +57,13 @@ const request = extend({
 request.interceptors.request.use(async (url, options) => {
   const token = Cookies.get('token');
   if (token) {
-    const headers = {
-      Authorization: `JWT ${token}`,
-    };
     return ({
       url,
-      options: { ...options, headers },
+      options: {
+        ...options,
+        headers: { Authorization: `JWT ${token}` },
+      },
     });
-  } else if (url.indexOf('/login') < 0) {
-    const { pathname } = window.location;
-    router.push(`/login?from=${pathname}`);
   }
 });
 

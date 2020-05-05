@@ -27,7 +27,7 @@ export default {
           :
           localStorage.removeItem('username');
         message.success(msg);
-        router.push(from || '/projects');
+        router.push(from || '/users');
       } catch (err) {
         console.log(err);
       }
