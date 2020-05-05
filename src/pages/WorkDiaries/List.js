@@ -30,6 +30,7 @@ class WorkDiariesList extends React.Component {
       if (!err) {
         dispatch({
           type: 'workDiariesList/eCreateWorkDiary',
+          form,
           payload: {
             title: values.title,
             points: values.points,
@@ -125,6 +126,7 @@ class WorkDiariesList extends React.Component {
                   </Form.Item>
                   <Form.Item label="日志正文">
                     {getFieldDecorator('content', {
+                      initialValue: '',
                       validateTrigger: 'onBlur',
                       rules: [{
                         required: true,

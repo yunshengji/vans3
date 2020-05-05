@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Row, Col, Button, Table, Form, Input, Pagination, Select, Modal, message, Tag } from 'antd';
+import { Row, Col, Button, Table, Form, Input, Pagination, Select, Modal, Tag, Switch } from 'antd';
 import moment from 'moment';
 
 const { Column } = Table;
@@ -47,7 +47,7 @@ class Customers extends React.Component {
   };
 
   render() {
-    const { fetchingCustomers, deletingCustomer, editCustomerModalVisible, editCustomerForm, total, current, pageSize, customersList } = this.props;
+    const { fetchingCustomers, deletingCustomer, total, current, pageSize, customersList } = this.props;
     return (
       <React.Fragment>
         <h3 style={{ marginTop: '1em' }}>查找客户</h3>
@@ -61,9 +61,14 @@ class Customers extends React.Component {
             <Col xl={6} md={12} sm={24}>
               <Form.Item label="性别">
                 <Select placeholder="请选择">
-                  <Option key="a">男</Option>
-                  <Option key="b">女</Option>
+                  <Option key="male" value="male">男</Option>
+                  <Option key="female" value="female">女</Option>
                 </Select>
+              </Form.Item>
+            </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="地区">
+                <Input placeholder="请输入"/>
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
@@ -77,7 +82,12 @@ class Customers extends React.Component {
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="部门">
+              <Form.Item label="手机号码">
+                <Input placeholder="请输入"/>
+              </Form.Item>
+            </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="微信">
                 <Input placeholder="请输入"/>
               </Form.Item>
             </Col>
@@ -87,17 +97,15 @@ class Customers extends React.Component {
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="手机号码">
-                <Input placeholder="请输入"/>
+              <Form.Item label="是否共享">
+                <Switch checked checkedChildren="公开" unCheckedChildren="隐藏"/>
               </Form.Item>
             </Col>
           </Row>
-          <Row>
-            <div className="searchWrapper">
-              <Button type="primary" htmlType="submit">搜索</Button>
-              <Button style={{ marginLeft: 8 }}>重置</Button>
-            </div>
-          </Row>
+          <div className="searchWrapper">
+            <Button type="primary">搜索</Button>
+            <Button style={{ marginLeft: '1em' }}>重置</Button>
+          </div>
         </Form>
         <h3 style={{ marginBottom: '2em' }}>客户列表</h3>
         <Table size="middle" tableLayout="fixed" pagination={false} dataSource={customersList}
@@ -121,7 +129,7 @@ class Customers extends React.Component {
           {/*<Column title="备注" dataIndex="description"/>*/}
           {/*<Column title="重点关注" dataIndex="points"/>*/}
           <Column title="状态" dataIndex="private"
-                  render={text => (text ? <Tag>隐藏</Tag> : <Tag color="#108EE9">共享</Tag>)}/>
+                  render={text => (text ? <Tag>隐藏</Tag> : <Tag color="#108EE9">公开</Tag>)}/>
           <Column title="创建日期" dataIndex="created_at" sorter={(a, b) => a['created_at'] - b['created_at']}
                   render={(text) => (<span>{moment(1000 * text).format('YYYY-MM-DD')}</span>)}/>
           <Column title="操作" dataIndex="action"

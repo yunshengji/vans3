@@ -3,8 +3,11 @@ import { Link } from 'umi';
 import { connect } from 'dva';
 import { Breadcrumb, Button, Tabs } from 'antd';
 import Customers from '@/pages/Contacts/components/Customers';
-import CreateCustomerModal from '@/pages/Contacts/components/CreateCustomerModal';
 import Contractors from '@/pages/Contacts/components/Contractors';
+import CreateCustomerModal from '@/pages/Contacts/components/CreateCustomerModal';
+import CreateContractorModal from '@/pages/Contacts/components/CreateContractorModal';
+import EditCustomerModal from '@/pages/Contacts/components/EditCustomerModal';
+import EditContractorModal from '@/pages/Contacts/components/EditContractorModal';
 
 const { TabPane } = Tabs;
 
@@ -24,7 +27,7 @@ class ContactsList extends React.Component {
   showCreateContractorModal = () => {
     this.props.dispatch({
       type: 'contactsList/rUpdateState',
-      payload: { createCustomerModalVisible: true },
+      payload: { createContractorModalVisible: true },
     });
   };
 
@@ -32,7 +35,11 @@ class ContactsList extends React.Component {
     const { activeKey } = this.props;
     const routes = activeKey === 'customers' ? [{ breadcrumbName: '客户列表' }] : [{ breadcrumbName: '合作伙伴列表' }];
     return (
-      <div>
+      <React.Fragment>
+        <CreateCustomerModal/>
+        <CreateContractorModal/>
+        <EditCustomerModal/>
+        <EditContractorModal/>
         <div className="headerWrapperWithCreate">
           <Breadcrumb>
             {routes.map((item, index) => {
@@ -61,7 +68,6 @@ class ContactsList extends React.Component {
               新建合作伙伴
             </Button>
           }
-          <CreateCustomerModal/>
         </div>
         <div className="contentWrapper">
           <Tabs activeKey={activeKey} onChange={this.changeTab}>
@@ -73,7 +79,7 @@ class ContactsList extends React.Component {
             </TabPane>
           </Tabs>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

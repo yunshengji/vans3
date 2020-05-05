@@ -1,6 +1,6 @@
-import { CreateWorkDiary, DeleteWorkDiary, EditWorkDiary, GetWorkDiariesList } from '@/services/workDiaries';
 import { message } from 'antd';
-
+import BraftEditor from 'braft-editor';
+import { CreateWorkDiary, DeleteWorkDiary, EditWorkDiary, GetWorkDiariesList } from '@/services/workDiaries';
 
 export default {
 
@@ -26,9 +26,11 @@ export default {
   },
 
   effects: {
-    * eCreateWorkDiary({ payload }, { select, call, put }) {
+    * eCreateWorkDiary({ form, payload }, { select, call, put }) {
       try {
         const { msg } = yield call(CreateWorkDiary, payload);
+        form.resetFields();
+        form.setFieldsValue({ content: BraftEditor.createEditorState('') });
         message.success(msg);
         const { workDiaries: { current, pageSize } } = yield select(state => state.workDiariesList);
         yield put({ type: 'eGetWorkDiaries', payload: { page: current, page_size: pageSize } });

@@ -14,7 +14,7 @@ export async function DeleteCustomer(id, data) {
   });
 }
 
-export async function EditCustomer(id, data) {
+export async function UpdateCustomer(id, data) {
   return request(`/customer/${id}`, {
     method: 'PUT',
     data,
@@ -28,8 +28,29 @@ export async function GetCustomers(params) {
   });
 }
 
-export async function GetContractorsList(params) {
-  return request('/contractors', {
+export async function CreateContractor(data) {
+  return request('/partner', {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function DeleteContractor(id, data) {
+  return request(`/partner/${id}`, {
+    method: 'DELETE',
+    data,
+  });
+}
+
+export async function UpdateContractor(id, data) {
+  return request(`/partner/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
+export async function GetContractors(params) {
+  return request('/partner', {
     method: 'GET',
     params,
   });

@@ -1,25 +1,23 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Input, Select, Switch, Rate } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
 
 const { Option } = Select;
-const { TextArea } = Input;
 
-class CreateCustomerModal extends React.Component {
+class CreateContractorModal extends React.Component {
 
-  hideCreateCustomerModal = () => {
+  hideCreateContractorModal = () => {
     this.props.dispatch({
       type: 'contactsList/rUpdateState',
-      payload: { createCustomerModalVisible: false },
+      payload: { createContractorModalVisible: false },
     });
   };
 
-  submitCreatedCustomer = () => {
+  submitCreatedContractor = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values.private = !values.private;
         this.props.dispatch({
-          type: 'contactsList/eCreateCustomer',
+          type: 'contactsList/eCreateContractor',
           payload: { ...values },
         });
       }
@@ -27,13 +25,13 @@ class CreateCustomerModal extends React.Component {
   };
 
   render() {
-    const { creatingCustomer, form, createCustomerModalVisible } = this.props;
+    const { creatingContractor, form, createContractorModalVisible } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <Modal title="新建客户" visible={createCustomerModalVisible} confirmLoading={creatingCustomer}
+      <Modal title="新建合作伙伴" visible={createContractorModalVisible} confirmLoading={creatingContractor}
              afterClose={() => this.props.form.resetFields()}
-             onOk={this.submitCreatedCustomer}
-             onCancel={this.hideCreateCustomerModal}>
+             onOk={this.submitCreatedContractor}
+             onCancel={this.hideCreateContractorModal}>
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
           <Form.Item label="姓名">
             {getFieldDecorator('name', {
@@ -51,11 +49,6 @@ class CreateCustomerModal extends React.Component {
                 <Option key="male" value="male">男</Option>
                 <Option key="female" value="female">女</Option>
               </Select>,
-            )}
-          </Form.Item>
-          <Form.Item label="地区">
-            {getFieldDecorator('area', {})(
-              <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="公司">
@@ -85,39 +78,15 @@ class CreateCustomerModal extends React.Component {
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
-          <Form.Item label="客户特点">
-            {getFieldDecorator('personality', {})(
-              <TextArea placeholder="请输入"/>,
-            )}
-          </Form.Item>
-          <Form.Item label="备注">
-            {getFieldDecorator('description', {})(
-              <TextArea placeholder="请输入"/>,
-            )}
-          </Form.Item>
-          <Form.Item label="重点关注">
-            {getFieldDecorator('points', {})(
-              <Rate count={3}/>,
-            )}
-          </Form.Item>
-          <Form.Item label="公开客户信息">
-            {getFieldDecorator('private', {
-              valuePropName: 'checked',
-              initialValue: true,
-              rules: [{ required: true }],
-            })(
-              <Switch checkedChildren="公开" unCheckedChildren="隐藏"/>,
-            )}
-          </Form.Item>
         </Form>
       </Modal>
     );
   }
 }
 
-const WrappedForm = Form.create({ name: 'createCustomer' })(CreateCustomerModal);
+const WrappedForm = Form.create({ name: 'createCustomer' })(CreateContractorModal);
 
 export default connect(({ loading, contactsList }) => ({
-  creatingCustomer: loading.effects['contactsList/eCreateCustomer'],
-  createCustomerModalVisible: contactsList.createCustomerModalVisible,
+  creatingContractor: loading.effects['contactsList/eCreateContractor'],
+  createContractorModalVisible: contactsList.createContractorModalVisible,
 }))(WrappedForm);

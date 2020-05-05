@@ -5,38 +5,38 @@ import { Modal, Form, Input, Select, Switch, Rate } from 'antd';
 const { Option } = Select;
 const { TextArea } = Input;
 
-class CreateCustomerModal extends React.Component {
+class EditCustomerModal extends React.Component {
 
-  hideCreateCustomerModal = () => {
+  hideEditCustomerModal = () => {
     this.props.dispatch({
       type: 'contactsList/rUpdateState',
-      payload: { createCustomerModalVisible: false },
+      payload: { editCustomerModalVisible: false },
     });
   };
 
-  submitCreatedCustomer = () => {
-    this.props.form.validateFields((err, values) => {
+  submitEditedCustomer = () => {
+    const { dispatch, form, editCustomerForm } = this.props;
+    const { id } = editCustomerForm;
+    form.validateFields((err, values) => {
       if (!err) {
         values.private = !values.private;
-        this.props.dispatch({
-          type: 'contactsList/eCreateCustomer',
-          payload: { ...values },
-        });
+        dispatch({ type: 'contactsList/eUpdateCustomer', id, payload: { ...values } });
       }
     });
   };
 
   render() {
-    const { creatingCustomer, form, createCustomerModalVisible } = this.props;
+    const { updatingCustomer, form, editCustomerModalVisible, editCustomerForm } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <Modal title="新建客户" visible={createCustomerModalVisible} confirmLoading={creatingCustomer}
+      <Modal title="修改客户信息" visible={editCustomerModalVisible} confirmLoading={updatingCustomer}
              afterClose={() => this.props.form.resetFields()}
-             onOk={this.submitCreatedCustomer}
-             onCancel={this.hideCreateCustomerModal}>
+             onOk={this.submitEditedCustomer}
+             onCancel={this.hideEditCustomerModal}>
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
           <Form.Item label="姓名">
             {getFieldDecorator('name', {
+              initialValue: editCustomerForm['name'],
               rules: [
                 { required: true, message: '姓名不能为空' },
               ],
@@ -45,7 +45,7 @@ class CreateCustomerModal extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('gender', { initialValue: 'unknown' })(
+            {getFieldDecorator('gender', { initialValue: editCustomerForm['gender'] })(
               <Select placeholder="请选择">
                 <Option key="unknown" value="unknown">不清楚</Option>
                 <Option key="male" value="male">男</Option>
@@ -54,56 +54,57 @@ class CreateCustomerModal extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="地区">
-            {getFieldDecorator('area', {})(
+            {getFieldDecorator('area', { initialValue: editCustomerForm['area'] })(
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="公司">
-            {getFieldDecorator('company', {})(
+            {getFieldDecorator('company', { initialValue: editCustomerForm['company'] })(
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="职务">
-            {getFieldDecorator('job_title', {})(
+            {getFieldDecorator('job_title', { initialValue: editCustomerForm['job_title'] })(
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="手机号码">
-            {getFieldDecorator('phone', {})(
+            {getFieldDecorator('phone', { initialValue: editCustomerForm['phone'] })(
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="微信">
-            {getFieldDecorator('wx', {})(
+            {getFieldDecorator('wx', { initialValue: editCustomerForm['wx'] })(
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="邮箱">
             {getFieldDecorator('email', {
+              initialValue: editCustomerForm['email'],
               rules: [{ type: 'email', message: '请填写符合格式的邮箱地址' }],
             })(
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="客户特点">
-            {getFieldDecorator('personality', {})(
+            {getFieldDecorator('personality', { initialValue: editCustomerForm['personality'] })(
               <TextArea placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="备注">
-            {getFieldDecorator('description', {})(
+            {getFieldDecorator('description', { initialValue: editCustomerForm['description'] })(
               <TextArea placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="重点关注">
-            {getFieldDecorator('points', {})(
+            {getFieldDecorator('points', { initialValue: editCustomerForm['points'] })(
               <Rate count={3}/>,
             )}
           </Form.Item>
           <Form.Item label="公开客户信息">
             {getFieldDecorator('private', {
               valuePropName: 'checked',
-              initialValue: true,
+              initialValue: !editCustomerForm['private'],
               rules: [{ required: true }],
             })(
               <Switch checkedChildren="公开" unCheckedChildren="隐藏"/>,
@@ -115,9 +116,10 @@ class CreateCustomerModal extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'createCustomer' })(CreateCustomerModal);
+const WrappedForm = Form.create({ name: 'editCustomer' })(EditCustomerModal);
 
 export default connect(({ loading, contactsList }) => ({
-  creatingCustomer: loading.effects['contactsList/eCreateCustomer'],
-  createCustomerModalVisible: contactsList.createCustomerModalVisible,
+  updatingCustomer: loading.effects['contactsList/eUpdateCustomer'],
+  editCustomerModalVisible: contactsList.editCustomerModalVisible,
+  editCustomerForm: contactsList.editCustomerForm,
 }))(WrappedForm);
