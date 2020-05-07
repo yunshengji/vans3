@@ -36,18 +36,14 @@ class CreateUserModal extends React.Component {
           <Form layout="horizontal" labelCol={{ xs: 5 }} wrapperCol={{ xs: 17 }}>
             <Form.Item label="姓名">
               {getFieldDecorator('name', {
-                rules: [
-                  { required: true, message: '姓名不能为空' },
-                ],
+                rules: [{ required: true, message: '姓名不能为空' }],
               })(
                 <Input placeholder="请输入"/>,
               )}
             </Form.Item>
             <Form.Item label="部门">
               {getFieldDecorator('department', {
-                rules: [
-                  { required: true, message: '部门不能为空' },
-                ],
+                rules: [{ required: true, message: '部门不能为空' }],
               })(
                 <Select placeholder="请选择">
                   {departments.map(item =>
@@ -59,9 +55,7 @@ class CreateUserModal extends React.Component {
             <Form.Item label="权限">
               {getFieldDecorator('level', {
                 initialValue: 1,
-                rules: [
-                  { required: true, message: '权限不能为空' },
-                ],
+                rules: [{ required: true, message: '权限不能为空' }],
               })(
                 <Select placeholder="请选择">
                   <Option value={1}>普通权限</Option>
@@ -73,6 +67,8 @@ class CreateUserModal extends React.Component {
               {getFieldDecorator('username', {
                 rules: [
                   { required: true, message: '账号不能为空' },
+                  { min: 5, message: '账号长度不能少于 5 位！' },
+                  { max: 20, message: '账号长度不能多于 20 位！！' },
                 ],
               })(
                 <Input placeholder="请输入"/>,
@@ -81,7 +77,8 @@ class CreateUserModal extends React.Component {
             <Form.Item label="密码">
               {getFieldDecorator('password', {
                 rules: [
-                  { required: true, message: '密码不能为空' },
+                  { required: true, message: '请输入密码！' },
+                  { min: 5, message: '密码长度不能少于 5 位！' },
                 ],
               })(
                 <Input placeholder="请输入" type="password"/>,

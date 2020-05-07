@@ -1,5 +1,12 @@
 import request from '@/utils/request';
 
+export async function Login(data) {
+  return request('/login', {
+    method: 'POST',
+    data,
+  });
+}
+
 export async function GetDepartments(params) {
   return request('/department', {
     method: 'GET',

@@ -77,7 +77,9 @@ class EditUserModal extends React.Component {
               {getFieldDecorator('username', {
                 initialValue: editUser['username'],
                 rules: [
-                  { required: true, message: '账号不能为空' },
+                  { required: true, message: '请输入账号！' },
+                  { min: 5, message: '账号长度不能少于 5 位！' },
+                  { max: 20, message: '账号长度不能多于 20 位！！' },
                 ],
               })(
                 <Input placeholder="请输入"/>,
@@ -86,6 +88,7 @@ class EditUserModal extends React.Component {
             <Form.Item label="密码">
               {getFieldDecorator('password', {
                 initialValue: editUser['password'],
+                rules: [{ min: 5, message: '密码长度不能少于 5 位！' }],
               })(
                 <Input placeholder="请输入" type="password"/>,
               )}

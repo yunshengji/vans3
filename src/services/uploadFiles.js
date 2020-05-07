@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
-export async function Login(data) {
-  return request('/login', {
+export async function UploadFile(data) {
+  return request('/attachment', {
     method: 'POST',
     data,
   });

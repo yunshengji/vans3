@@ -50,7 +50,6 @@ const errorHandler = error => {
 
 const request = extend({
   prefix,
-  timeout: 3000,
   errorHandler,
 });
 

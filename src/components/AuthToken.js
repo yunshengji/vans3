@@ -16,11 +16,9 @@ class AuthToken extends React.Component {
   }
 
   render() {
-    const token = Cookies.get('token');
-    const props = this.props;
     return (
       <React.Fragment>
-        {token ? this.props.children : router.push('/login')}
+        {Cookies.get('token') ? this.props.children : router.push('/login')}
       </React.Fragment>
     );
   }

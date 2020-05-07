@@ -47,11 +47,11 @@ class Contractors extends React.Component {
   };
 
   render() {
-    const { fetchingContractors, deletingContractor, total, current, pageSize, contractorsList } = this.props;
+    const { fetchingContractors, deletingContractor, mine, total, current, pageSize, contractorsList } = this.props;
     return (
       <React.Fragment>
         <h3 style={{ marginTop: '1em' }}>查找合作伙伴</h3>
-        <Form layout="horizontal">
+        <Form layout="horizontal" className="searchWrapper">
           <Row gutter={[80]}>
             <Col xl={6} md={12} sm={24}>
               <Form.Item label="姓名">
@@ -91,11 +91,13 @@ class Contractors extends React.Component {
                 <Input placeholder="请输入"/>
               </Form.Item>
             </Col>
+            <Col xl={6} md={12} sm={24}>
+              <div className="searchButtons">
+                <Button type="primary">搜索</Button>
+                <Button style={{ marginLeft: '1em' }}>重置</Button>
+              </div>
+            </Col>
           </Row>
-          <div className="searchWrapper">
-            <Button type="primary">搜索</Button>
-            <Button style={{ marginLeft: '1em' }}>重置</Button>
-          </div>
         </Form>
         <h3 style={{ marginBottom: '2em' }}>合作伙伴列表</h3>
         <Table size="middle" tableLayout="fixed" pagination={false} dataSource={contractorsList}
@@ -142,9 +144,10 @@ class Contractors extends React.Component {
   }
 }
 
-export default connect(({ loading, contactsList }) => ({
+export default connect(({ loading, basicLayout, contactsList }) => ({
   fetchingContractors: loading.effects['contactsList/eGetContractors'],
   deletingContractor: loading.effects['contactsList/eDeleteContractor'],
+  mine: basicLayout.mine,
   total: contactsList.contractors.total,
   current: contactsList.contractors.current,
   pageSize: contactsList.contractors.pageSize,

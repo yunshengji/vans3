@@ -1,7 +1,7 @@
 import { router } from 'umi';
 import { message } from 'antd';
 import Cookies from 'js-cookie';
-import { Login } from '@/services/login';
+import { Login } from '@/services/users';
 
 export default {
 

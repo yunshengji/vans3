@@ -96,7 +96,7 @@ class EditCustomerModal extends React.Component {
               <TextArea placeholder="请输入"/>,
             )}
           </Form.Item>
-          <Form.Item label="重点关注">
+          <Form.Item label="重点关注度">
             {getFieldDecorator('points', { initialValue: editCustomerForm['points'] })(
               <Rate count={3}/>,
             )}

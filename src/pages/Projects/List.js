@@ -144,7 +144,7 @@ class Projects extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col className="searchWrapper">
+                <Col className="searchButtons">
                   <Button type="primary" htmlType="submit">
                     搜索
                   </Button>

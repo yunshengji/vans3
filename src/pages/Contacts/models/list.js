@@ -14,6 +14,8 @@ export default {
     createCustomerModalVisible: false,
     editCustomerModalVisible: false,
     editCustomerForm: {},
+    customerProfileModalVisible: false,
+    customerProfile: { creator: {} },
     customers: {
       total: 0,
       current: 1,
