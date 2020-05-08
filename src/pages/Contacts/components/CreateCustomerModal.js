@@ -17,7 +17,6 @@ class CreateCustomerModal extends React.Component {
   submitCreatedCustomer = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values.private = !values.private;
         this.props.dispatch({
           type: 'contactsList/eCreateCustomer',
           payload: { ...values },
@@ -100,13 +99,13 @@ class CreateCustomerModal extends React.Component {
               <Rate count={3}/>,
             )}
           </Form.Item>
-          <Form.Item label="公开客户信息">
+          <Form.Item label="客户信息">
             {getFieldDecorator('private', {
               valuePropName: 'checked',
               initialValue: true,
               rules: [{ required: true }],
             })(
-              <Switch checkedChildren="公开" unCheckedChildren="隐藏"/>,
+              <Switch checkedChildren="不公开" unCheckedChildren="公开"/>,
             )}
           </Form.Item>
         </Form>

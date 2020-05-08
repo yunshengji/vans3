@@ -14,6 +14,7 @@ export default {
         { path: '/projects', component: './Projects/List' },
         { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
         { path: '/workDiaries', component: './WorkDiaries/List' },
+        { path: '/lawsRegulations', component: './LawsRegulations/List' },
         { path: '/contacts', component: './Contacts/List' },
         { path: '/users', component: './Users/List' },
         { path: '/users/setting', component: './Users/Setting' },

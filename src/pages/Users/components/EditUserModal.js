@@ -119,7 +119,7 @@ class EditUserModal extends React.Component {
                 initialValue: editUser['alive'],
                 rules: [{ required: true }],
               })(
-                <Switch checkedChildren="激活" unCheckedChildren="禁用"/>,
+                <Switch checkedChildren="在职" unCheckedChildren="离职"/>,
               )}
             </Form.Item>
           </Form>

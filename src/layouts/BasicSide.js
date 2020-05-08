@@ -3,6 +3,7 @@ import { Link, router, withRouter } from 'umi';
 import { Avatar, Layout, Menu, Spin } from 'antd';
 import { connect } from 'dva';
 import styles from './BasicSide.less';
+import { getFileURL } from '@/utils/transfer';
 
 const { Sider } = Layout;
 
@@ -34,7 +35,7 @@ class BasicSide extends React.Component {
           {
             (avatar || name) ?
               <div className="userContainer">
-                <Avatar size={48} src={avatar}/>
+                <Avatar size={48} src={getFileURL(avatar)}/>
                 {
                   menuCollapsed ||
                   <div className="username">

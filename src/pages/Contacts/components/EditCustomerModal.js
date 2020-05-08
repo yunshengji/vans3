@@ -19,7 +19,6 @@ class EditCustomerModal extends React.Component {
     const { id } = editCustomerForm;
     form.validateFields((err, values) => {
       if (!err) {
-        values.private = !values.private;
         dispatch({ type: 'contactsList/eUpdateCustomer', id, payload: { ...values } });
       }
     });
@@ -101,13 +100,13 @@ class EditCustomerModal extends React.Component {
               <Rate count={3}/>,
             )}
           </Form.Item>
-          <Form.Item label="公开客户信息">
+          <Form.Item label="客户信息">
             {getFieldDecorator('private', {
               valuePropName: 'checked',
-              initialValue: !editCustomerForm['private'],
+              initialValue: !!editCustomerForm['private'],
               rules: [{ required: true }],
             })(
-              <Switch checkedChildren="公开" unCheckedChildren="隐藏"/>,
+              <Switch checkedChildren="不公开" unCheckedChildren="公开"/>,
             )}
           </Form.Item>
         </Form>

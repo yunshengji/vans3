@@ -3,7 +3,7 @@ import { message } from 'antd';
 
 export default {
 
-  namespace: 'usersList',
+  namespace: 'awsRegulationsList',
 
   state: {
     routes: [{ breadcrumbName: '用户列表' }],

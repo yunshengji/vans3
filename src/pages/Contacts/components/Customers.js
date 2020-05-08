@@ -85,7 +85,7 @@ class Customers extends React.Component {
               <Form.Item label="邮箱"><Input placeholder="请输入"/></Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="是否共享"><Switch checked checkedChildren="公开" unCheckedChildren="隐藏"/></Form.Item>
+              <Form.Item label="是否公开"><Switch checked checkedChildren="不公开" unCheckedChildren="公开"/></Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
               <div className="searchButtons">
@@ -121,7 +121,7 @@ class Customers extends React.Component {
           <Column title="微信" dataIndex="wx"/>
           <Column title="邮箱" dataIndex="email"/>
           <Column title="状态" dataIndex="private"
-                  render={text => (text ? <Tag>隐藏</Tag> : <Tag color="#108EE9">公开</Tag>)}/>
+                  render={text => (text ? <Tag color="#108EE9 ">不公开</Tag> : <Tag color="#F50">公开</Tag>)}/>
           <Column title="创建人" dataIndex="creator" render={(creator) => creator.name}/>
           <Column title="创建日期" dataIndex="created_at" sorter={(a, b) => a['created_at'] - b['created_at']}
                   render={(text) => (<span>{moment(1000 * text).format('YYYY-MM-DD')}</span>)}/>

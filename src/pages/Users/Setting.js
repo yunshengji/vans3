@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
 import { Row, Col, Upload, Button, Breadcrumb, Form, Input, Avatar, message } from 'antd';
+import { getFileURL } from '@/utils/transfer';
 
 class Setting extends React.Component {
 
@@ -75,7 +76,7 @@ class Setting extends React.Component {
               <Col xl={6} lg={8} md={12} sm={14} xs={24}>
                 <Form.Item label="头像">
                   <Upload {...uploadConfig}>
-                    <Avatar size={120} src={avatarPreview || mine.avatar}/>
+                    <Avatar size={120} src={avatarPreview || getFileURL(mine.avatar)}/>
                   </Upload>
                 </Form.Item>
                 <Form.Item label="姓名">
