@@ -14,7 +14,7 @@ export default {
         { path: '/projects', component: './Projects/List' },
         { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
         { path: '/workDiaries', component: './WorkDiaries/List' },
-        { path: '/lawsRegulations', component: './LawsRegulations/List' },
+        { path: '/laws', component: './Laws/List' },
         { path: '/contacts', component: './Contacts/List' },
         { path: '/users', component: './Users/List' },
         { path: '/users/setting', component: './Users/Setting' },
@@ -29,4 +29,17 @@ export default {
       dll: true,
     }],
   ],
+  urlLoaderExcludes: [/\.svg$/],
+  chainWebpack(config) {
+    config.module
+      .rule('svg')
+      .test(/\.svg(\?v=\d+\.\d+\.\d+)?$/)
+      .use([
+        { loader: 'babel-loader' },
+        {
+          loader: '@svgr/webpack', options: { babel: false, icon: true },
+        },
+      ])
+      .loader(require.resolve('@svgr/webpack'));
+  },
 };

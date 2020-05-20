@@ -1,54 +1,28 @@
-.globalSideDrawer {
-  :global {
-    .ant-drawer-body {
-      padding: 0;
+.basicSideDrawer {
+  .ant-drawer-body {
+    height: 100vh;
+    display: flex;
+    padding: 0;
+  }
 
-      .globalSideDrawerWrapper {
-        display: flex;
-        flex-direction: column;
-        height: 80vh;
-        overflow: auto;
+  .basicSideDrawerWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
 
-        > a {
-          padding: 25px;
-          background-color: #3F78FF;
+    > a {
+      padding: 2rem 1.5rem;
+      background-color: #001529;
 
-          img {
-            width: 100%;
-          }
-        }
+      img {
+        width: 100%;
       }
     }
+  }
 
-    .ant-menu {
-      padding-top: 20px;
-      border-right: none;
-
-      li {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-
-        img {
-          width: 15px;
-          margin-right: .8em;
-        }
-      }
-    }
-
-    .ant-menu-item {
-      width: 120px;
-      margin: 10px auto;
-      border-radius: 12px;
-    }
-
-    .ant-menu-item-selected {
-      color: #FFF;
-      background-color: #3F78FF !important;
-
-      &::after {
-        display: none;
-      }
-    }
+  .ant-menu {
+    border-right: none;
+    flex-grow: 1;
   }
 }

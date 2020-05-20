@@ -31,7 +31,7 @@ export default {
         }
         const { msg } = yield call(EditUser, id, payload);
         message.success(msg);
-        yield put({ type: 'basicLayout/eGetMe' });
+        yield put({ type: 'common/eGetMe' });
         yield put({ type: 'rUpdateState', payload: { avatarFile: null, avatarPreview: '' } });
       } catch (err) {
         console.log(err);

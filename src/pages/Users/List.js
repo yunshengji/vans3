@@ -91,7 +91,7 @@ class UsersList extends React.Component {
             <Column title="邮箱" dataIndex="email"/>
             <Column title="状态" dataIndex="alive" render={(text, record) => (
               <React.Fragment>
-                {text ? <Tag color="#108EE9">已激活</Tag> : <Tag color="#F50">已禁用</Tag>}
+                {text ? <Tag color="#108EE9">在职</Tag> : <Tag color="#F50">离职</Tag>}
               </React.Fragment>
             )}/>
             {
@@ -118,10 +118,10 @@ class UsersList extends React.Component {
   }
 }
 
-export default connect(({ loading, basicLayout, usersList }) => ({
+export default connect(({ loading, common, usersList }) => ({
   fetchingUsers: loading.effects['usersList/eGetUsers'],
   routes: usersList.routes,
-  level: basicLayout.mine.level,
+  level: common.mine.level,
   createUserModalVisible: usersList.createUserModalVisible,
   total: usersList.users.total,
   current: usersList.users.current,

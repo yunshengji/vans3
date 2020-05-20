@@ -139,10 +139,9 @@ class Setting extends React.Component {
 
 const WrappedForm = Form.create({ name: 'setting' })(Setting);
 
-export default connect(({ loading, basicLayout, setting }) => ({
+export default connect(({ loading, common, setting }) => ({
   submittingEdit: loading.effects['setting/eSubmitUpdate'],
-  mine: basicLayout.mine,
+  mine: common.mine,
   routes: setting.routes,
-  avatarFile: setting.avatarFile,
   avatarPreview: setting.avatarPreview,
 }))(WrappedForm);

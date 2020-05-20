@@ -144,10 +144,10 @@ class Contractors extends React.Component {
   }
 }
 
-export default connect(({ loading, basicLayout, contactsList }) => ({
+export default connect(({ loading, common, contactsList }) => ({
   fetchingContractors: loading.effects['contactsList/eGetContractors'],
   deletingContractor: loading.effects['contactsList/eDeleteContractor'],
-  mine: basicLayout.mine,
+  mine: common.mine,
   total: contactsList.contractors.total,
   current: contactsList.contractors.current,
   pageSize: contactsList.contractors.pageSize,

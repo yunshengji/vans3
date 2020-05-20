@@ -68,7 +68,7 @@ class EditWorkDiaryDrawer extends React.Component {
           <Spin spinning={Boolean(deletingWorkDiary) || Boolean(updatingWorkDiary)}>
             <Form onSubmit={this.handleSubmit}>
               <Form.Item label="修改时间">
-                <span>{moment(1000 * editWorkDiary.created_at).format('YYYY-MM-DD HH:mm')}</span>
+                <span>{moment(1000 * editWorkDiary['created_at']).format('YYYY-MM-DD HH:mm')}</span>
               </Form.Item>
               <Form.Item label="日志标题">
                 {getFieldDecorator('title', {

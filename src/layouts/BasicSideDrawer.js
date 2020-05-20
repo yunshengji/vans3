@@ -1,13 +1,24 @@
 import React from 'react';
 import { Link, router, withRouter } from 'umi';
-import { Drawer, Menu } from 'antd';
+import { Drawer, Icon, Layout, Menu } from 'antd';
 import { connect } from 'dva';
-import styles from './BasicSideDrawer.less';
+import DashboardReverseIcon from '../../public/menu/dashboard-reverse.svg';
+import DashboardIcon from '../../public/menu/dashboard.svg';
+import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
+import ContractsIcon from '../../public/menu/contracts.svg';
+import DatumReverseIcon from '../../public/menu/datum-reverse.svg';
+import DatumIcon from '../../public/menu/datum.svg';
+import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
+import ContactsIcon from '../../public/menu/contacts.svg';
+import UsersReverseIcon from '../../public/menu/users-reverse.svg';
+import UsersIcon from '../../public/menu/users.svg';
+import MessagesReverseIcon from '../../public/menu/messages-reverse.svg';
+import MessagesIcon from '../../public/menu/messages.svg';
 
 class BasicSideDrawer extends React.Component {
   onClose = () => {
     this.props.dispatch({
-      type: 'basicLayout/rUpdateState',
+      type: 'common/rUpdateState',
       payload: { drawerMenuVisible: false },
     });
   };
@@ -15,7 +26,7 @@ class BasicSideDrawer extends React.Component {
     router.push(`/${key}`);
     setTimeout(() => {
       this.props.dispatch({
-        type: 'basicLayout/rUpdateState',
+        type: 'common/rUpdateState',
         payload: { drawerMenuVisible: false },
       });
     }, 200);
@@ -25,35 +36,39 @@ class BasicSideDrawer extends React.Component {
     const { drawerMenuVisible } = this.props;
     const selectKeys = this.props.history.location.pathname.split('/')[1];
     return (
-      <Drawer placement="left" closable={false} width={180} visible={drawerMenuVisible} onClose={this.onClose}
-              className={styles.globalSideDrawer}>
-        <div className="globalSideDrawerWrapper">
+      <Drawer placement="left" closable={false} width="12rem" visible={drawerMenuVisible} onClose={this.onClose}
+              className="basicSideDrawer">
+        <div className="basicSideDrawerWrapper">
           <Link to="/projects">
             <img src="/system-name.svg" alt="万铭"/>
           </Link>
-          <Menu selectedKeys={[selectKeys]} onSelect={this.onSelect}>
+          <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
             <Menu.Item key="projects">
-              <img src={selectKeys === 'projects' ? '/menu/dashboard-reverse.svg' : '/menu/dashboard.svg'} alt="项目库"/>
+              <Icon component={selectKeys === 'projects' ? DashboardReverseIcon : DashboardIcon}/>
               <span>项目库</span>
             </Menu.Item>
+            <Menu.Item key="workDiaries">
+              <Icon component={selectKeys === 'workDiaries' ? DashboardReverseIcon : DashboardIcon}/>
+              <span>工作日志</span>
+            </Menu.Item>
             <Menu.Item key="contracts">
-              <img src={selectKeys === 'contracts' ? '/menu/contracts-reverse.svg' : '/menu/contracts.svg'} alt="合同"/>
+              <Icon component={selectKeys === 'contracts' ? ContractsReverseIcon : ContractsIcon}/>
               <span>合同</span>
             </Menu.Item>
             <Menu.Item key="datum">
-              <img src={selectKeys === 'datum' ? '/menu/datum-reverse.svg' : '/menu/datum.svg'} alt="资料库"/>
+              <Icon component={selectKeys === 'datum' ? DatumReverseIcon : DatumIcon}/>
               <span>资料库</span>
             </Menu.Item>
             <Menu.Item key="contacts">
-              <img src={selectKeys === 'contacts' ? '/menu/contacts-reverse.svg' : '/menu/contacts.svg'} alt="联系人"/>
+              <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/>
               <span>联系人</span>
             </Menu.Item>
             <Menu.Item key="users">
-              <img src={selectKeys === 'users' ? '/menu/users-reverse.svg' : '/menu/users.svg'} alt="用户"/>
+              <Icon component={selectKeys === 'users' ? UsersReverseIcon : UsersIcon}/>
               <span>用户</span>
             </Menu.Item>
             <Menu.Item key="messages">
-              <img src={selectKeys === 'messages' ? '/menu/messages-reverse.svg' : '/menu/messages.svg'} alt="消息"/>
+              <Icon component={selectKeys === 'messages' ? MessagesReverseIcon : MessagesIcon}/>
               <span>消息</span>
             </Menu.Item>
           </Menu>
@@ -63,6 +78,6 @@ class BasicSideDrawer extends React.Component {
   }
 }
 
-export default withRouter(connect(({ basicLayout }) => ({
-  drawerMenuVisible: basicLayout.drawerMenuVisible,
+export default withRouter(connect(({ common }) => ({
+  drawerMenuVisible: common.drawerMenuVisible,
 }))(BasicSideDrawer));

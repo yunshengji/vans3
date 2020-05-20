@@ -1,16 +1,22 @@
 import React from 'react';
 import { Link, router, withRouter } from 'umi';
-import { Avatar, Layout, Menu, Spin } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
 import { connect } from 'dva';
-import styles from './BasicSide.less';
-import { getFileURL } from '@/utils/transfer';
-
-const { Sider } = Layout;
+import DashboardIcon from '../../public/menu/dashboard.svg';
+import DashboardReverseIcon from '../../public/menu/dashboard-reverse.svg';
+import ContractsIcon from '../../public/menu/contracts.svg';
+import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
+import LawReverseIcon from '../../public/menu/datum-reverse.svg';
+import LawIcon from '../../public/menu/datum.svg';
+import ContactsIcon from '../../public/menu/contacts.svg';
+import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
+import UsersIcon from '../../public/menu/users.svg';
+import UsersReverseIcon from '../../public/menu/users-reverse.svg';
 
 class BasicSide extends React.Component {
   onCollapse = (menuCollapsed) => {
     this.props.dispatch({
-      type: 'basicLayout/rUpdateState',
+      type: 'common/rUpdateState',
       payload: { menuCollapsed },
     });
   };
@@ -19,11 +25,11 @@ class BasicSide extends React.Component {
   };
 
   render() {
-    const { menuCollapsed, avatar, name } = this.props;
+    const { menuCollapsed } = this.props;
     const selectKeys = this.props.history.location.pathname.split('/')[1];
     return (
-      <Sider width="180" collapsible breakpoint="lg" theme="light" onCollapse={this.onCollapse}
-             className={styles.globalSide}>
+      <Layout.Sider width="180" collapsible breakpoint="lg" theme="light" onCollapse={this.onCollapse}
+                    className="basicSide">
         <Link className="systemName" to="/projects">
           {
             menuCollapsed ?
@@ -31,60 +37,37 @@ class BasicSide extends React.Component {
               <img src="/system-name.svg" alt="万铭"/>
           }
         </Link>
-        <Link className="userWrapper" to="/users/setting">
-          {
-            (avatar || name) ?
-              <div className="userContainer">
-                <Avatar size={48} src={getFileURL(avatar)}/>
-                {
-                  menuCollapsed ||
-                  <div className="username">
-                    <p>姓名</p>
-                    <p>{name}</p>
-                  </div>
-                }
-              </div>
-              :
-              <Spin/>
-          }
-        </Link>
         <Menu mode="inline" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
           <Menu.Item key="projects">
-            <img src={selectKeys === 'projects' ? '/menu/dashboard-reverse.svg' : '/menu/dashboard.svg'} alt="项目库"/>
+            <Icon component={selectKeys === 'projects' ? DashboardReverseIcon : DashboardIcon}/>
             <span>项目库</span>
           </Menu.Item>
           <Menu.Item key="workDiaries">
-            <img src={selectKeys === 'workDiaries' ? '/menu/dashboard-reverse.svg' : '/menu/dashboard.svg'} alt="项目库"/>
+            <Icon component={selectKeys === 'workDiaries' ? DashboardReverseIcon : DashboardIcon}/>
             <span>工作日志</span>
           </Menu.Item>
           <Menu.Item key="contracts">
-            <img src={selectKeys === 'contracts' ? '/menu/contracts-reverse.svg' : '/menu/contracts.svg'} alt="合同"/>
+            <Icon component={selectKeys === 'contracts' ? ContractsReverseIcon : ContractsIcon}/>
             <span>合同</span>
           </Menu.Item>
-          <Menu.Item key="datum">
-            <img src={selectKeys === 'datum' ? '/menu/datum-reverse.svg' : '/menu/datum.svg'} alt="资料库"/>
-            <span>资料库</span>
+          <Menu.Item key="laws">
+            <Icon component={selectKeys === 'laws' ? LawReverseIcon : LawIcon}/>
+            <span>法律法规</span>
           </Menu.Item>
           <Menu.Item key="contacts">
-            <img src={selectKeys === 'contacts' ? '/menu/contacts-reverse.svg' : '/menu/contacts.svg'} alt="联系人"/>
+            <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/>
             <span>联系人</span>
           </Menu.Item>
           <Menu.Item key="users">
-            <img src={selectKeys === 'users' ? '/menu/users-reverse.svg' : '/menu/users.svg'} alt="用户"/>
+            <Icon component={selectKeys === 'users' ? UsersReverseIcon : UsersIcon}/>
             <span>用户</span>
           </Menu.Item>
-          <Menu.Item key="messages">
-            <img src={selectKeys === 'messages' ? '/menu/messages-reverse.svg' : '/menu/messages.svg'} alt="消息"/>
-            <span>消息</span>
-          </Menu.Item>
         </Menu>
-      </Sider>
+      </Layout.Sider>
     );
   }
 }
 
-export default withRouter(connect(({ basicLayout }) => ({
-  menuCollapsed: basicLayout.menuCollapsed,
-  avatar: basicLayout.mine.avatar,
-  name: basicLayout.mine.name,
+export default withRouter(connect(({ common }) => ({
+  menuCollapsed: common.menuCollapsed,
 }))(BasicSide));

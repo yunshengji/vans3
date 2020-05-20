@@ -1,13 +1,11 @@
-import { prefix } from '../../config/api';
+const Cookies = require('js-cookie');
+const { prefix } = require('../../config/api');
 
-const getFileURL = (id) => {
-  if (id) {
-    return `${prefix}/download/${id}`;
-  } else {
-    return ``;
-  }
+const getFileURL = id => {
+  const token = Cookies.get('token');
+  return id && `${prefix}/download/${id}?token=${token}`;
 };
 
-export {
+module.exports = {
   getFileURL,
 };

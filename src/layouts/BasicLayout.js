@@ -11,7 +11,7 @@ const { Content, Footer } = Layout;
 class BasicLayout extends React.Component {
 
   componentDidMount() {
-    this.props.dispatch({ type: 'basicLayout/eGetMe' });
+    this.props.dispatch({ type: 'common/eGetMe' });
   }
 
   render() {

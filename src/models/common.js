@@ -1,8 +1,9 @@
 import { GetMe } from '@/services/users';
+// import { UploadFile } from '@/services/files';
 
 export default {
 
-  namespace: 'basicLayout',
+  namespace: 'common',
 
   state: {
     menuCollapsed: false,
@@ -11,6 +12,7 @@ export default {
 
     mine: {},
   },
+
 
   subscriptions: {
     setup({ dispatch, history }) {
@@ -26,6 +28,14 @@ export default {
         console.log(err);
       }
     },
+    // * eUploadFile({ payload }, { select, call, put }) {
+    //   const { folder_path, file } = payload;
+    //   const formData = new FormData();
+    //   formData.append('folder_path', folder_path);
+    //   formData.append('file', file);
+    //   const { data } = yield call(UploadFile, formData);
+    //   return data;
+    // },
   },
 
   reducers: {

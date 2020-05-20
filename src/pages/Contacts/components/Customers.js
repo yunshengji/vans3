@@ -154,10 +154,10 @@ class Customers extends React.Component {
   }
 }
 
-export default connect(({ loading, basicLayout, contactsList }) => ({
+export default connect(({ loading, common, contactsList }) => ({
   fetchingCustomers: loading.effects['contactsList/eGetCustomers'],
   deletingCustomer: loading.effects['contactsList/eDeleteCustomer'],
-  mine: basicLayout.mine,
+  mine: common.mine,
   total: contactsList.customers.total,
   current: contactsList.customers.current,
   pageSize: contactsList.customers.pageSize,

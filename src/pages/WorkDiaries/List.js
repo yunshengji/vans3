@@ -90,7 +90,7 @@ class WorkDiariesList extends React.Component {
                                      this.showEditDrawer(item);
                                    }}>
                           <List.Item.Meta
-                            title={moment(1000 * item.created_at).format('YYYY-MM-DD HH:mm') + ' ' + item.title}
+                            title={moment(1000 * item['created_at']).format('YYYY-MM-DD HH:mm') + ' ' + item.title}
                             description={
                               <React.Fragment>
                                 重要性：<Rate disabled count={3} value={item.points}/>
