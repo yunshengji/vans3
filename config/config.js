@@ -15,6 +15,7 @@ export default {
         { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
         { path: '/workDiaries', component: './WorkDiaries/List' },
         { path: '/laws', component: './Laws/List' },
+        { path: '/gossip', component: './Gossip/Gossip' },
         { path: '/contacts', component: './Contacts/List' },
         { path: '/users', component: './Users/List' },
         { path: '/users/setting', component: './Users/Setting' },

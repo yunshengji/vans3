@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Breadcrumb, Tag, Row, Form, Col, Input, Select, DatePicker, Modal } from 'antd';
+import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Input, Select, DatePicker, Modal } from 'antd';
 import moment from 'moment';
 import UploadLaws from '@/pages/Laws/components/UploadLaws';
 import { getFileURL } from '@/utils/transfer';
@@ -28,11 +28,19 @@ class LawsList extends React.Component {
       payload: { uploadLawsModalVisible: true },
     });
   };
+  searchLawsList = () => {
+    const values = this.props.form.getFieldsValue();
+    const { dispatch, current, pageSize } = this.props;
+    dispatch({
+      type: 'lawsList/eGetLaws',
+      payload: { page: current, page_size: pageSize, ...values },
+    });
+  };
   showDeleteConfirm = ({ id, creator: { name }, attachment: { file_name_local } }) => {
     const { dispatch } = this.props;
     confirm({
       title: '确定删除此资料',
-      content: <p>{name} 上传的的资料 <Tag>{file_name_local}</Tag></p>,
+      content: <p><b>{name}</b> 上传的的资料 <b>{file_name_local}</b></p>,
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
@@ -42,14 +50,16 @@ class LawsList extends React.Component {
     });
   };
   lawsPaginationChange = (page, pageSize) => {
+    const values = this.props.form.getFieldsValue();
     this.props.dispatch({
       type: 'lawsList/eGetLaws',
-      payload: { page, page_size: pageSize },
+      payload: { page, page_size: pageSize, ...values },
     });
   };
 
   render() {
-    const { fetchingLaws, deletingLaw, routes, level, total, current, pageSize, lawsList } = this.props;
+    const { form, fetchingLaws, deletingLaw, routes, level, belong_to, total, current, pageSize, lawsList } = this.props;
+    const { getFieldDecorator } = form;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -80,11 +90,16 @@ class LawsList extends React.Component {
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
                 <Form.Item label="类别">
-                  <Select placeholder="请选择">
-                    {LAWS_LABELS.map((item) =>
-                      <Option key={item} value={item}>{item}</Option>,
-                    )}
-                  </Select>
+                  {getFieldDecorator('belong_to', {
+                    initialValue: belong_to,
+                  })(
+                    <Select placeholder="请选择">
+                      <Option key="全部" value="">全部</Option>
+                      {LAWS_LABELS.map((item) =>
+                        <Option key={item} value={item}>{item}</Option>,
+                      )}
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
@@ -97,7 +112,7 @@ class LawsList extends React.Component {
               </Col>
               <Col xl={6} md={12} sm={24}>
                 <div className="searchButtons">
-                  <Button type="primary">搜索</Button>
+                  <Button type="primary" onClick={this.searchLawsList}>搜索</Button>
                   <Button style={{ marginLeft: '1em' }}>重置</Button>
                 </div>
               </Col>
@@ -110,7 +125,7 @@ class LawsList extends React.Component {
               <a href={getFileURL(record['attachment']['id'])}
                  target="_blank">{record['attachment']['file_name_local']}</a>
             )}/>
-            <Column title="类别" dataIndex="belong_to" render={text => (<Tag>{text}</Tag>)}/>
+            <Column title="类别" dataIndex="belong_to" render={text => (<b>{text}</b>)}/>
             <Column title="上传者" dataIndex="creator" render={text => (<React.Fragment>{text['name']}</React.Fragment>)}/>
             <Column title="上传时间" dataIndex="created_at"
                     render={text => (<React.Fragment>{moment(text * 1000).format('YYYY-MM-DD')}</React.Fragment>)}/>
@@ -119,7 +134,6 @@ class LawsList extends React.Component {
               <Column title="操作" dataIndex="action"
                       render={(text, record) => (
                         <div className="actionGroup">
-                          <Button type="link" icon="edit">归类</Button>
                           <Button type="link" icon="delete" className="redButton"
                                   onClick={() => {
                                     this.showDeleteConfirm(record);
@@ -141,13 +155,16 @@ class LawsList extends React.Component {
   }
 }
 
+const WrappedForm = Form.create({ name: 'lawsList' })(LawsList);
+
 export default connect(({ loading, common, lawsList }) => ({
   fetchingLaws: loading.effects['lawsList/eGetLaws'],
   deletingLaw: loading.effects['lawsList/DeleteLaw'],
   level: common.mine.level,
   routes: lawsList.routes,
+  belong_to: lawsList.searchParams.belong_to,
   total: lawsList.laws.total,
   current: lawsList.laws.current,
   pageSize: lawsList.laws.pageSize,
   lawsList: lawsList.laws.list,
-}))(LawsList);
+}))(WrappedForm);

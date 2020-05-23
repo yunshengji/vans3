@@ -6,11 +6,9 @@ import { LAWS_LABELS } from '../../../../config/constant';
 const { Option } = Select;
 
 class UploadLaws extends React.Component {
-
   hideUploadLawsModal = () => {
     this.props.dispatch({ type: 'lawsList/rUpdateState', payload: { uploadLawsModalVisible: false } });
   };
-
   submitCreatedLaws = () => {
     const { dispatch, form } = this.props;
     form.validateFields((err, values) => {
@@ -43,6 +41,7 @@ class UploadLaws extends React.Component {
           <Form.Item label="类别">
             {getFieldDecorator('belong_to', {
               initialValue: '其他',
+              rules: [{ required: true, message: '请选择类别' }],
             })(
               <Select placeholder="请选择">
                 {LAWS_LABELS.map((item) =>
@@ -59,7 +58,7 @@ class UploadLaws extends React.Component {
             })(
               <Upload {...uploadConfig}>
                 <Button>
-                  <Icon type="upload"/> 选择文件
+                  选择文件 <Icon type="cloud-upload"/>
                 </Button>
               </Upload>,
             )}
@@ -70,7 +69,7 @@ class UploadLaws extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'setting' })(UploadLaws);
+const WrappedForm = Form.create({ name: 'uploadLaws' })(UploadLaws);
 
 export default connect(({ loading, lawsList }) => ({
   uploadingLaws: loading.effects['lawsList/eUploadLaws'],

@@ -6,8 +6,10 @@ import DashboardIcon from '../../public/menu/dashboard.svg';
 import DashboardReverseIcon from '../../public/menu/dashboard-reverse.svg';
 import ContractsIcon from '../../public/menu/contracts.svg';
 import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
-import LawReverseIcon from '../../public/menu/datum-reverse.svg';
-import LawIcon from '../../public/menu/datum.svg';
+import LawReverseIcon from '../../public/menu/laws-reverse.svg';
+import LawIcon from '../../public/menu/laws.svg';
+import GossipIcon from '../../public/menu/gossip.svg';
+import GossipReverseIcon from '../../public/menu/gossip-reverse.svg';
 import ContactsIcon from '../../public/menu/contacts.svg';
 import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
 import UsersIcon from '../../public/menu/users.svg';
@@ -53,6 +55,10 @@ class BasicSide extends React.Component {
           <Menu.Item key="laws">
             <Icon component={selectKeys === 'laws' ? LawReverseIcon : LawIcon}/>
             <span>法律法规</span>
+          </Menu.Item>
+          <Menu.Item key="gossip">
+            <Icon component={selectKeys === 'gossip' ? GossipReverseIcon : GossipIcon}/>
+            <span>吐槽角</span>
           </Menu.Item>
           <Menu.Item key="contacts">
             <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/>

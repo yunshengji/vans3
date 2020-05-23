@@ -10,7 +10,10 @@ export default {
     routes: [{ breadcrumbName: '法律法规资料' }],
 
     uploadLawsModalVisible: false,
-    // editUser: { department: {} },
+
+    searchParams: {
+      belong_to: '',
+    },
 
     laws: {
       total: 0,
@@ -58,17 +61,7 @@ export default {
         console.log(err);
       }
     },
-    // * eEditUser({ id, payload }, { select, call, put }) {
-    //   try {
-    //     const { msg } = yield call(EditUser, id, payload);
-    //     const { users: { current, pageSize } } = yield select(state => state.usersList);
-    //     message.success(msg);
-    //     yield put({ type: 'rUpdateState', payload: { editUserModalVisible: false } });
-    //     yield put({ type: 'eGetUsers', payload: { page: current, page_size: pageSize } });
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
+
     * eGetLaws({ payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetLawsList, payload);
