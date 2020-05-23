@@ -20,7 +20,7 @@ export default {
     gossipWritings: {
       total: 0,
       current: 1,
-      pageSize: 10,
+      pageSize: 5,
       list: [],
     },
   },
@@ -66,10 +66,10 @@ export default {
         console.log(err);
       }
     },
-    * ePublishComment({ payload }, { select, call, put }) {
+    * ePublishComment({ resetFields, payload }, { select, call, put }) {
       try {
-        console.log(payload)
         const { msg } = yield call(publishComment, payload);
+        resetFields();
         message.success(msg);
         const { gossipWritings: { current, pageSize } } = yield select(state => state['gossipList']);
         yield put({ type: 'eGetGossipWritings', payload: { page: current, page_size: pageSize } });
@@ -82,6 +82,7 @@ export default {
       try {
         const { data } = yield call(GetGossipWritings, payload);
         yield put({ type: 'rUpdateGossipWritings', payload: data });
+        window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
       } catch (err) {
         console.log(err);
       }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { List, Tooltip, Modal, Comment, Avatar, Button, Form, Input, Col, Row, message } from 'antd';
+import { List, Tooltip, Modal, Comment, Avatar, Button, Form, Input, Col, Row, Pagination, message } from 'antd';
 import moment from 'moment';
 import { getFileURL } from '@/utils/transfer';
 
@@ -46,6 +46,7 @@ class GossipWritings extends React.Component {
     });
   };
   publishComment = (id, isPrivate) => {
+    const resetFields = this.props.form.resetFields;
     const comment = this.props.form.getFieldValue(id);
     if (!comment || !comment.trim()) {
       message.warning('请输入评论');
@@ -53,18 +54,24 @@ class GossipWritings extends React.Component {
     }
     this.props.dispatch({
       type: 'gossipList/ePublishComment',
+      resetFields,
       payload: { gossip_id: id, content: comment },
     });
-    this.props.form.resetFields();
+  };
+  gossipWritingsPaginationChange = (page, pageSize) => {
+    this.props.dispatch({
+      type: 'gossipList/eGetGossipWritings',
+      payload: { page, page_size: pageSize },
+    });
   };
 
   render() {
-    const { dispatch, form, mine, writingsPictureDetailModalVisible, writingsPictureDetailImage, total, current, pageSize, gossipWritingsList } = this.props;
+    const { form, fetchingGossipWritings, writingsPictureDetailModalVisible, writingsPictureDetailImage, total, current, pageSize, gossipWritingsList } = this.props;
     const { getFieldDecorator } = form;
     return (
       <div className="contentWrapper">
         <div className="gossipWritingsWrapper">
-          <List size="small" itemLayout="vertical" dataSource={gossipWritingsList}
+          <List size="small" itemLayout="vertical" dataSource={gossipWritingsList} loading={fetchingGossipWritings}
                 renderItem={item => (
                   <List.Item
                     key={item.id}
@@ -132,6 +139,10 @@ class GossipWritings extends React.Component {
                   </List.Item>
                 )}/>
         </div>
+        <div className="paginationWrapper">
+          <Pagination showQuickJumper defaultCurrent={1} total={total} current={current} pageSize={pageSize}
+                      showTotal={() => `共 ${total} 条`} onChange={this.gossipWritingsPaginationChange}/>
+        </div>
         <Modal width="30vw" visible={writingsPictureDetailModalVisible} footer={null}
                onCancel={this.cancelImageDetail}>
           <img style={{ width: '100%' }} src={writingsPictureDetailImage}/>
@@ -143,8 +154,8 @@ class GossipWritings extends React.Component {
 
 const WrappedForm = Form.create({ name: 'gossipList' })(GossipWritings);
 
-export default connect(({ loading, common, gossipList }) => ({
-  mine: common.mine,
+export default connect(({ loading, gossipList }) => ({
+  fetchingGossipWritings: loading.effects['gossipList/eGetGossipWritings'],
   writingsPictureDetailModalVisible: gossipList.writingsPictureDetailModalVisible,
   writingsPictureDetailImage: gossipList.writingsPictureDetailImage,
   total: gossipList.gossipWritings.total,
