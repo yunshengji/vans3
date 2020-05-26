@@ -12,6 +12,8 @@ import GossipIcon from '../../public/menu/gossip.svg';
 import GossipReverseIcon from '../../public/menu/gossip-reverse.svg';
 import ContactsIcon from '../../public/menu/contacts.svg';
 import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
+import ExpertsIcon from '../../public/menu/contacts.svg';
+import ExpertsReverseIcon from '../../public/menu/contacts-reverse.svg';
 import UsersIcon from '../../public/menu/users.svg';
 import UsersReverseIcon from '../../public/menu/users-reverse.svg';
 
@@ -63,6 +65,10 @@ class BasicSide extends React.Component {
           <Menu.Item key="contacts">
             <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/>
             <span>联系人</span>
+          </Menu.Item>
+          <Menu.Item key="experts">
+            <Icon component={selectKeys === 'experts' ? ExpertsReverseIcon : ExpertsIcon}/>
+            <span>专家组</span>
           </Menu.Item>
           <Menu.Item key="users">
             <Icon component={selectKeys === 'users' ? UsersReverseIcon : UsersIcon}/>

@@ -60,11 +60,11 @@ class ContactsList extends React.Component {
             })}
           </Breadcrumb>
           {activeKey === 'customers' ?
-            <Button size="small" type="primary" onClick={this.showCreateCustomerModal}>
+            <Button size="small" type="link" onClick={this.showCreateCustomerModal}>
               新建客户
             </Button>
             :
-            <Button size="small" type="primary" onClick={this.showCreateContractorModal}>
+            <Button size="small" type="link" onClick={this.showCreateContractorModal}>
               新建合作伙伴
             </Button>
           }

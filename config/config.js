@@ -17,6 +17,7 @@ export default {
         { path: '/laws', component: './Laws/List' },
         { path: '/gossip', component: './Gossip/Gossip' },
         { path: '/contacts', component: './Contacts/List' },
+        { path: '/experts', component: './Experts/Index' },
         { path: '/users', component: './Users/List' },
         { path: '/users/setting', component: './Users/Setting' },
       ],

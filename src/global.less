@@ -7,21 +7,30 @@ body {
   //font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
 }
 
-thead.ant-table-thead {
-  > tr {
-    > th {
-      background-color: #F7FAFB;
+.ant-table-wrapper {
+  th, td {
+    border: none !important;
+  }
 
-      span.ant-table-column-title {
-        font-weight: 400;
-        color: #A9ADB7;
-      }
+  th {
+    background-color: rgb(241, 247, 255);
+
+    span.ant-table-column-title {
+      font-weight: 400;
+      color: #A9ADB7;
     }
   }
 }
 
+
 .ant-form-item-label > label {
   color: #A9ADB7 !important;
+}
+
+
+.zebraHighlight {
+  background: rgb(244, 249, 250);
+  border: none;
 }
 
 .textRight {
@@ -78,10 +87,12 @@ thead.ant-table-thead {
   background-color: #FFF;
 
   h3 {
+    margin-top: 1.5em;
     margin-bottom: 1.5em;
     padding-left: .5em;
     border-left: 4px solid #356DF9;
     font-weight: normal;
+    font-size: 1.05em;
   }
 
   .ant-table-wrapper {
