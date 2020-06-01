@@ -6,6 +6,35 @@ const getFileURL = id => {
   return id && `${prefix}/download/${id}?token=${token}`;
 };
 
+// 禁止 InputNumber 组件接收小数
+const limitDecimals = value => {
+  if (typeof value === 'string') {
+    return value.replace(/^(0+)|[^\d]+/g, '');
+  } else if (typeof value === 'number') {
+    return value;
+  }
+};
+
+// 完整列表展示在 Select 组件时仅获取 id 列表
+const getIdsFromWholeList = list => {
+  let transferList = [];
+  list.forEach(item => {
+    transferList.push(item.id);
+  });
+  return transferList;
+};
+
+// 获取参与确认股东中的 id 列表
+const getIdsFromManagerList = list => {
+  let transferList = [];
+  list.forEach(item => {
+    transferList.push(item['confirm_user'].id);
+  });
+  return transferList;
+};
 module.exports = {
   getFileURL,
+  limitDecimals,
+  getIdsFromWholeList,
+  getIdsFromManagerList,
 };

@@ -14,7 +14,12 @@ class ProjectsList extends React.Component {
   expandedRowRender = (record, index) => {
     const expertList = record['expert_list'];
     return (
-      <Table size="middle" dataSource={expertList} pagination={false} rowKey={record => record.id}>
+      <Table size="middle" dataSource={expertList} pagination={false} rowKey={record => record.id}
+             rowClassName={(record, index) => {
+               if (index % 2 === 1) {
+                 return 'zebraHighlight';
+               }
+             }}>
         <Table.Column title="专家姓名" dataIndex="name"/>
         <Table.Column title="采购证号" dataIndex="procurement_num"/>
         <Table.Column title="法改证号" dataIndex="law_num"/>

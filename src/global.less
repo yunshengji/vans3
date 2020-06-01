@@ -24,9 +24,15 @@ body {
 
 
 .ant-form-item-label > label {
-  color: #A9ADB7 !important;
+  //color: #a9adb7 !important;
+  color: #777a84 !important;
 }
 
+.ant-input, .ant-select-selection, .ant-input-number-input {
+  //border: none !important;
+  //border-color: #eee !important;
+  background-color: #F8F9FB !important;
+}
 
 .zebraHighlight {
   background: rgb(244, 249, 250);
@@ -52,14 +58,15 @@ body {
 .headerWrapper {
   display: flex;
   justify-content: flex-start;
-  padding: 22px 15px;
+  padding: 22px 40px;
   background-color: #FFF;
 }
 
 .headerWrapperWithCreate {
   display: flex;
   justify-content: space-between;
-  padding: 22px 15px;
+  align-items: center;
+  padding: 22px 40px;
   background-color: #FFF;
 }
 
@@ -95,6 +102,15 @@ body {
     font-size: 1.05em;
   }
 
+  h4 {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding-left: .5em;
+    border-left: 4px solid #becffa;
+    font-weight: normal;
+    font-size: 1.05em;
+  }
+
   .ant-table-wrapper {
     overflow: auto;
 
@@ -115,6 +131,7 @@ body {
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-start;
+  align-items: center;
 
   > button {
     padding: 0;

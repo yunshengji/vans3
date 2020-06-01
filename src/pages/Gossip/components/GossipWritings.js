@@ -84,7 +84,7 @@ class GossipWritings extends React.Component {
                       avatar={item.creator ?
                         <Avatar size="large" shape="square" src={getFileURL(item.creator.avatar)}/> :
                         <Avatar size="large" shape="square" icon="user"/>}
-                      title={item.creator ? item.creator.name : '匿名用户'}
+                      title={(item.creator && item.creator.name) ? item.creator.name : '匿名用户'}
                       description={
                         <Tooltip title={moment(item['created_at'] * 1000).format('YYYY-MM-DD HH:mm')}>
                           {moment(item['created_at'] * 1000).fromNow()}

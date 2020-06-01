@@ -67,14 +67,14 @@ class BasicHeader extends React.Component {
         </div>
         <div className={styles.rightWrapper}>
           <Badge dot>
-            <Icon type="bell" theme="filled" style={{ color: '#FFF', fontSize: '20px' }}/>
+            <Icon type="bell" style={{ fontSize: '18px' }}/>
           </Badge>
           {
             (avatar) ?
               <Dropdown overlay={menu}>
                 <div className={styles.dropdown}>
                   <Avatar src={getFileURL(avatar)}/>
-                  <Icon type="caret-down" style={{ marginLeft: '.5em', color: '#FFF', fontSize: '12px' }}/>
+                  <Icon type="caret-down" style={{ marginLeft: '.5em', fontSize: '12px' }}/>
                 </div>
               </Dropdown>
               :

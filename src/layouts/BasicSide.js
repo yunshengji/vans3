@@ -6,14 +6,18 @@ import DashboardIcon from '../../public/menu/dashboard.svg';
 import DashboardReverseIcon from '../../public/menu/dashboard-reverse.svg';
 import ContractsIcon from '../../public/menu/contracts.svg';
 import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
-import LawReverseIcon from '../../public/menu/laws-reverse.svg';
+import MakeProject from '../../public/menu/make-project.svg';
+import MakeProjectReverseIcon from '../../public/menu/make-projects-reverse.svg';
 import LawIcon from '../../public/menu/laws.svg';
+import LawReverseIcon from '../../public/menu/laws-reverse.svg';
+import WorkDiaries from '../../public/menu/workDiaries.svg';
+import WorkDiariesReverseIcon from '../../public/menu/workDiaries-reverse.svg';
 import GossipIcon from '../../public/menu/gossip.svg';
 import GossipReverseIcon from '../../public/menu/gossip-reverse.svg';
 import ContactsIcon from '../../public/menu/contacts.svg';
 import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
-import ExpertsIcon from '../../public/menu/contacts.svg';
-import ExpertsReverseIcon from '../../public/menu/contacts-reverse.svg';
+import ExpertsIcon from '../../public/menu/experts.svg';
+import ExpertsReverseIcon from '../../public/menu/experts-reverse.svg';
 import UsersIcon from '../../public/menu/users.svg';
 import UsersReverseIcon from '../../public/menu/users-reverse.svg';
 
@@ -32,7 +36,7 @@ class BasicSide extends React.Component {
     const { menuCollapsed } = this.props;
     const selectKeys = this.props.history.location.pathname.split('/')[1];
     return (
-      <Layout.Sider width="180" collapsible breakpoint="lg" theme="light" onCollapse={this.onCollapse}
+      <Layout.Sider width="200" collapsible breakpoint="lg" theme="dark" onCollapse={this.onCollapse}
                     className="basicSide">
         <Link className="systemName" to="/projects">
           {
@@ -41,38 +45,49 @@ class BasicSide extends React.Component {
               <img src="/system-name.svg" alt="万铭"/>
           }
         </Link>
-        <Menu mode="inline" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
+        <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
           <Menu.Item key="projects">
-            <Icon component={selectKeys === 'projects' ? DashboardReverseIcon : DashboardIcon}/>
-            <span>项目库</span>
+            <Icon component={selectKeys === 'projects' ? DashboardReverseIcon : DashboardIcon}/><span>项目库</span>
           </Menu.Item>
           <Menu.Item key="workDiaries">
-            <Icon component={selectKeys === 'workDiaries' ? DashboardReverseIcon : DashboardIcon}/>
-            <span>工作日志</span>
+            <Icon component={selectKeys === 'workDiaries' ? WorkDiariesReverseIcon : WorkDiaries}/><span>工作日志</span>
           </Menu.Item>
-          <Menu.Item key="contracts">
-            <Icon component={selectKeys === 'contracts' ? ContractsReverseIcon : ContractsIcon}/>
-            <span>合同</span>
-          </Menu.Item>
+          <Menu.SubMenu
+            key="sub2"
+            title={
+              <span>
+                <Icon component={selectKeys === 'workDiaries' ? MakeProject : MakeProject}/>
+                <span>销售部</span>
+              </span>
+            }
+          >
+            <Menu.Item key="originList">
+              <Icon type="smile" theme="twoTone"/><span>立项表</span>
+            </Menu.Item>
+            <Menu.Item key="recordList">
+              <Icon type="smile" theme="twoTone"/><span>备案表</span>
+            </Menu.Item>
+            <Menu.Item key="executeList">
+              <Icon type="smile" theme="twoTone"/><span>营销实施情况表</span>
+            </Menu.Item>
+            <Menu.Item key="serviceList">
+              <Icon type="smile" theme="twoTone"/><span>跟踪服务表</span>
+            </Menu.Item>
+          </Menu.SubMenu>
           <Menu.Item key="laws">
-            <Icon component={selectKeys === 'laws' ? LawReverseIcon : LawIcon}/>
-            <span>法律法规</span>
+            <Icon component={selectKeys === 'laws' ? LawReverseIcon : LawIcon}/><span>法律法规</span>
           </Menu.Item>
           <Menu.Item key="gossip">
-            <Icon component={selectKeys === 'gossip' ? GossipReverseIcon : GossipIcon}/>
-            <span>吐槽角</span>
+            <Icon component={selectKeys === 'gossip' ? GossipReverseIcon : GossipIcon}/><span>吐槽角</span>
           </Menu.Item>
           <Menu.Item key="contacts">
-            <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/>
-            <span>联系人</span>
+            <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/><span>联系人</span>
           </Menu.Item>
           <Menu.Item key="experts">
-            <Icon component={selectKeys === 'experts' ? ExpertsReverseIcon : ExpertsIcon}/>
-            <span>专家组</span>
+            <Icon component={selectKeys === 'experts' ? ExpertsReverseIcon : ExpertsIcon}/><span>专家组</span>
           </Menu.Item>
           <Menu.Item key="users">
-            <Icon component={selectKeys === 'users' ? UsersReverseIcon : UsersIcon}/>
-            <span>用户</span>
+            <Icon component={selectKeys === 'users' ? UsersReverseIcon : UsersIcon}/><span>用户</span>
           </Menu.Item>
         </Menu>
       </Layout.Sider>

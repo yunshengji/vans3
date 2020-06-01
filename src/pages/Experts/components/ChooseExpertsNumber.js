@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Modal, Form, InputNumber } from 'antd';
+import { limitDecimals } from '@/utils/transfer';
 
 class ChooseExpertsNumber extends React.Component {
 
@@ -14,7 +15,6 @@ class ChooseExpertsNumber extends React.Component {
   submitChooseExpertsNum = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        values['expert_num'] = Math.floor(values['expert_num']);
         this.props.dispatch({
           type: 'experts/eCreateProjectExpertsList',
           payload: { ...values, action: 'roll' },
@@ -36,7 +36,7 @@ class ChooseExpertsNumber extends React.Component {
             {getFieldDecorator('expert_num', {
               rules: [{ required: true, message: '专家人数不能为空' }],
             })(
-              <InputNumber min={1}/>,
+              <InputNumber min={1} formatter={limitDecimals} parser={limitDecimals}/>,
             )}
           </Form.Item>
         </Form>

@@ -38,6 +38,7 @@ class GossipList extends React.Component {
     const { getFieldDecorator } = form;
     const uploadConfig = {
       listType: 'picture-card',
+      multiple: true,
       showUploadList: true,
       fileList: gossipPicturesPreviewFileList,
       beforeUpload: () => false,
