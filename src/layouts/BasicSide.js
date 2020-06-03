@@ -53,7 +53,7 @@ class BasicSide extends React.Component {
             <Icon component={selectKeys === 'workDiaries' ? WorkDiariesReverseIcon : WorkDiaries}/><span>工作日志</span>
           </Menu.Item>
           <Menu.SubMenu
-            key="sub2"
+            key="approvalProject"
             title={
               <span>
                 <Icon component={selectKeys === 'workDiaries' ? MakeProject : MakeProject}/>

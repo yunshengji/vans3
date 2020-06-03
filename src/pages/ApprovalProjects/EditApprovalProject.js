@@ -6,6 +6,8 @@ import EditTableOrigin from '@/pages/ApprovalProjects/components/EditTableOrigin
 import EditTableRecord from '@/pages/ApprovalProjects/components/EditTableRecord';
 import EditTableService from '@/pages/ApprovalProjects/components/EditTableService';
 import EditTableExecute from '@/pages/ApprovalProjects/components/EditTableExecute';
+import ChooseProcess from '@/pages/ApprovalProjects/components/ChooseProcess';
+import EditEasyProcess from '@/pages/ApprovalProjects/components/EditEasyProcess';
 
 class EditApprovalProject extends React.Component {
   changeTab = (activeKey) => {
@@ -55,6 +57,9 @@ class EditApprovalProject extends React.Component {
               </Tabs.TabPane>
               <Tabs.TabPane tab="跟踪服务表" key="EditTableService">
                 <EditTableService/>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="项目流程" key="Process">
+                <ChooseProcess/>
               </Tabs.TabPane>
             </Tabs>
             :

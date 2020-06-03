@@ -139,3 +139,59 @@ export async function GetExecuteTableList(params) {
     params,
   });
 }
+
+export async function CreateEasyProcess(data) {
+  return request('/easy_process', {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function DeleteEasyProcess(id, data) {
+  return request(`/easy_process/${id}`, {
+    method: 'DELETE',
+    data,
+  });
+}
+
+export async function UpdateEasyProcess(id, data) {
+  return request(`/easy_process/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
+export async function GetEasyProcess(id, params) {
+  return request(`/easy_process/${id}`, {
+    method: 'GET',
+    params,
+  });
+}
+
+export async function CreatePurchaseProcess(data) {
+  return request('/procurement_process', {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function DeletePurchaseProcess(id, data) {
+  return request(`/procurement_process/${id}`, {
+    method: 'DELETE',
+    data,
+  });
+}
+
+export async function UpdatePurchaseProcess(id, data) {
+  return request(`/procurement_process/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
+export async function GetPurchaseProcess(id, params) {
+  return request(`/procurement_process/${id}`, {
+    method: 'GET',
+    params,
+  });
+}

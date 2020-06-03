@@ -1,5 +1,5 @@
-import { WriteGossip, publishComment, GetGossipWritings } from '@/services/gossip';
 import { message } from 'antd';
+import { WriteGossip, publishComment, GetGossipWritings } from '@/services/gossip';
 import { UploadFile } from '@/services/files';
 
 export default {

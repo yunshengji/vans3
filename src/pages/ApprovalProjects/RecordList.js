@@ -57,7 +57,7 @@ class RecordList extends React.Component {
           </Breadcrumb>
         </div>
         <div className="contentWrapper">
-          <h3 style={{ marginTop: '1em' }}>查找立项表</h3>
+          <h3 style={{ marginTop: '1em' }}>查找</h3>
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
@@ -114,7 +114,7 @@ class RecordList extends React.Component {
                             <div className="actionGroup">
                               <Button type="link" icon="edit"
                                       onClick={() => {
-                                        window.location.href = `/approvalProject/edit/${record.id}`;
+                                        window.location.href = `/approvalProject/edit/${record.origin.id}`;
                                       }}>
                                 修改
                               </Button>

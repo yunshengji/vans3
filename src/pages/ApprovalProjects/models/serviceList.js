@@ -6,7 +6,7 @@ export default {
   namespace: 'serviceList',
 
   state: {
-    routes: [{ breadcrumbName: '营销实施情况表' }],
+    routes: [{ breadcrumbName: '跟踪服务表' }],
 
     searchParams: {},
 

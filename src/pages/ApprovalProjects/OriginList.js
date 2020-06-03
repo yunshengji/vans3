@@ -60,7 +60,7 @@ class OriginList extends React.Component {
           </Button>
         </div>
         <div className="contentWrapper">
-          <h3 style={{ marginTop: '1em' }}>查找立项表</h3>
+          <h3 style={{ marginTop: '1em' }}>查找</h3>
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
