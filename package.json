@@ -12,6 +12,7 @@
     "braft-editor": "^2.3.9",
     "dva": "^2.6.0-beta.6",
     "js-cookie": "^2.2.1",
+    "lodash": "^4.17.15",
     "moment": "^2.25.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

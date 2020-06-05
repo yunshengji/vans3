@@ -13,6 +13,10 @@ export default {
         { path: '/500', component: './Exception/500' },
         { path: '/projects', component: './Projects/List' },
 
+        { path: '/staff', component: './Staff/StaffList' },
+        { path: '/staff/edit', component: './Staff/EditStaff' },
+        { path: '/staff/edit/:id', component: './Staff/EditStaff' },
+
         { path: '/originList', component: './ApprovalProjects/OriginList' },
         { path: '/recordList', component: './ApprovalProjects/RecordList' },
         { path: '/executeList', component: './ApprovalProjects/ExecuteList' },

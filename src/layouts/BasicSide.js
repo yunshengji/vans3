@@ -20,6 +20,8 @@ import ExpertsIcon from '../../public/menu/experts.svg';
 import ExpertsReverseIcon from '../../public/menu/experts-reverse.svg';
 import UsersIcon from '../../public/menu/users.svg';
 import UsersReverseIcon from '../../public/menu/users-reverse.svg';
+import HumanResourceIcon from '../../public/menu/humanResource.svg';
+import HumanResourceReverseIcon from '../../public/menu/humanResource-reverse.svg';
 
 class BasicSide extends React.Component {
   onCollapse = (menuCollapsed) => {
@@ -48,6 +50,10 @@ class BasicSide extends React.Component {
         <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
           <Menu.Item key="projects">
             <Icon component={selectKeys === 'projects' ? DashboardReverseIcon : DashboardIcon}/><span>项目库</span>
+          </Menu.Item>
+          <Menu.Item key="staff">
+            <Icon
+              component={selectKeys === 'staff' ? HumanResourceReverseIcon : HumanResourceIcon}/><span>人事管理</span>
           </Menu.Item>
           <Menu.Item key="workDiaries">
             <Icon component={selectKeys === 'workDiaries' ? WorkDiariesReverseIcon : WorkDiaries}/><span>工作日志</span>
