@@ -296,15 +296,12 @@ class EditStaff extends React.Component {
                       }
                       {
                         !uploadIDCardFrontPreview && !staff['credentials_front'] &&
-                        <React.Fragment>
+                        <div style={{ padding: '3em 0' }}>
                           <p className="ant-upload-drag-icon">
-                            <Icon type="inbox"/>
+                            <img src="/staff/身份证-正.svg" style={{ width: '30%' }}/>
                           </p>
-                          <p className="ant-upload-text">点击或拖动图片上传</p>
-                          <p className="ant-upload-hint">
-                            支持图片格式 ：PNG JPG JPEG SVG GIF
-                          </p>
-                        </React.Fragment>
+                          <p>点击或拖动图片上传</p>
+                        </div>
                       }
                     </Upload.Dragger>
                   </Form.Item>
@@ -322,15 +319,12 @@ class EditStaff extends React.Component {
                       }
                       {
                         !uploadIDCardBackPreview && !staff['credentials_back'] &&
-                        <React.Fragment>
+                        <div style={{ padding: '3em 0' }}>
                           <p className="ant-upload-drag-icon">
-                            <Icon type="inbox"/>
+                            <img src="/staff/身份证-反.svg" style={{ width: '30%' }}/>
                           </p>
-                          <p className="ant-upload-text">点击或拖动图片上传</p>
-                          <p className="ant-upload-hint">
-                            支持图片格式 ：PNG JPG JPEG SVG GIF
-                          </p>
-                        </React.Fragment>
+                          <p>点击或拖动图片上传</p>
+                        </div>
                       }
                     </Upload.Dragger>
                   </Form.Item>
@@ -348,15 +342,12 @@ class EditStaff extends React.Component {
                       }
                       {
                         !uploadDiplomaPreview && !staff['diploma'] &&
-                        <React.Fragment>
+                        <div style={{ padding: '3em 0' }}>
                           <p className="ant-upload-drag-icon">
-                            <Icon type="inbox"/>
+                            <img src="/staff/证书.svg" style={{ width: '30%' }}/>
                           </p>
-                          <p className="ant-upload-text">点击或拖动图片上传</p>
-                          <p className="ant-upload-hint">
-                            支持图片格式 ：PNG JPG JPEG SVG GIF
-                          </p>
-                        </React.Fragment>
+                          <p>点击或拖动图片上传</p>
+                        </div>
                       }
                     </Upload.Dragger>
                   </Form.Item>
