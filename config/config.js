@@ -11,7 +11,6 @@ export default {
         { path: '/403', component: './Exception/403' },
         { path: '/404', component: './Exception/404' },
         { path: '/500', component: './Exception/500' },
-        { path: '/projects', component: './Projects/List' },
 
         { path: '/staff', component: './Staff/StaffList' },
         { path: '/staff/edit', component: './Staff/EditStaff' },
@@ -21,7 +20,8 @@ export default {
         { path: '/performance/', component: './Brochure/Performance' },
         { path: '/aptitude/', component: './Brochure/Aptitude' },
 
-        { path: '/archive/', component: './Archive/projectArchive' },
+        { path: '/projectArchive/', component: './Archive/ProjectArchive' },
+        { path: '/contractArchive/', component: './Archive/ContractArchive' },
 
 
         { path: '/originList', component: './ApprovalProjects/OriginList' },
@@ -31,7 +31,6 @@ export default {
         { path: '/approvalProject/edit', component: './ApprovalProjects/EditApprovalProject' },
         { path: '/approvalProject/edit/:id', component: './ApprovalProjects/EditApprovalProject' },
 
-        { path: '/projects/create/specialDebt', component: './Projects/CreateSpecialDebt' },
         { path: '/workDiaries', component: './WorkDiaries/List' },
         { path: '/laws', component: './Laws/List' },
         { path: '/gossip', component: './Gossip/Gossip' },

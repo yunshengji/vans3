@@ -1,21 +1,22 @@
-import { UploadAptitude, DeleteAptitude, GetAptitudeList } from '@/services/brochure';
+import { UploadProjectArchive, DeleteProjectArchive, GetProjectArchiveList } from '@/services/archive';
 import { message } from 'antd';
 import { UploadFile } from '@/services/files';
+import _ from 'lodash';
 
 export default {
 
-  namespace: 'aptitudeList',
+  namespace: 'projectArchiveList',
 
   state: {
-    routes: [{ breadcrumbName: '宣传册' }],
+    routes: [{ breadcrumbName: '项目档案' }],
 
-    uploadAptitudesModalVisible: false,
+    uploadProjectArchivesModalVisible: false,
 
     searchParams: {
       belong_to: '',
     },
 
-    aptitudes: {
+    projectArchives: {
       total: 0,
       current: 1,
       pageSize: 10,
@@ -29,43 +30,58 @@ export default {
   },
 
   effects: {
-    * eUploadAptitudes({ payload }, { select, call, put }) {
+    * eUploadProjectArchives({ payload }, { select, call, put }) {
       try {
-        const { category, fileList } = payload;
-        const { aptitudes: { current, pageSize } } = yield select(state => state['aptitudeList']);
+        const { name, category, settlement, fileListOrdinary, fileListDetail } = payload;
+        let attachment, detail;
+        const { projectArchives: { current, pageSize } } = yield select(state => state['projectArchiveList']);
 
         // 上传文件
-        const formData = new FormData();
-        formData.append('folder_path', 'aptitude');
-        formData.append('file', fileList[0]);
-        const { data } = yield call(UploadFile, formData);
-        yield put({ type: 'rUpdateState', payload: { uploadAptitudesModalVisible: false } });
+        if (fileListOrdinary) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_project');
+          _.forEach(fileListOrdinary, (value, key) => {
+            formData.append('file', fileListOrdinary[key]['originFileObj']);
+          });
+          const { data } = yield call(UploadFile, formData);
+          attachment = _.map(data, 'id');
+        }
+        if (fileListDetail) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_project');
+          _.forEach(fileListDetail, (value, key) => {
+            formData.append('file', fileListDetail[key]['originFileObj']);
+          });
+          const { data } = yield call(UploadFile, formData);
+          detail = _.map(data, 'id');
+        }
 
         // 提交文件和分类信息
-        const { msg } = yield call(UploadAptitude, { category, attachment: data[0].id });
+        const { msg } = yield call(UploadProjectArchive, { name, category, settlement, attachment, detail });
+        yield put({ type: 'rUpdateState', payload: { uploadProjectArchivesModalVisible: false } });
         message.success(msg);
 
         // 更新列表数据
-        yield put({ type: 'eGetAptitudes', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eGetProjectArchives', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
       }
     },
-    * eDeleteAptitude({ id, payload }, { select, call, put }) {
+    * eDeleteProjectArchive({ id, payload }, { select, call, put }) {
       try {
-        const { msg } = yield call(DeleteAptitude, id, payload);
+        const { msg } = yield call(DeleteProjectArchive, id, payload);
         message.success(msg);
-        const { aptitudes: { current, pageSize } } = yield select(state => state['aptitudeList']);
-        yield put({ type: 'eGetAptitudes', payload: { page: current, page_size: pageSize } });
+        const { projectArchives: { current, pageSize } } = yield select(state => state['projectArchiveList']);
+        yield put({ type: 'eGetProjectArchives', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
       }
     },
 
-    * eGetAptitudes({ payload }, { select, call, put }) {
+    * eGetProjectArchives({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetAptitudeList, payload);
-        yield put({ type: 'rUpdateState', payload: { aptitudes: data } });
+        const { data } = yield call(GetProjectArchiveList, payload);
+        yield put({ type: 'rUpdateState', payload: { projectArchives: data } });
       } catch (err) {
         console.log(err);
       }

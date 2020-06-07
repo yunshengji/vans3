@@ -48,9 +48,6 @@ class BasicSide extends React.Component {
           }
         </Link>
         <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
-          <Menu.Item key="projects">
-            <Icon component={selectKeys === 'projects' ? DashboardReverseIcon : DashboardIcon}/><span>项目库</span>
-          </Menu.Item>
           <Menu.Item key="staff">
             <Icon
               component={selectKeys === 'staff' ? HumanResourceReverseIcon : HumanResourceIcon}/><span>人事管理</span>
@@ -99,9 +96,22 @@ class BasicSide extends React.Component {
               <Icon type="smile" theme="twoTone"/><span>资质库</span>
             </Menu.Item>
           </Menu.SubMenu>
-          <Menu.Item key="archives">
-            <Icon component={selectKeys === 'archives' ? LawReverseIcon : LawIcon}/><span>项目档案</span>
-          </Menu.Item>
+          <Menu.SubMenu
+            key="archive"
+            title={
+              <span>
+                <Icon component={selectKeys === 'archive' ? MakeProject : MakeProject}/>
+                <span>档案管理</span>
+              </span>
+            }
+          >
+            <Menu.Item key="projectArchive">
+              <Icon type="smile" theme="twoTone"/><span>项目档案</span>
+            </Menu.Item>
+            <Menu.Item key="contractArchive">
+              <Icon type="smile" theme="twoTone"/><span>合同档案</span>
+            </Menu.Item>
+          </Menu.SubMenu>
           <Menu.Item key="laws">
             <Icon component={selectKeys === 'laws' ? LawReverseIcon : LawIcon}/><span>法律法规</span>
           </Menu.Item>

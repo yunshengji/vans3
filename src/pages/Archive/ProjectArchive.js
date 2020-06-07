@@ -1,63 +1,62 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Input, Select, Modal } from 'antd';
+import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal } from 'antd';
 import moment from 'moment';
-import UploadAptitude from '@/pages/Brochure/components/UploadAptitude';
+import UploadProjectArchive from '@/pages/Archive/components/UploadProjectArchive';
 import { getFileURL } from '@/utils/transfer';
-import { PAMPHLET_CATEGORIES } from '../../../config/constant';
+import _ from 'lodash';
 
 const { Column } = Table;
-const { Option } = Select;
 const { confirm } = Modal;
 
 
-class Aptitude extends React.Component {
+class ProjectArchive extends React.Component {
   componentDidMount() {
     const { dispatch, current, pageSize } = this.props;
     dispatch({
-      type: 'aptitudeList/eGetAptitudes',
+      type: 'projectArchiveList/eGetProjectArchives',
       payload: { page: current, page_size: pageSize },
     });
   }
 
-  showUploadAptitudesModal = () => {
+  showUploadProjectArchivesModal = () => {
     this.props.dispatch({
-      type: 'aptitudeList/rUpdateState',
-      payload: { uploadAptitudesModalVisible: true },
+      type: 'projectArchiveList/rUpdateState',
+      payload: { uploadProjectArchivesModalVisible: true },
     });
   };
   // searchLawsList = () => {
   //   const values = this.props.form.getFieldsValue();
   //   const { dispatch, current, pageSize } = this.props;
   //   dispatch({
-  //     type: 'aptitudeList/eGetAptitudes',
+  //     type: 'projectArchiveList/eGetProjectArchives',
   //     payload: { page: current, page_size: pageSize, ...values },
   //   });
   // };
   showDeleteConfirm = ({ id, attachment: { file_name_local } }) => {
     const { dispatch } = this.props;
     confirm({
-      title: '确定删除此资质',
+      title: '确定删除此档案',
       content: <p>文件 <b>《{file_name_local}》</b> 删除后将无法恢复</p>,
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        dispatch({ type: 'aptitudeList/eDeleteAptitude', id });
+        dispatch({ type: 'projectArchiveList/eDeleteProjectArchive', id });
       },
     });
   };
-  aptitudesPaginationChange = (page, pageSize) => {
+  projectArchivesPaginationChange = (page, pageSize) => {
     const values = this.props.form.getFieldsValue();
     this.props.dispatch({
-      type: 'aptitudeList/eGetAptitudes',
+      type: 'projectArchiveList/eGetProjectArchives',
       payload: { page, page_size: pageSize, ...values },
     });
   };
 
   render() {
-    const { form, fetchingAptitudes, deletingAptitude, routes, level, belong_to, total, current, pageSize, aptitudeList } = this.props;
+    const { form, fetchingProjectArchives, deletingProjectArchive, routes, level, belong_to, total, current, pageSize, projectArchiveList } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -79,23 +78,33 @@ class Aptitude extends React.Component {
               }
             })}
           </Breadcrumb>
-          <Button type="link" size="small" onClick={this.showUploadAptitudesModal}>上传</Button>
+          <Button type="link" size="small" onClick={this.showUploadProjectArchivesModal}>上传</Button>
         </div>
-        <UploadAptitude/>
+        <UploadProjectArchive/>
         <div className="contentWrapper">
-          <h3>资质筛选</h3>
+          <h3>档案筛选</h3>
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
-                <Form.Item label="类别">
+                <Form.Item label="档案类型">
                   {form.getFieldDecorator('belong_to', {
                     initialValue: belong_to,
                   })(
                     <Select placeholder="请选择">
-                      <Option key="全部" value="">全部</Option>
-                      {PAMPHLET_CATEGORIES.map((item) =>
-                        <Option key={item} value={item}>{item}</Option>,
-                      )}
+                      <Select.Option key="上游档案" value="">上游档案</Select.Option>
+                      <Select.Option key="下游档案" value="">下游档案</Select.Option>
+                    </Select>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col xl={6} md={12} sm={24}>
+                <Form.Item label="是否结算">
+                  {form.getFieldDecorator('belong_to', {
+                    initialValue: belong_to,
+                  })(
+                    <Select placeholder="请选择">
+                      <Select.Option key="已结算" value="">已结算</Select.Option>
+                      <Select.Option key="未结算" value="">未结算</Select.Option>
                     </Select>,
                   )}
                 </Form.Item>
@@ -108,37 +117,55 @@ class Aptitude extends React.Component {
               </Col>
             </Row>
           </Form>
-          <h3>资质列表</h3>
-          <Table tableLayout="fixed" size="middle" pagination={false} dataSource={aptitudeList}
-                 loading={fetchingAptitudes || deletingAptitude} rowKey={record => record.id}>
-            <Column title="文件名" dataIndex="attachment" render={(text, record) => (
-              <a href={getFileURL(record['attachment']['id'])}
-                 target="_blank">{record['attachment']['file_name_local']}</a>
-            )}/>
-            <Column title="类别" dataIndex="category" render={text => (<b>{text}</b>)}/>
-            <Column title="上传者" dataIndex="creator" render={(text, record) => (
-              <React.Fragment>{record['attachment']['creator']['name']}</React.Fragment>)}/>
-            <Column title="上传时间" dataIndex="created_at"
-                    render={text => (<React.Fragment>{moment(text * 1000).format('YYYY-MM-DD')}</React.Fragment>)}/>
-            {
-              level > 1 &&
-              <Column title="操作" dataIndex="action"
-                      render={(text, record) => (
-                        <div className="actionGroup">
-                          <Button type="link" icon="delete" className="redButton"
-                                  onClick={() => {
-                                    this.showDeleteConfirm(record);
-                                  }}>
-                            删除
-                          </Button>
-                        </div>
-                      )}/>
-            }
+          <h3>档案列表</h3>
+          <Table tableLayout="fixed" size="middle" pagination={false} dataSource={projectArchiveList}
+                 loading={fetchingProjectArchives || deletingProjectArchive} rowKey={record => record.id}
+                 rowClassName={(record, index) => {
+                   if (index % 2 === 1) {
+                     return 'zebraHighlight';
+                   }
+                 }}>
+            <Column title="档案名称" dataIndex="name"/>
+            <Column title="档案类型" dataIndex="category"/>
+            <Column title="是否结算" dataIndex="settlement"/>
+            <Column title="相关文件" dataIndex="attachment" render={(attachment) => {
+              return (
+                _.map(attachment, (value, key) => {
+                  return (
+                    <p key={key}>
+                      <a href={getFileURL(value.id)} target="_blank">{value['file_name_local']}</a>
+                    </p>
+                  );
+                })
+              );
+            }}/>
+            <Column title="明细文件" dataIndex="detail" render={(detail) => {
+              return (
+                _.map(detail, (value, key) => {
+                  return (
+                    <p key={key}>
+                      <a href={getFileURL(value.id)} target="_blank">{value['file_name_local']}</a>
+                    </p>
+                  );
+                })
+              );
+            }}/>
+            <Column title="操作" dataIndex="action"
+                    render={(text, record) => (
+                      <div className="actionGroup">
+                        <Button type="link" icon="delete" className="redButton"
+                                onClick={() => {
+                                  this.showDeleteConfirm(record);
+                                }}>
+                          删除
+                        </Button>
+                      </div>
+                    )}/>
           </Table>
           <div className="paginationWrapper">
             <Pagination showQuickJumper total={total} current={current} pageSize={pageSize}
                         showTotal={() => `共 ${total} 条`}
-                        onChange={this.aptitudesPaginationChange}/>
+                        onChange={this.projectArchivesPaginationChange}/>
           </div>
         </div>
       </React.Fragment>
@@ -146,16 +173,16 @@ class Aptitude extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'Aptitude' })(Aptitude);
+const WrappedForm = Form.create({ name: 'ProjectArchive' })(ProjectArchive);
 
-export default connect(({ loading, common, aptitudeList }) => ({
-  fetchingAptitudes: loading.effects['aptitudeList/eGetAptitudes'],
-  deletingAptitude: loading.effects['aptitudeList/eDeleteAptitude'],
+export default connect(({ loading, common, projectArchiveList }) => ({
+  fetchingProjectArchives: loading.effects['projectArchiveList/eGetProjectArchives'],
+  deletingProjectArchive: loading.effects['projectArchiveList/eDeleteProjectArchive'],
   level: common.mine.level,
-  routes: aptitudeList.routes,
-  belong_to: aptitudeList.searchParams.belong_to,
-  total: aptitudeList.aptitudes.total,
-  current: aptitudeList.aptitudes.current,
-  pageSize: aptitudeList.aptitudes.pageSize,
-  aptitudeList: aptitudeList.aptitudes.list,
+  routes: projectArchiveList.routes,
+  belong_to: projectArchiveList.searchParams.belong_to,
+  total: projectArchiveList.projectArchives.total,
+  current: projectArchiveList.projectArchives.current,
+  pageSize: projectArchiveList.projectArchives.pageSize,
+  projectArchiveList: projectArchiveList.projectArchives.list,
 }))(WrappedForm);

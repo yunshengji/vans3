@@ -30,7 +30,7 @@ export default {
   },
 
   effects: {
-    * eUploadAptitudes({ payload }, { select, call, put }) {
+    eUploadAptitudes: function* ({ payload }, { select, call, put }) {
       try {
         const { name, remark, fileList } = payload;
         const { aptitudes: { current, pageSize } } = yield select(state => state['aptitudeList']);
@@ -38,7 +38,7 @@ export default {
         // 上传文件
         const formData = new FormData();
         formData.append('folder_path', 'aptitude');
-        _.forEach(fileList, (value,key) => {
+        _.forEach(fileList, (value, key) => {
           formData.append('file', fileList[key]['originFileObj']);
         });
         const { data } = yield call(UploadFile, formData);
