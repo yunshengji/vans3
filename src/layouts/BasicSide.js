@@ -80,6 +80,28 @@ class BasicSide extends React.Component {
               <Icon type="smile" theme="twoTone"/><span>跟踪服务表</span>
             </Menu.Item>
           </Menu.SubMenu>
+          <Menu.SubMenu
+            key="brochure"
+            title={
+              <span>
+                <Icon component={selectKeys === 'brochure' ? MakeProject : MakeProject}/>
+                <span>宣传册管理</span>
+              </span>
+            }
+          >
+            <Menu.Item key="pamphlet">
+              <Icon type="smile" theme="twoTone"/><span>宣传册</span>
+            </Menu.Item>
+            <Menu.Item key="performance">
+              <Icon type="smile" theme="twoTone"/><span>业绩表</span>
+            </Menu.Item>
+            <Menu.Item key="aptitude">
+              <Icon type="smile" theme="twoTone"/><span>资质库</span>
+            </Menu.Item>
+          </Menu.SubMenu>
+          <Menu.Item key="archives">
+            <Icon component={selectKeys === 'archives' ? LawReverseIcon : LawIcon}/><span>项目档案</span>
+          </Menu.Item>
           <Menu.Item key="laws">
             <Icon component={selectKeys === 'laws' ? LawReverseIcon : LawIcon}/><span>法律法规</span>
           </Menu.Item>

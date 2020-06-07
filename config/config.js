@@ -17,6 +17,13 @@ export default {
         { path: '/staff/edit', component: './Staff/EditStaff' },
         { path: '/staff/edit/:id', component: './Staff/EditStaff' },
 
+        { path: '/pamphlet/', component: './Brochure/Pamphlet' },
+        { path: '/performance/', component: './Brochure/Performance' },
+        { path: '/aptitude/', component: './Brochure/Aptitude' },
+
+        { path: '/archive/', component: './Archive/projectArchive' },
+
+
         { path: '/originList', component: './ApprovalProjects/OriginList' },
         { path: '/recordList', component: './ApprovalProjects/RecordList' },
         { path: '/executeList', component: './ApprovalProjects/ExecuteList' },

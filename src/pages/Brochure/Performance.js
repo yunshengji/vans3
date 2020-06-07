@@ -1,65 +1,63 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Input, Select, DatePicker, Modal } from 'antd';
+import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Input, Select, Modal } from 'antd';
 import moment from 'moment';
-import UploadLaws from '@/pages/Laws/components/UploadLaws';
+import UploadPerformance from '@/pages/Brochure/components/UploadPerformance';
 import { getFileURL } from '@/utils/transfer';
-import { LAWS_LABELS } from '../../../config/constant';
+import { PERFORMANCE_CATEGORIES } from '../../../config/constant';
 
 const { Column } = Table;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
 const { confirm } = Modal;
 
 
-class LawsList extends React.Component {
+class Performance extends React.Component {
   componentDidMount() {
     const { dispatch, current, pageSize } = this.props;
     dispatch({
-      type: 'lawsList/eGetLaws',
+      type: 'performanceList/eGetPerformances',
       payload: { page: current, page_size: pageSize },
     });
   }
 
-  showUploadLawsModal = () => {
+  showUploadPerformancesModal = () => {
     this.props.dispatch({
-      type: 'lawsList/rUpdateState',
-      payload: { uploadLawsModalVisible: true },
+      type: 'performanceList/rUpdateState',
+      payload: { uploadPerformancesModalVisible: true },
     });
   };
-  searchLawsList = () => {
-    const values = this.props.form.getFieldsValue();
-    const { dispatch, current, pageSize } = this.props;
-    dispatch({
-      type: 'lawsList/eGetLaws',
-      payload: { page: current, page_size: pageSize, ...values },
-    });
-  };
-  showDeleteConfirm = ({ id, creator: { name }, attachment: { file_name_local } }) => {
+  // searchLawsList = () => {
+  //   const values = this.props.form.getFieldsValue();
+  //   const { dispatch, current, pageSize } = this.props;
+  //   dispatch({
+  //     type: 'performanceList/eGetPerformances',
+  //     payload: { page: current, page_size: pageSize, ...values },
+  //   });
+  // };
+  showDeleteConfirm = ({ id, attachment: { file_name_local } }) => {
     const { dispatch } = this.props;
     confirm({
-      title: '确定删除此资料',
-      content: <p><b>{name}</b> 上传的的资料 <b>{file_name_local}</b></p>,
+      title: '确定删除此宣传册',
+      content: <p>文件 <b>《{file_name_local}》</b> 删除后将无法恢复</p>,
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        dispatch({ type: 'lawsList/eDeleteLaw', id });
+        dispatch({ type: 'performanceList/eDeletePerformance', id });
       },
     });
   };
-  lawsPaginationChange = (page, pageSize) => {
+  performancesPaginationChange = (page, pageSize) => {
     const values = this.props.form.getFieldsValue();
     this.props.dispatch({
-      type: 'lawsList/eGetLaws',
+      type: 'performanceList/eGetPerformances',
       payload: { page, page_size: pageSize, ...values },
     });
   };
 
   render() {
-    const { form, fetchingLaws, deletingLaw, routes, level, belong_to, total, current, pageSize, lawsList } = this.props;
-    const { getFieldDecorator } = form;
+    const { form, fetchingPerformances, deletingPerformance, routes, level, belong_to, total, current, pageSize, performanceList } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -81,33 +79,25 @@ class LawsList extends React.Component {
               }
             })}
           </Breadcrumb>
-          {level > 1 && <Button type="primary" size="small" onClick={this.showUploadLawsModal}>上传</Button>}
+          <Button type="link" size="small" onClick={this.showUploadPerformancesModal}>上传</Button>
         </div>
-        <UploadLaws/>
+        <UploadPerformance/>
         <div className="contentWrapper">
-          <h3>资料筛选</h3>
+          <h3>业绩表筛选</h3>
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
                 <Form.Item label="类别">
-                  {getFieldDecorator('belong_to', {
+                  {form.getFieldDecorator('belong_to', {
                     initialValue: belong_to,
                   })(
                     <Select placeholder="请选择">
                       <Option key="全部" value="">全部</Option>
-                      {LAWS_LABELS.map((item) =>
+                      {PERFORMANCE_CATEGORIES.map((item) =>
                         <Option key={item} value={item}>{item}</Option>,
                       )}
                     </Select>,
                   )}
-                </Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
-                <Form.Item label="文件名"><Input placeholder="请输入"/></Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
-                <Form.Item label="上传时间">
-                  <RangePicker/>
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
@@ -118,15 +108,16 @@ class LawsList extends React.Component {
               </Col>
             </Row>
           </Form>
-          <h3>法律法规资料列表</h3>
-          <Table tableLayout="fixed" size="middle" pagination={false} dataSource={lawsList}
-                 loading={fetchingLaws || deletingLaw} rowKey={record => record.id}>
+          <h3>业绩表</h3>
+          <Table tableLayout="fixed" size="middle" pagination={false} dataSource={performanceList}
+                 loading={fetchingPerformances || deletingPerformance} rowKey={record => record.id}>
             <Column title="文件名" dataIndex="attachment" render={(text, record) => (
               <a href={getFileURL(record['attachment']['id'])}
                  target="_blank">{record['attachment']['file_name_local']}</a>
             )}/>
-            <Column title="类别" dataIndex="belong_to" render={text => (<b>{text}</b>)}/>
-            <Column title="上传者" dataIndex="creator" render={text => (<React.Fragment>{text['name']}</React.Fragment>)}/>
+            <Column title="类别" dataIndex="category" render={text => (<b>{text}</b>)}/>
+            <Column title="上传者" dataIndex="creator" render={(text, record) => (
+              <React.Fragment>{record['attachment']['creator']['name']}</React.Fragment>)}/>
             <Column title="上传时间" dataIndex="created_at"
                     render={text => (<React.Fragment>{moment(text * 1000).format('YYYY-MM-DD')}</React.Fragment>)}/>
             {
@@ -147,7 +138,7 @@ class LawsList extends React.Component {
           <div className="paginationWrapper">
             <Pagination showQuickJumper total={total} current={current} pageSize={pageSize}
                         showTotal={() => `共 ${total} 条`}
-                        onChange={this.lawsPaginationChange}/>
+                        onChange={this.performancesPaginationChange}/>
           </div>
         </div>
       </React.Fragment>
@@ -155,16 +146,16 @@ class LawsList extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'lawsList' })(LawsList);
+const WrappedForm = Form.create({ name: 'Performance' })(Performance);
 
-export default connect(({ loading, common, lawsList }) => ({
-  fetchingLaws: loading.effects['lawsList/eGetLaws'],
-  deletingLaw: loading.effects['lawsList/DeleteLaw'],
+export default connect(({ loading, common, performanceList }) => ({
+  fetchingPerformances: loading.effects['performanceList/eGetPerformances'],
+  deletingPerformance: loading.effects['performanceList/eDeletePerformance'],
   level: common.mine.level,
-  routes: lawsList.routes,
-  belong_to: lawsList.searchParams.belong_to,
-  total: lawsList.laws.total,
-  current: lawsList.laws.current,
-  pageSize: lawsList.laws.pageSize,
-  lawsList: lawsList.laws.list,
+  routes: performanceList.routes,
+  belong_to: performanceList.searchParams.belong_to,
+  total: performanceList.performances.total,
+  current: performanceList.performances.current,
+  pageSize: performanceList.performances.pageSize,
+  performanceList: performanceList.performances.list,
 }))(WrappedForm);
