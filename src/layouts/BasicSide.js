@@ -52,6 +52,22 @@ class BasicSide extends React.Component {
             <Icon
               component={selectKeys === 'staff' ? HumanResourceReverseIcon : HumanResourceIcon}/><span>人事管理</span>
           </Menu.Item>
+          <Menu.SubMenu
+            key="project"
+            title={
+              <span>
+                <Icon component={selectKeys === 'project' ? MakeProject : MakeProject}/>
+                <span>项目管理</span>
+              </span>
+            }
+          >
+            <Menu.Item key="specialDebt">
+              <Icon type="smile" theme="twoTone"/><span>专项债</span>
+            </Menu.Item>
+            <Menu.Item key="ppp">
+              <Icon type="smile" theme="twoTone"/><span>PPP</span>
+            </Menu.Item>
+          </Menu.SubMenu>
           <Menu.Item key="workDiaries">
             <Icon component={selectKeys === 'workDiaries' ? WorkDiariesReverseIcon : WorkDiaries}/><span>工作日志</span>
           </Menu.Item>
@@ -59,7 +75,7 @@ class BasicSide extends React.Component {
             key="approvalProject"
             title={
               <span>
-                <Icon component={selectKeys === 'workDiaries' ? MakeProject : MakeProject}/>
+                <Icon component={selectKeys === 'approvalProject' ? MakeProject : MakeProject}/>
                 <span>销售部</span>
               </span>
             }

@@ -20,8 +20,11 @@ export default {
         { path: '/performance/', component: './Brochure/Performance' },
         { path: '/aptitude/', component: './Brochure/Aptitude' },
 
-        { path: '/projectArchive/', component: './Archive/ProjectArchive' },
-        { path: '/contractArchive/', component: './Archive/ContractArchive' },
+        { path: '/projectArchive', component: './Archive/ProjectArchive' },
+        { path: '/contractArchive', component: './Archive/ContractArchive' },
+
+        { path: '/specialDebt', component: './Project/SpecialDebtList' },
+        { path: '/specialDebt/edit/:id', component: './Project/EditSpecialDebt' },
 
 
         { path: '/originList', component: './ApprovalProjects/OriginList' },
