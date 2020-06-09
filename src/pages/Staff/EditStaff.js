@@ -2,23 +2,12 @@ import React from 'react';
 import { Link, withRouter } from 'umi';
 import { connect } from 'dva';
 import {
-  Spin,
-  Col,
-  Form,
-  Input,
-  Row,
-  Icon,
-  Button,
-  InputNumber,
-  Select,
-  DatePicker,
-  Upload,
-  message, List, Breadcrumb,
+  Spin, Col, Form, Input, Row, Icon, Button, InputNumber, Select, DatePicker, Upload, message, List,
+  Breadcrumb,
 } from 'antd';
+import _ from 'lodash';
 import moment from 'moment';
 import { getFileURL } from '@/utils/transfer';
-
-let companyOuterId = 0;
 
 class EditStaff extends React.Component {
 
@@ -33,15 +22,30 @@ class EditStaff extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'editStaff/rUpdateState',
+      payload: {
+        staff: {},
+        uploadIDCardFrontFile: null,
+        uploadIDCardFrontPreview: null,
+        uploadIDCardBackFile: null,
+        uploadIDCardBackPreview: null,
+        uploadDiplomaFile: null,
+        uploadDiplomaPreview: null,
+        uploadedContractFiles: [],
+      },
+    });
+  }
+
   deleteUploadedFile = (item) => {
     const { uploadedContractFiles } = this.props;
-    let payload = [];
-    uploadedContractFiles.forEach(value => {
-      if (value.id !== item.id) {
-        payload.push(value);
-      }
+    this.props.dispatch({
+      type: 'editStaff/rUpdateState',
+      payload: {
+        uploadedContractFiles: _.filter(uploadedContractFiles, (value) => value.id !== item.id),
+      },
     });
-    this.props.dispatch({ type: 'editStaff/rUpdateState', payload: { uploadedContractFiles: payload } });
   };
   submit = () => {
     const { dispatch, form, match: { path, params } } = this.props;
@@ -51,9 +55,8 @@ class EditStaff extends React.Component {
           dispatch({ type: 'editStaff/eCreateStaff', payload: { ...values } });
         }
         if (path === '/staff/edit/:id') {
-          console.log(this.props);
           const { id } = params;
-          dispatch({ type: 'editStaff/eUpdateStaff', id, payload: { ...values } });
+          dispatch({ type: 'editStaff/eUpdateStaff', id, form, payload: { ...values } });
         }
       }
     });
@@ -61,79 +64,39 @@ class EditStaff extends React.Component {
 
   render() {
     const {
-      form: { getFieldDecorator, getFieldValue, setFieldsValue }, match: { path }, routes,
+      form: { getFieldDecorator, getFieldValue, setFieldsValue }, match: { path }, dispatch, routes,
       loadingDepartments, loadingStaff, submittingCreatedStaff, submittingUpdatedStaff,
       departments, staff, uploadIDCardFrontPreview, uploadIDCardBackPreview, uploadDiplomaPreview, uploadedContractFiles,
     } = this.props;
-    const uploadIDCardFront = {
-      showUploadList: false,
-      multiple: false,
-      beforeUpload: file => {
-        const reader = new FileReader();
-        const isImage = file.type === 'image/gif' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/svg';
-        if (!isImage) {
-          message.warn('图片只能是 PNG JPG JPEG SVG GIF 格式!');
+
+    const generateUploadConfig = (fileName, filePreviewName) => {
+      return {
+        showUploadList: false,
+        multiple: false,
+        beforeUpload: file => {
+          const reader = new FileReader();
+          const isImage = file.type === 'image/gif' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/svg';
+          if (!isImage) {
+            message.warn('图片只能是 PNG JPG JPEG SVG GIF 格式!');
+            return false;
+          }
+          reader.readAsDataURL(file);
+          reader.onload = e => {
+            dispatch({
+              type: 'editStaff/rUpdateState',
+              payload: {
+                [fileName]: file,
+                [filePreviewName]: e.target.result,
+              },
+            });
+          };
           return false;
-        }
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.props.dispatch({
-            type: 'editStaff/rUpdateState',
-            payload: {
-              uploadIDCardFrontFile: file,
-              uploadIDCardFrontPreview: e.target.result,
-            },
-          });
-        };
-        return false;
-      },
+        },
+      };
     };
-    const uploadIDCardBack = {
-      showUploadList: false,
-      multiple: false,
-      beforeUpload: file => {
-        const reader = new FileReader();
-        const isImage = file.type === 'image/gif' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/svg';
-        if (!isImage) {
-          message.warn('图片只能是 PNG JPG JPEG SVG GIF 格式!');
-          return false;
-        }
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.props.dispatch({
-            type: 'editStaff/rUpdateState',
-            payload: {
-              uploadIDCardBackFile: file,
-              uploadIDCardBackPreview: e.target.result,
-            },
-          });
-        };
-        return false;
-      },
-    };
-    const uploadDiploma = {
-      showUploadList: false,
-      multiple: false,
-      beforeUpload: file => {
-        const reader = new FileReader();
-        const isImage = file.type === 'image/gif' || file.type === 'image/jpeg' || file.type === 'image/jpg' || file.type === 'image/png' || file.type === 'image/svg';
-        if (!isImage) {
-          message.warn('图片只能是 PNG JPG JPEG SVG GIF 格式!');
-          return false;
-        }
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-          this.props.dispatch({
-            type: 'editStaff/rUpdateState',
-            payload: {
-              uploadDiplomaFile: file,
-              uploadDiplomaPreview: e.target.result,
-            },
-          });
-        };
-        return false;
-      },
-    };
+    const uploadIDCardFront = generateUploadConfig('uploadIDCardFrontFile', 'uploadIDCardFrontPreview');
+    const uploadIDCardBack = generateUploadConfig('uploadIDCardBackFile', 'uploadIDCardBackPreview');
+    const uploadDiploma = generateUploadConfig('uploadDiplomaFile', 'uploadDiplomaPreview');
     const uploadContracts = {
       showUploadList: true,
       multiple: true,
@@ -168,7 +131,7 @@ class EditStaff extends React.Component {
           </Breadcrumb>
         </div>
         <div className="contentWrapper">
-          <Spin spinning={Boolean(loadingStaff) || Boolean(submittingCreatedStaff) || Boolean(submittingUpdatedStaff)}>
+          <Spin spinning={Boolean(loadingStaff)}>
             <Form layout="horizontal">
               <h3>基本信息</h3>
               <Row gutter={[150]}>
@@ -381,9 +344,11 @@ class EditStaff extends React.Component {
                             renderItem={(item, index) => (
                               <List.Item
                                 key={item.id}
-                                actions={[<Button type="link" icon="delete" className="redButton" onClick={() => {
-                                  this.deleteUploadedFile(item);
-                                }}>删除</Button>]}
+                                actions={[
+                                  <Button type="link" icon="delete" className="redButton"
+                                          onClick={() => this.deleteUploadedFile(item)}>
+                                    删除
+                                  </Button>]}
                               >
                                 <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
                               </List.Item>
@@ -394,7 +359,9 @@ class EditStaff extends React.Component {
                 </React.Fragment>
               }
               <Row>
-                <Button type="primary" onClick={this.submit}>提交</Button>
+                <Button type="primary" onClick={this.submit} loading={submittingCreatedStaff || submittingUpdatedStaff}>
+                  提交
+                </Button>
               </Row>
             </Form>
           </Spin>
@@ -407,10 +374,10 @@ class EditStaff extends React.Component {
 const WrappedForm = Form.create({ name: 'EditStaff' })(EditStaff);
 
 export default withRouter(connect(({ loading, common, editStaff }) => ({
-  loadingDepartments: loading.effects['staff/eGetDepartments'],
-  submittingCreatedStaff: loading.effects['staff/eCreateStaff'],
-  submittingUpdatedStaff: loading.effects['staff/eUpdateStaff'],
-  loadingStaff: loading.effects['staff/eGetStaff'],
+  loadingDepartments: loading.effects['editStaff/eGetDepartments'],
+  submittingCreatedStaff: loading.effects['editStaff/eCreateStaff'],
+  submittingUpdatedStaff: loading.effects['editStaff/eUpdateStaff'],
+  loadingStaff: loading.effects['editStaff/eGetStaff'],
   routes: editStaff.routes,
   departments: editStaff.departments,
   staff: editStaff.staff,

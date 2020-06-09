@@ -12,10 +12,6 @@ export default {
         { path: '/404', component: './Exception/404' },
         { path: '/500', component: './Exception/500' },
 
-        { path: '/staff', component: './Staff/StaffList' },
-        { path: '/staff/edit', component: './Staff/EditStaff' },
-        { path: '/staff/edit/:id', component: './Staff/EditStaff' },
-
         { path: '/pamphlet/', component: './Brochure/Pamphlet' },
         { path: '/performance/', component: './Brochure/Performance' },
         { path: '/aptitude/', component: './Brochure/Aptitude' },
@@ -38,6 +34,10 @@ export default {
         { path: '/gossip', component: './Gossip/Gossip' },
         { path: '/contacts', component: './Contacts/List' },
         { path: '/experts', component: './Experts/Index' },
+
+        { path: '/staff', component: './Staff/StaffList' },
+        { path: '/staff/edit', component: './Staff/EditStaff' },
+        { path: '/staff/edit/:id', component: './Staff/EditStaff' },
 
         { path: '/laws', component: './Law/List' },
 

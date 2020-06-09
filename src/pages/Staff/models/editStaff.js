@@ -11,7 +11,8 @@ export default {
   namespace: 'editStaff',
 
   state: {
-    routes: [{ breadcrumbName: '人事管理', path: '/staff' }, { breadcrumbName: '编辑员工信息' }],
+    routes: [{ breadcrumbName: '员工管理', path: '/staff' }, { breadcrumbName: '编辑员工信息' }],
+
     departments: [],
     staff: {},
 
@@ -43,6 +44,8 @@ export default {
       try {
         const { uploadIDCardFrontFile, uploadIDCardBackFile, uploadDiplomaFile } = yield select(state => state['editStaff']);
         const { recruit, status, entry_time, contract } = payload;
+
+        // 基本参数转换
         if (recruit === '自招') {
           payload['recruit'] = true;
         } else if (recruit === '挂靠') {
@@ -57,6 +60,28 @@ export default {
           payload['entry_time'] = moment(payload['entry_time']).valueOf() / 1000;
         }
 
+        // 主要文件上传
+        if (uploadIDCardFrontFile) {
+          const formData = new FormData();
+          formData.append('folder_path', 'staff_id_card_front');
+          formData.append('file', uploadIDCardFrontFile);
+          const { data: ids } = yield call(UploadFile, formData);
+          payload['credentials_front'] = _.head(ids)['id'];
+        }
+        if (uploadIDCardBackFile) {
+          const formData = new FormData();
+          formData.append('folder_path', 'staff_id_card_back');
+          formData.append('file', uploadIDCardBackFile);
+          const { data: ids } = yield call(UploadFile, formData);
+          payload['credentials_back'] = _.head(ids)['id'];
+        }
+        if (uploadDiplomaFile) {
+          const formData = new FormData();
+          formData.append('folder_path', 'staff_diploma');
+          formData.append('file', uploadDiplomaFile);
+          const { data: ids } = yield call(UploadFile, formData);
+          payload['diploma'] = _.head(ids)['id'];
+        }
         if (contract) {
           const formData = new FormData();
           formData.append('folder_path', 'staff_contract');
@@ -66,40 +91,20 @@ export default {
           const { data } = yield call(UploadFile, formData);
           payload['contract'] = _.map(data, 'id');
         }
-        if (uploadIDCardFrontFile) {
-          const formData = new FormData();
-          formData.append('folder_path', 'staff_id_card_front');
-          formData.append('file', uploadIDCardFrontFile);
-          const { data: ids } = yield call(UploadFile, formData);
-          payload['credentials_front'] = ids[0]['id'];
-        }
-        if (uploadIDCardBackFile) {
-          const formData = new FormData();
-          formData.append('folder_path', 'staff_id_card_back');
-          formData.append('file', uploadIDCardBackFile);
-          const { data: ids } = yield call(UploadFile, formData);
-          payload['credentials_back'] = ids[0]['id'];
-        }
-        if (uploadDiplomaFile) {
-          const formData = new FormData();
-          formData.append('folder_path', 'staff_diploma');
-          formData.append('file', uploadDiplomaFile);
-          const { data: ids } = yield call(UploadFile, formData);
-          payload['diploma'] = ids[0]['id'];
-        }
 
         const { msg, data: { id: staffId } } = yield call(CreateStaff, payload);
         message.success(msg);
         router.push(`/staff/edit/${staffId}`);
-        yield put({ type: 'eGetStaff', id: staffId });
       } catch (err) {
         console.log(err);
       }
     },
-    * eUpdateStaff({ id, payload }, { select, call, put }) {
+    * eUpdateStaff({ id, form, payload }, { select, call, put }) {
       try {
         const { uploadIDCardFrontFile, uploadIDCardBackFile, uploadDiplomaFile, uploadedContractFiles } = yield select(state => state['editStaff']);
         const { recruit, status, entry_time, contract } = payload;
+
+        // 基本参数转换
         if (recruit === '自招') {
           payload['recruit'] = true;
         } else if (recruit === '挂靠') {
@@ -114,6 +119,7 @@ export default {
           payload['entry_time'] = moment(payload['entry_time']).valueOf() / 1000;
         }
 
+        // 选择的新合同与已有合同合并
         if (contract) {
           const formData = new FormData();
           formData.append('folder_path', 'staff_contract');
@@ -124,29 +130,31 @@ export default {
           payload['contract'] = _.map(data, 'id');
         }
         payload['contract'] = _.concat(payload['contract'] || [], _.map(uploadedContractFiles, 'id'));
+
         if (uploadIDCardFrontFile) {
           const formData = new FormData();
           formData.append('folder_path', 'staff_id_card_front');
           formData.append('file', uploadIDCardFrontFile);
           const { data: ids } = yield call(UploadFile, formData);
-          payload['credentials_front'] = ids[0]['id'];
+          payload['credentials_front'] = _.head(ids)['id'];
         }
         if (uploadIDCardBackFile) {
           const formData = new FormData();
           formData.append('folder_path', 'staff_id_card_back');
           formData.append('file', uploadIDCardBackFile);
           const { data: ids } = yield call(UploadFile, formData);
-          payload['credentials_back'] = ids[0]['id'];
+          payload['credentials_back'] = _.head(ids)['id'];
         }
         if (uploadDiplomaFile) {
           const formData = new FormData();
           formData.append('folder_path', 'staff_diploma');
           formData.append('file', uploadDiplomaFile);
           const { data: ids } = yield call(UploadFile, formData);
-          payload['diploma'] = ids[0]['id'];
+          payload['diploma'] = _.head(ids)['id'];
         }
         const { msg } = yield call(EditStaff, id, payload);
         message.success(msg);
+        form.resetFields();
         yield put({ type: 'eGetStaff', id });
       } catch (err) {
         console.log(err);
@@ -155,8 +163,11 @@ export default {
     * eGetStaff({ id, payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetStaff, id, payload);
-        console.log(data);
-        const { department, recruit, status, contract } = data;
+
+        const { department, recruit, status } = data;
+        if (department) {
+          data['department'] = department['id'];
+        }
         if (recruit === true) {
           data['recruit'] = '自招';
         } else if (recruit === false) {
@@ -167,11 +178,14 @@ export default {
         } else if (recruit === false) {
           data['status'] = '已离职';
         }
-        if (department) {
-          data['department'] = department['id'];
-        }
-        yield put({ type: 'rUpdateState', payload: { uploadedContractFiles: data['contract'] } });
-        yield put({ type: 'rUpdateStaff', payload: data });
+
+        yield put({
+          type: 'rUpdateState',
+          payload: {
+            uploadedContractFiles: data['contract'],
+            staff: data,
+          },
+        });
       } catch (err) {
         console.log(err);
       }
@@ -181,12 +195,6 @@ export default {
   reducers: {
     rUpdateState(state, { payload }) {
       return { ...state, ...payload };
-    },
-    rUpdateStaff(state, { payload }) {
-      return {
-        ...state,
-        staff: payload,
-      };
     },
   },
 

@@ -16,9 +16,9 @@ import ContactsIcon from '../../public/menu/contacts.svg';
 import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
 import ExpertsIcon from '../../public/menu/experts.svg';
 import ExpertsReverseIcon from '../../public/menu/experts-reverse.svg';
+
 import HRGray from '../../public/menu/HRGray.svg';
 import HRWhite from '../../public/menu/HRWhite.svg';
-
 import LawGray from '../../public/menu/LawGray.svg';
 import LawWhite from '../../public/menu/LawWhite.svg';
 import UserGray from '../../public/menu/HRGray.svg';
@@ -36,7 +36,7 @@ class BasicSide extends React.Component {
   };
 
   render() {
-    const { menuCollapsed } = this.props;
+    const { menuCollapsed, mine } = this.props;
     const selectKeys = this.props.history.location.pathname.split('/')[1];
     return (
       <Layout.Sider width="200" collapsible breakpoint="lg" theme="dark" onCollapse={this.onCollapse}
@@ -49,10 +49,6 @@ class BasicSide extends React.Component {
           }
         </Link>
         <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
-          <Menu.Item key="staff">
-            <Icon
-              component={selectKeys === 'staff' ? HRWhite : HRGray}/><span>人事管理</span>
-          </Menu.Item>
           <Menu.SubMenu
             key="project"
             title={
@@ -138,6 +134,13 @@ class BasicSide extends React.Component {
           <Menu.Item key="experts">
             <Icon component={selectKeys === 'experts' ? ExpertsReverseIcon : ExpertsIcon}/><span>专家组</span>
           </Menu.Item>
+          {
+            (mine.level > 1 && mine.department.name === '行政部') || mine.level > 2
+            &&
+            < Menu.Item key='staff'>
+              <Icon component={selectKeys === 'staff' ? HRWhite : HRGray}/><span>员工管理</span>
+            </Menu.Item>
+          }
           <Menu.Item key="laws">
             <Icon component={selectKeys === 'laws' ? LawWhite : LawGray}/><span>法律法规</span>
           </Menu.Item>
