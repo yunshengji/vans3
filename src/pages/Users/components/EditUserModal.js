@@ -2,13 +2,11 @@ import React from 'react';
 import { connect } from 'dva';
 import { Modal, Form, Input, Select, Switch } from 'antd';
 
-const { Option } = Select;
-
 class EditUserModal extends React.Component {
 
   hideCreateUserModal = () => {
     this.props.dispatch({
-      type: 'usersList/rUpdateState',
+      type: 'userList/rUpdateState',
       payload: { editUserModalVisible: false },
     });
   };
@@ -19,7 +17,7 @@ class EditUserModal extends React.Component {
     form.validateFields((err, values) => {
       if (!err) {
         dispatch({
-          type: 'usersList/eEditUser',
+          type: 'userList/eEditUser',
           id,
           payload: { ...values },
         });
@@ -28,12 +26,13 @@ class EditUserModal extends React.Component {
   };
 
   render() {
-    const { submittingUser, form, departments, editUserModalVisible, editUser } = this.props;
+    const { submittingEditedUser, form, departments, editUserModalVisible, editUser } = this.props;
     const { getFieldDecorator } = form;
     return (
       <React.Fragment>
-        <Modal title="编辑用户" width={420} visible={editUserModalVisible} afterClose={() => this.props.form.resetFields()}
-               confirmLoading={submittingUser}
+        <Modal title="编辑用户" width={420} visible={editUserModalVisible}
+               afterClose={() => this.props.form.resetFields()}
+               confirmLoading={submittingEditedUser}
                onOk={this.submitCreatedUser} onCancel={this.hideCreateUserModal}>
           <Form layout="horizontal" labelCol={{ xs: 5 }} wrapperCol={{ xs: 17 }}>
             <Form.Item label="姓名">
@@ -55,7 +54,7 @@ class EditUserModal extends React.Component {
               })(
                 <Select placeholder="请选择">
                   {departments.map(item =>
-                    <Option key={item.id} value={item.id}>{item.name}</Option>,
+                    <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>,
                   )}
                 </Select>,
               )}
@@ -68,8 +67,8 @@ class EditUserModal extends React.Component {
                 ],
               })(
                 <Select placeholder="请选择">
-                  <Option value={1}>普通权限</Option>
-                  <Option value={2}>主管权限</Option>
+                  <Select.Option value={1}>普通权限</Select.Option>
+                  <Select.Option value={2}>主管权限</Select.Option>
                 </Select>,
               )}
             </Form.Item>
@@ -129,11 +128,11 @@ class EditUserModal extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'editUser' })(EditUserModal);
+const WrappedForm = Form.create({ name: 'EditUserModal' })(EditUserModal);
 
-export default connect(({ loading, usersList }) => ({
-  submittingUser: loading.effects['usersList/eEditUser'],
-  departments: usersList.departments,
-  editUserModalVisible: usersList.editUserModalVisible,
-  editUser: usersList.editUser,
+export default connect(({ loading, userList }) => ({
+  submittingEditedUser: loading.effects['userList/eEditUser'],
+  departments: userList.departments,
+  editUserModalVisible: userList.editUserModalVisible,
+  editUser: userList.editUser,
 }))(WrappedForm);

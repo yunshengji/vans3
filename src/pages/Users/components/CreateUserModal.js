@@ -2,13 +2,11 @@ import React from 'react';
 import { connect } from 'dva';
 import { Modal, Form, Input, Select } from 'antd';
 
-const { Option } = Select;
-
 class CreateUserModal extends React.Component {
 
   hideCreateUserModal = () => {
     this.props.dispatch({
-      type: 'usersList/rUpdateState',
+      type: 'userList/rUpdateState',
       payload: { createUserModalVisible: false },
     });
   };
@@ -17,7 +15,7 @@ class CreateUserModal extends React.Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.dispatch({
-          type: 'usersList/eCreateUser',
+          type: 'userList/eCreateUser',
           payload: { ...values },
         });
       }
@@ -25,11 +23,10 @@ class CreateUserModal extends React.Component {
   };
 
   render() {
-    const { submittingUser, form, createUserModalVisible, departments } = this.props;
-    const { getFieldDecorator } = form;
+    const { form: { getFieldDecorator }, submittingUser, departments, createUserModalVisible } = this.props;
     return (
       <React.Fragment>
-        <Modal title="新建用户" width={420} visible={createUserModalVisible} confirmLoading={submittingUser}
+        <Modal title="创建用户" width={420} visible={createUserModalVisible} confirmLoading={submittingUser}
                afterClose={() => this.props.form.resetFields()}
                onOk={this.submitCreatedUser}
                onCancel={this.hideCreateUserModal}>
@@ -47,7 +44,7 @@ class CreateUserModal extends React.Component {
               })(
                 <Select placeholder="请选择">
                   {departments.map(item =>
-                    <Option key={item.id} value={item.id}>{item.name}</Option>,
+                    <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>,
                   )}
                 </Select>,
               )}
@@ -58,8 +55,8 @@ class CreateUserModal extends React.Component {
                 rules: [{ required: true, message: '权限不能为空' }],
               })(
                 <Select placeholder="请选择">
-                  <Option value={1}>普通权限</Option>
-                  <Option value={2}>主管权限</Option>
+                  <Select.Option value={1}>普通权限</Select.Option>
+                  <Select.Option value={2}>主管权限</Select.Option>
                 </Select>,
               )}
             </Form.Item>
@@ -109,10 +106,10 @@ class CreateUserModal extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'createUser' })(CreateUserModal);
+const WrappedForm = Form.create({ name: 'CreateUserModal' })(CreateUserModal);
 
-export default connect(({ loading, usersList }) => ({
-  submittingUser: loading.effects['usersList/eCreateUser'],
-  departments: usersList.departments,
-  createUserModalVisible: usersList.createUserModalVisible,
+export default connect(({ loading, userList }) => ({
+  submittingUser: loading.effects['userList/eCreateUser'],
+  departments: userList.departments,
+  createUserModalVisible: userList.createUserModalVisible,
 }))(WrappedForm);

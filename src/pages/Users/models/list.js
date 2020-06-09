@@ -1,15 +1,24 @@
-import { GetDepartments, CreateUser, EditUser, GetUsersList } from '@/services/users';
 import { message } from 'antd';
+import _ from 'lodash';
+import { GetDepartments, CreateUser, EditUser, GetUsersList } from '@/services/users';
 
 export default {
 
-  namespace: 'usersList',
+  namespace: 'userList',
 
   state: {
     routes: [{ breadcrumbName: '用户列表' }],
 
+    searchParams: {
+      name: undefined,
+      department: undefined,
+      level: undefined,
+    },
+
     departments: [],
+
     createUserModalVisible: false,
+
     editUserModalVisible: false,
     editUser: { department: {} },
 
@@ -38,10 +47,9 @@ export default {
     * eCreateUser({ payload }, { select, call, put }) {
       try {
         const { msg } = yield call(CreateUser, payload);
-        const { users: { current, pageSize } } = yield select(state => state.usersList);
-        message.success(msg);
         yield put({ type: 'rUpdateState', payload: { createUserModalVisible: false } });
-        yield put({ type: 'eGetUsers', payload: { page: current, page_size: pageSize } });
+        message.success(msg);
+        yield put({ type: 'eReloadUsers' });
       } catch (err) {
         console.log(err);
       }
@@ -49,18 +57,19 @@ export default {
     * eEditUser({ id, payload }, { select, call, put }) {
       try {
         const { msg } = yield call(EditUser, id, payload);
-        const { users: { current, pageSize } } = yield select(state => state.usersList);
-        message.success(msg);
         yield put({ type: 'rUpdateState', payload: { editUserModalVisible: false } });
-        yield put({ type: 'eGetUsers', payload: { page: current, page_size: pageSize } });
+        message.success(msg);
+        yield put({ type: 'eReloadUsers' });
       } catch (err) {
         console.log(err);
       }
     },
-    * eGetUsers({ payload }, { select, call, put }) {
+    * eReloadUsers({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetUsersList, payload);
-        yield put({ type: 'rUpdateUsers', payload: data });
+        const { searchParams, users: { current, pageSize } } = yield select(state => state['userList']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
+        const { data } = yield call(GetUsersList, { ...queries });
+        yield put({ type: 'rUpdateState', payload: { users: data } });
       } catch (err) {
         console.log(err);
       }
@@ -70,10 +79,6 @@ export default {
   reducers: {
     rUpdateState(state, { payload }) {
       return { ...state, ...payload };
-    },
-    rUpdateUsers(state, { payload }) {
-      state.users = payload;
-      return state;
     },
   },
 

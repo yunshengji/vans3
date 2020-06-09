@@ -35,12 +35,12 @@ class Login extends React.Component {
           <Form.Item>
             {getFieldDecorator('username', {
               rules: [
-                { required: true, message: '请输入账号！' },
+                { required: true, message: '请输入用户名！' },
                 { min: 5, message: '账号长度不能少于 5 位！' },
                 { max: 20, message: '账号长度不能多于 20 位！！' },
               ],
             })(
-              <Input prefix={<Icon type="user" style={{ color: '#CCC' }}/>} size="large" placeholder="请输入账号"/>,
+              <Input prefix={<Icon type="smile" style={{ color: '#CCC' }}/>} size="large" placeholder="请输入账号"/>,
             )}
           </Form.Item>
           <Form.Item>
