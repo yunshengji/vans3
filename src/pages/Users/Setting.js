@@ -11,7 +11,7 @@ class Setting extends React.Component {
     form.validateFields((err, values) => {
       if (!err) {
         dispatch({
-          type: 'setting/eSubmitUpdate',
+          type: 'setting/eUpdate',
           id: mine.id,
           payload: { ...values },
         });
@@ -20,7 +20,7 @@ class Setting extends React.Component {
   };
 
   render() {
-    const { form, routes, submittingEdit, mine, avatarPreview } = this.props;
+    const { form, routes, submittingEditedMe, mine, avatarPreview } = this.props;
     const { getFieldDecorator } = form;
     const uploadConfig = {
       showUploadList: false,
@@ -124,7 +124,7 @@ class Setting extends React.Component {
                   )}
                 </Form.Item>
                 <Form.Item>
-                  <Button type="primary" onClick={this.submitEdit} loading={submittingEdit}>
+                  <Button type="primary" onClick={this.submitEdit} loading={submittingEditedMe}>
                     更新基本信息
                   </Button>
                 </Form.Item>
@@ -140,7 +140,7 @@ class Setting extends React.Component {
 const WrappedForm = Form.create({ name: 'setting' })(Setting);
 
 export default connect(({ loading, common, setting }) => ({
-  submittingEdit: loading.effects['setting/eSubmitUpdate'],
+  submittingEditedMe: loading.effects['setting/eUpdate'],
   mine: common.mine,
   routes: setting.routes,
   avatarPreview: setting.avatarPreview,

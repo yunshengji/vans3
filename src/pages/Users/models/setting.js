@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import _ from 'lodash';
 import { UploadFile } from '@/services/files';
 import { EditUser } from '@/services/users';
 
@@ -7,7 +8,7 @@ export default {
   namespace: 'setting',
 
   state: {
-    routes: [{ breadcrumbName: '用户', path: '/users' }, { breadcrumbName: '个人设置' }],
+    routes: [{ breadcrumbName: '系统用户', path: '/users' }, { breadcrumbName: '个人设置' }],
     avatarFile: null,
     avatarPreview: '',
   },
@@ -18,7 +19,7 @@ export default {
   },
 
   effects: {
-    * eSubmitUpdate({ id, payload }, { select, call, put }) {
+    * eUpdate({ id, payload }, { select, call, put }) {
       try {
         const { avatarFile } = yield select(state => state['setting']);
         if (avatarFile) {
@@ -26,8 +27,8 @@ export default {
           const { avatarFile } = yield select(state => state['setting']);
           formData.append('file', avatarFile);
           formData.append('folder_path', 'avatar');
-          const { data: { file_url } } = yield call(UploadFile, formData);
-          payload.avatar = file_url;
+          const { data } = yield call(UploadFile, formData);
+          payload.avatar = _.head(data).id;
         }
         const { msg } = yield call(EditUser, id, payload);
         message.success(msg);
