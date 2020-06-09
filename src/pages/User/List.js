@@ -2,19 +2,18 @@ import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
 import { Button, Table, Pagination, Breadcrumb, Tag, Form, Row, Col, Select, Input } from 'antd';
-import CreateUserModal from '@/pages/Users/components/CreateUserModal';
-import EditUserModal from '@/pages/Users/components/EditUserModal';
+import CreateUserModal from '@/pages/User/components/CreateUserModal';
+import EditUserModal from '@/pages/User/components/EditUserModal';
 import { USER_LEVEL } from '../../../config/constant';
 
 class UsersList extends React.Component {
 
   componentDidMount() {
-    const { dispatch, current, pageSize } = this.props;
-    dispatch({
+    this.props.dispatch({
       type: 'userList/eGetDepartments',
       payload: { page_size: 10000 },
     });
-    dispatch({ type: 'userList/eReloadUsers', payload: {} });
+    this.props.dispatch({ type: 'userList/eLoadUsers', payload: {} });
   }
 
   searchUserList = e => {
@@ -23,7 +22,7 @@ class UsersList extends React.Component {
       type: 'userList/rUpdateState',
       payload: { searchParams: { ...values }, users: { current: 1, pageSize: 10 } },
     });
-    this.props.dispatch({ type: 'userList/eReloadUsers' });
+    this.props.dispatch({ type: 'userList/eLoadUsers' });
     e.preventDefault();
   };
   resetSearch = e => {
@@ -37,7 +36,7 @@ class UsersList extends React.Component {
       type: 'userList/rUpdateState',
       payload: { searchParams: { ...values }, users: { current: 1, pageSize: 10 } },
     });
-    this.props.dispatch({ type: 'userList/eReloadUsers' });
+    this.props.dispatch({ type: 'userList/eLoadUsers' });
     e.preventDefault();
   };
   showCreateUserModal = () => {
@@ -57,7 +56,7 @@ class UsersList extends React.Component {
   };
   usersPaginationChange = (page, pageSize) => {
     this.props.dispatch({
-      type: 'userList/eReloadUsers',
+      type: 'userList/eLoadUsers',
       payload: { page, page_size: pageSize },
     });
   };
@@ -98,7 +97,7 @@ class UsersList extends React.Component {
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
-                <Form.Item label="用户名">
+                <Form.Item label="姓名">
                   {getFieldDecorator('name', { initialValue: searchParams['name'] })(
                     <Input placeholder="请输入"/>,
                   )}
@@ -136,7 +135,12 @@ class UsersList extends React.Component {
           </Form>
           <h3>用户列表</h3>
           <Table tableLayout="fixed" size="middle" pagination={false} dataSource={users}
-                 loading={fetchingUsers} rowKey={record => record.id}>
+                 loading={fetchingUsers} rowKey={record => record.id}
+                 rowClassName={(record, index) => {
+                   if (index % 2 === 1) {
+                     return 'zebraHighlight';
+                   }
+                 }}>
             <Table.Column title="姓名" dataIndex="name"/>
             <Table.Column title="部门" dataIndex="department" render={(text, record) => (
               <React.Fragment>
@@ -182,7 +186,7 @@ class UsersList extends React.Component {
 const WrappedForm = Form.create({ name: 'UsersList' })(UsersList);
 
 export default connect(({ loading, common, userList }) => ({
-  fetchingUsers: loading.effects['userList/eReloadUsers'],
+  fetchingUsers: loading.effects['userList/eLoadUsers'],
   routes: userList.routes,
   level: common.mine.level,
   createUserModalVisible: userList.createUserModalVisible,

@@ -1,7 +1,7 @@
 import { router } from 'umi';
 import { message } from 'antd';
 import { getIdsFromWholeList, getIdsFromManagerList } from '@/utils/transfer';
-import { GetUsersList } from '@/services/users';
+import { GetUsersList } from '@/services/user';
 import { UploadFile } from '@/services/files';
 
 import {

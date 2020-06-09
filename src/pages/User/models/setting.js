@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import _ from 'lodash';
 import { UploadFile } from '@/services/files';
-import { EditUser } from '@/services/users';
+import { EditUser } from '@/services/user';
 
 export default {
 

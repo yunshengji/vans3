@@ -3,7 +3,7 @@ import { message } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 import { UploadFile } from '@/services/files';
-import { GetDepartments } from '@/services/users';
+import { GetDepartments } from '@/services/user';
 import { CreateStaff, EditStaff, GetStaff } from '@/services/staff';
 
 export default {

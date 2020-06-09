@@ -5,8 +5,7 @@ import { Avatar, Dropdown, Menu, Icon, Spin, Layout, Badge } from 'antd';
 import Cookies from 'js-cookie';
 import { getFileURL } from '@/utils/transfer';
 import styles from './BasicHeader.less';
-
-const { Header } = Layout;
+import MessageGray from '../../public/menu/MessageGray.svg';
 
 class BasicHeader extends React.Component {
   controlDrawerMenuVisible = (drawerMenuVisible) => {
@@ -50,9 +49,11 @@ class BasicHeader extends React.Component {
       </Menu>
     );
     return (
-      <Header className={styles.header}>
+      <Layout.Header className={styles.header}>
+
         <Spin size="large" tip="正在退出登录 ..." spinning={true} className={styles.loading}
               style={{ display: isLogOuting ? 'flex' : 'none' }}/>
+
         <div className={styles.leftWrapper}>
           <img src="/system-icon.svg" alt="万铭"/>
           <span className={styles.controlDrawerMenu}>
@@ -65,23 +66,25 @@ class BasicHeader extends React.Component {
               }
             </span>
         </div>
+
         <div className={styles.rightWrapper}>
           <Badge dot>
-            <Icon type="bell" style={{ fontSize: '18px' }}/>
+            <Icon component={MessageGray} style={{ fontSize: '18px' }}/>
           </Badge>
           {
             (avatar) ?
               <Dropdown overlay={menu}>
                 <div className={styles.dropdown}>
                   <Avatar src={getFileURL(avatar)}/>
-                  <Icon type="caret-down" style={{ marginLeft: '.5em', fontSize: '12px' }}/>
+                  <Icon type="caret-down" style={{ marginLeft: '.5em', color: '#606D85', fontSize: '12px' }}/>
                 </div>
               </Dropdown>
               :
               <Spin/>
           }
         </div>
-      </Header>
+
+      </Layout.Header>
     );
   }
 }

@@ -1,7 +1,7 @@
 export default {
   treeShaking: true,
   routes: [
-    { path: '/login', component: './Users/Login' },
+    { path: '/login', component: './User/Login' },
     {
       path: '/',
       component: '../layouts/BasicLayout',
@@ -35,12 +35,14 @@ export default {
         { path: '/approvalProject/edit/:id', component: './ApprovalProjects/EditApprovalProject' },
 
         { path: '/workDiaries', component: './WorkDiaries/List' },
-        { path: '/laws', component: './Laws/List' },
         { path: '/gossip', component: './Gossip/Gossip' },
         { path: '/contacts', component: './Contacts/List' },
         { path: '/experts', component: './Experts/Index' },
-        { path: '/users', component: './Users/List' },
-        { path: '/users/setting', component: './Users/Setting' },
+
+        { path: '/laws', component: './Law/List' },
+
+        { path: '/users', component: './User/List' },
+        { path: '/users/setting', component: './User/Setting' },
       ],
     },
   ],

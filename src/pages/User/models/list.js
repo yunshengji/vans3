@@ -1,13 +1,13 @@
 import { message } from 'antd';
 import _ from 'lodash';
-import { GetDepartments, CreateUser, EditUser, GetUsersList } from '@/services/users';
+import { GetDepartments, CreateUser, EditUser, GetUsersList } from '@/services/user';
 
 export default {
 
   namespace: 'userList',
 
   state: {
-    routes: [{ breadcrumbName: '用户列表' }],
+    routes: [{ breadcrumbName: '系统用户' }],
 
     searchParams: {
       name: undefined,
@@ -49,7 +49,7 @@ export default {
         const { msg } = yield call(CreateUser, payload);
         yield put({ type: 'rUpdateState', payload: { createUserModalVisible: false } });
         message.success(msg);
-        yield put({ type: 'eReloadUsers' });
+        yield put({ type: 'eLoadUsers' });
       } catch (err) {
         console.log(err);
       }
@@ -59,12 +59,12 @@ export default {
         const { msg } = yield call(EditUser, id, payload);
         yield put({ type: 'rUpdateState', payload: { editUserModalVisible: false } });
         message.success(msg);
-        yield put({ type: 'eReloadUsers' });
+        yield put({ type: 'eLoadUsers' });
       } catch (err) {
         console.log(err);
       }
     },
-    * eReloadUsers({ payload }, { select, call, put }) {
+    * eLoadUsers({ payload }, { select, call, put }) {
       try {
         const { searchParams, users: { current, pageSize } } = yield select(state => state['userList']);
         const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);

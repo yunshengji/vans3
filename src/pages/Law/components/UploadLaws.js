@@ -3,24 +3,20 @@ import { connect } from 'dva';
 import { Form, Modal, Select, Upload, Icon, Button } from 'antd';
 import { LAWS_LABELS } from '../../../../config/constant';
 
-const { Option } = Select;
-
 class UploadLaws extends React.Component {
   hideUploadLawsModal = () => {
     this.props.dispatch({ type: 'lawsList/rUpdateState', payload: { uploadLawsModalVisible: false } });
   };
   submitCreatedLaws = () => {
-    const { dispatch, form } = this.props;
-    form.validateFields((err, values) => {
+    this.props.form.validateFields((err, values) => {
       if (!err) {
-        dispatch({ type: 'lawsList/eUploadLaws', payload: { ...values } });
+        this.props.dispatch({ type: 'lawsList/eUploadLaws', payload: { ...values } });
       }
     });
   };
 
   render() {
-    const { form, uploadingLaws, uploadLawsModalVisible } = this.props;
-    const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
+    const { form: { getFieldDecorator, getFieldValue, setFieldsValue }, uploadingLaws, uploadLawsModalVisible } = this.props;
     const uploadConfig = {
       showUploadList: true,
       beforeUpload: () => false,
@@ -45,7 +41,7 @@ class UploadLaws extends React.Component {
             })(
               <Select placeholder="请选择">
                 {LAWS_LABELS.map((item) =>
-                  <Option key={item} value={item}>{item}</Option>,
+                  <Select.Option key={item} value={item}>{item}</Select.Option>,
                 )}
               </Select>,
             )}
@@ -69,7 +65,7 @@ class UploadLaws extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'uploadLaws' })(UploadLaws);
+const WrappedForm = Form.create({ name: 'UploadLaws' })(UploadLaws);
 
 export default connect(({ loading, lawsList }) => ({
   uploadingLaws: loading.effects['lawsList/eUploadLaws'],

@@ -10,7 +10,7 @@ import DatumReverseIcon from '../../public/menu/datum-reverse.svg';
 import DatumIcon from '../../public/menu/datum.svg';
 import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
 import ContactsIcon from '../../public/menu/contacts.svg';
-import UsersReverseIcon from '../../public/menu/users-reverse.svg';
+import UsersReverseIcon from '../../public/menu/UserWhite.svg';
 import UsersIcon from '../../public/menu/users.svg';
 import MessagesReverseIcon from '../../public/menu/messages-reverse.svg';
 import MessagesIcon from '../../public/menu/messages.svg';

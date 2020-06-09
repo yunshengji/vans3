@@ -8,8 +8,6 @@ import ContractsIcon from '../../public/menu/contracts.svg';
 import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
 import MakeProject from '../../public/menu/make-project.svg';
 import MakeProjectReverseIcon from '../../public/menu/make-projects-reverse.svg';
-import LawIcon from '../../public/menu/laws.svg';
-import LawReverseIcon from '../../public/menu/laws-reverse.svg';
 import WorkDiaries from '../../public/menu/workDiaries.svg';
 import WorkDiariesReverseIcon from '../../public/menu/workDiaries-reverse.svg';
 import GossipIcon from '../../public/menu/gossip.svg';
@@ -18,10 +16,13 @@ import ContactsIcon from '../../public/menu/contacts.svg';
 import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
 import ExpertsIcon from '../../public/menu/experts.svg';
 import ExpertsReverseIcon from '../../public/menu/experts-reverse.svg';
-import UsersIcon from '../../public/menu/users.svg';
-import UsersReverseIcon from '../../public/menu/users-reverse.svg';
 import HRGray from '../../public/menu/HRGray.svg';
 import HRWhite from '../../public/menu/HRWhite.svg';
+
+import LawGray from '../../public/menu/LawGray.svg';
+import LawWhite from '../../public/menu/LawWhite.svg';
+import UserGray from '../../public/menu/HRGray.svg';
+import UserWhite from '../../public/menu/UserWhite.svg';
 
 class BasicSide extends React.Component {
   onCollapse = (menuCollapsed) => {
@@ -128,9 +129,6 @@ class BasicSide extends React.Component {
               <Icon type="smile" theme="twoTone"/><span>合同档案</span>
             </Menu.Item>
           </Menu.SubMenu>
-          <Menu.Item key="laws">
-            <Icon component={selectKeys === 'laws' ? LawReverseIcon : LawIcon}/><span>法律法规</span>
-          </Menu.Item>
           <Menu.Item key="gossip">
             <Icon component={selectKeys === 'gossip' ? GossipReverseIcon : GossipIcon}/><span>吐槽角</span>
           </Menu.Item>
@@ -140,8 +138,11 @@ class BasicSide extends React.Component {
           <Menu.Item key="experts">
             <Icon component={selectKeys === 'experts' ? ExpertsReverseIcon : ExpertsIcon}/><span>专家组</span>
           </Menu.Item>
+          <Menu.Item key="laws">
+            <Icon component={selectKeys === 'laws' ? LawWhite : LawGray}/><span>法律法规</span>
+          </Menu.Item>
           <Menu.Item key="users">
-            <Icon component={selectKeys === 'users' ? HRWhite : HRGray}/><span>系统用户</span>
+            <Icon component={selectKeys === 'users' ? UserWhite : UserGray}/><span>系统用户</span>
           </Menu.Item>
         </Menu>
       </Layout.Sider>
@@ -151,4 +152,5 @@ class BasicSide extends React.Component {
 
 export default withRouter(connect(({ common }) => ({
   menuCollapsed: common.menuCollapsed,
+  mine: common.mine,
 }))(BasicSide));

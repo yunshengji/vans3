@@ -4,7 +4,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { getIdsFromWholeList, getIdsFromManagerList } from '@/utils/transfer';
 import { SPECIAL_DEBT_FILE_TYPE } from '../../../../config/constant';
-import { GetUsersList } from '@/services/users';
+import { GetUsersList } from '@/services/user';
 import { UploadFile } from '@/services/files';
 import { DeleteSpecialDebt, UpdateSpecialDebt, GetSpecialDebtList, GetSpecialDebt } from '@/services/project';
 

@@ -1,5 +1,6 @@
-import { UploadLaws, DeleteLaw, GetLawsList } from '@/services/laws';
 import { message } from 'antd';
+import _ from 'lodash';
+import { UploadLaws, DeleteLaw, GetLawsList } from '@/services/laws';
 import { UploadFile } from '@/services/files';
 
 export default {
@@ -12,7 +13,8 @@ export default {
     uploadLawsModalVisible: false,
 
     searchParams: {
-      belong_to: '',
+      belong_to: undefined,
+      name: undefined,
     },
 
     laws: {
@@ -37,16 +39,15 @@ export default {
         // 上传文件
         const formData = new FormData();
         formData.append('folder_path', 'law');
-        formData.append('file', fileList[0]);
-        const { data: { id: attachmentId } } = yield call(UploadFile, formData);
-        yield put({ type: 'rUpdateState', payload: { uploadLawsModalVisible: false } });
+        formData.append('file', _.head(fileList));
+        const { data } = yield call(UploadFile, formData);
 
-        // 提交文件和分类信息
-        const { msg } = yield call(UploadLaws, { belong_to, attachment: attachmentId });
+        // 提交
+        const { msg } = yield call(UploadLaws, { belong_to, attachment: _.head(data).id });
+        yield put({ type: 'rUpdateState', payload: { uploadLawsModalVisible: false } });
         message.success(msg);
 
-        // 更新列表数据
-        yield put({ type: 'eGetLaws', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadLaws' });
       } catch (err) {
         console.log(err);
       }
@@ -55,17 +56,18 @@ export default {
       try {
         const { msg } = yield call(DeleteLaw, id, payload);
         message.success(msg);
-        const { laws: { current, pageSize } } = yield select(state => state['lawsList']);
-        yield put({ type: 'eGetLaws', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadLaws' });
       } catch (err) {
         console.log(err);
       }
     },
 
-    * eGetLaws({ payload }, { select, call, put }) {
+    * eLoadLaws({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetLawsList, payload);
-        yield put({ type: 'rUpdateLaws', payload: data });
+        const { searchParams, laws: { current, pageSize } } = yield select(state => state['lawsList']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
+        const { data } = yield call(GetLawsList, { ...queries });
+        yield put({ type: 'rUpdateState', payload: { laws: data } });
       } catch (err) {
         console.log(err);
       }
@@ -75,10 +77,6 @@ export default {
   reducers: {
     rUpdateState(state, { payload }) {
       return { ...state, ...payload };
-    },
-    rUpdateLaws(state, { payload }) {
-      state.laws = payload;
-      return state;
     },
   },
 
