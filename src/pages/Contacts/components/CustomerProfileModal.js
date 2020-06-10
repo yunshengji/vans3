@@ -43,7 +43,7 @@ class CustomerProfileModal extends React.Component {
         </Row>
         <Row gutter={[10]}>
           <Col xs={6} className="textRight"><p>客户信息：</p></Col>
-          <Col xs={15}>{customerProfile['private'] ? <Tag color="#108EE9">不公开</Tag> : <Tag color="#F50">公开</Tag>}</Col>
+          <Col xs={15}>{customerProfile['private'] ? <Tag color="green">不公开</Tag> : <Tag color="orange">公开</Tag>}</Col>
         </Row>
         <Row gutter={[10]}>
           <Col xs={6} className="textRight"><p>重点关注度：</p></Col>

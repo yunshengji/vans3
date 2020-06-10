@@ -105,7 +105,7 @@ class ProjectsList extends React.Component {
   };
   exportResult = ({ id }) => {
     const token = Cookies.get('token');
-    window.open(`${prefix}/roll/export/${id}?token=${token}`);
+    window.open(`${prefix}/roll/export/${id}?token=${token}`, '_blank');
   };
   projectsListPaginationChange = (page, pageSize) => {
     this.props.dispatch({
@@ -166,17 +166,17 @@ class ProjectsList extends React.Component {
                             {
                               record['expert_list'].length === 0 ?
                                 <Tooltip placement="topLeft" title="生成随机评审成员" arrowPointAtCenter>
-                                  <Button shape="circle" onClick={() => this.showChooseExpertsNum(record)}>
+                                  <Button shape="circle" type="primary"
+                                          onClick={() => this.showChooseExpertsNum(record)}>
                                     <Icon type="deployment-unit"/>
                                   </Button>
                                 </Tooltip>
-                                : null
+                                :
+                                <Button type="link" icon="cloud-download" onClick={() => this.exportResult(record)}>
+                                  导出结果
+                                </Button>
                             }
                           </div>
-                        )}/>
-          <Table.Column title="导出结果" dataIndex="export"
-                        render={(text, record) => (
-                          <Button type="link" icon="cloud-download" onClick={() => this.exportResult(record)}/>
                         )}/>
         </Table>
         <div className="paginationWrapper">

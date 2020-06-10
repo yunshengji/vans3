@@ -9,8 +9,6 @@ import CreateContractorModal from '@/pages/Contacts/components/CreateContractorM
 import EditCustomerModal from '@/pages/Contacts/components/EditCustomerModal';
 import EditContractorModal from '@/pages/Contacts/components/EditContractorModal';
 
-const { TabPane } = Tabs;
-
 class ContactsList extends React.Component {
   changeTab = (activeKey) => {
     this.props.dispatch({
@@ -33,7 +31,14 @@ class ContactsList extends React.Component {
 
   render() {
     const { activeKey } = this.props;
-    const routes = activeKey === 'customers' ? [{ breadcrumbName: '客户列表' }] : [{ breadcrumbName: '合作伙伴列表' }];
+    const routes = activeKey === 'customers' ? [
+        { breadcrumbName: '联系人', path: '/contacts' },
+        { breadcrumbName: '客户' }]
+      :
+      [
+        { breadcrumbName: '联系人', path: '/contacts' },
+        { breadcrumbName: '合作伙伴' },
+      ];
     return (
       <React.Fragment>
         <CreateCustomerModal/>
@@ -60,23 +65,23 @@ class ContactsList extends React.Component {
             })}
           </Breadcrumb>
           {activeKey === 'customers' ?
-            <Button size="small" type="link" onClick={this.showCreateCustomerModal}>
+            <Button icon="plus-circle" onClick={this.showCreateCustomerModal}>
               新建客户
             </Button>
             :
-            <Button size="small" type="link" onClick={this.showCreateContractorModal}>
+            <Button icon="plus-circle" onClick={this.showCreateContractorModal}>
               新建合作伙伴
             </Button>
           }
         </div>
         <div className="contentWrapper">
           <Tabs activeKey={activeKey} onChange={this.changeTab}>
-            <TabPane tab="客户" key="customers">
+            <Tabs.TabPane tab="我的客户" key="customers">
               <Customers/>
-            </TabPane>
-            <TabPane tab="合作伙伴" key="contractors">
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="合作伙伴" key="contractors">
               <Contractors/>
-            </TabPane>
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </React.Fragment>
@@ -84,6 +89,6 @@ class ContactsList extends React.Component {
   }
 }
 
-export default connect(({ loading, contactsList }) => ({
+export default connect(({ loading, common, contactsList }) => ({
   activeKey: contactsList.activeKey,
 }))(ContactsList);

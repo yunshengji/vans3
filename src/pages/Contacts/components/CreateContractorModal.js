@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { Modal, Form, Input, Select } from 'antd';
 
-const { Option } = Select;
-
 class CreateContractorModal extends React.Component {
 
   hideCreateContractorModal = () => {
@@ -25,8 +23,7 @@ class CreateContractorModal extends React.Component {
   };
 
   render() {
-    const { creatingContractor, form, createContractorModalVisible } = this.props;
-    const { getFieldDecorator } = form;
+    const { creatingContractor, form: { getFieldDecorator }, createContractorModalVisible } = this.props;
     return (
       <Modal title="新建合作伙伴" visible={createContractorModalVisible} confirmLoading={creatingContractor}
              afterClose={() => this.props.form.resetFields()}
@@ -35,19 +32,16 @@ class CreateContractorModal extends React.Component {
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
           <Form.Item label="姓名">
             {getFieldDecorator('name', {
-              rules: [
-                { required: true, message: '姓名不能为空' },
-              ],
+              rules: [{ required: true, message: '姓名不能为空' }],
             })(
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('gender', { initialValue: 'unknown' })(
+            {getFieldDecorator('gender', { initialValue: '', rules: [{ required: true, message: '请选择性别' }] })(
               <Select placeholder="请选择">
-                <Option key="unknown" value="unknown">不清楚</Option>
-                <Option key="male" value="male">男</Option>
-                <Option key="female" value="female">女</Option>
+                <Select.Option key="male" value="male">男</Select.Option>
+                <Select.Option key="female" value="female">女</Select.Option>
               </Select>,
             )}
           </Form.Item>

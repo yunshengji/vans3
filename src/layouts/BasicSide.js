@@ -12,9 +12,9 @@ import WorkDiaries from '../../public/menu/workDiaries.svg';
 import WorkDiariesReverseIcon from '../../public/menu/workDiaries-reverse.svg';
 import GossipIcon from '../../public/menu/gossip.svg';
 import GossipReverseIcon from '../../public/menu/gossip-reverse.svg';
-import ContactsIcon from '../../public/menu/contacts.svg';
-import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
 
+import ContactGray from '../../public/menu/ContactGray.svg';
+import ContactWhite from '../../public/menu/ContactWhite.svg';
 import ExpertGray from '../../public/menu/ExpertGray.svg';
 import ExpertWhite from '../../public/menu/ExpertWhite.svg';
 import HRGray from '../../public/menu/HRGray.svg';
@@ -131,7 +131,7 @@ class BasicSide extends React.Component {
             <Icon component={selectKeys === 'gossip' ? GossipReverseIcon : GossipIcon}/><span>吐槽角</span>
           </Menu.Item>
           <Menu.Item key="contacts">
-            <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/><span>联系人</span>
+            <Icon component={selectKeys === 'contacts' ? ContactWhite : ContactGray}/><span>联系人</span>
           </Menu.Item>
 
           {

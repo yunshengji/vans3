@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { Modal, Form, Input, Select } from 'antd';
 
-const { Option } = Select;
-
 class EditContractorModal extends React.Component {
 
   hideEditContractorModal = () => {
@@ -43,11 +41,13 @@ class EditContractorModal extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('gender', { initialValue: editContractorForm['gender'] })(
+            {getFieldDecorator('gender', {
+              initialValue: editContractorForm['gender'],
+              rules: [{ required: true, message: '请选择性别' }],
+            })(
               <Select placeholder="请选择">
-                <Option key="unknown" value="unknown">不清楚</Option>
-                <Option key="male" value="male">男</Option>
-                <Option key="female" value="female">女</Option>
+                <Select.Option key="male" value="male">男</Select.Option>
+                <Select.Option key="female" value="female">女</Select.Option>
               </Select>,
             )}
           </Form.Item>

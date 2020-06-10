@@ -8,7 +8,7 @@ import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
 import ContractsIcon from '../../public/menu/contracts.svg';
 import DatumReverseIcon from '../../public/menu/datum-reverse.svg';
 import DatumIcon from '../../public/menu/datum.svg';
-import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
+import ContactsReverseIcon from '../../public/menu/ContactWhite.svg';
 import ContactsIcon from '../../public/menu/contacts.svg';
 import UsersReverseIcon from '../../public/menu/UserWhite.svg';
 import UsersIcon from '../../public/menu/users.svg';

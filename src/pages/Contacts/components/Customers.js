@@ -1,23 +1,37 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Row, Col, Button, Table, Form, Input, Pagination, Select, Modal, Tag, Switch } from 'antd';
-import moment from 'moment';
+import { Row, Col, Button, Table, Form, Input, Pagination, Modal, Tag } from 'antd';
 import CustomerProfileModal from './CustomerProfileModal';
-
-const { Column } = Table;
-const { Option } = Select;
-const { confirm } = Modal;
 
 class Customers extends React.Component {
 
   componentDidMount() {
-    const { dispatch, current, pageSize } = this.props;
-    dispatch({
-      type: 'contactsList/eGetCustomers',
-      payload: { page: current, page_size: pageSize },
-    });
+    this.props.dispatch({ type: 'contactsList/eLoadCustomers' });
   }
 
+  searchCustomerList = e => {
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'contactsList/rUpdateState',
+      payload: { searchParamsCustomer: { ...values }, customers: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'contactsList/eLoadCustomers' });
+    e.preventDefault();
+  };
+  resetSearch = e => {
+    this.props.form.setFieldsValue({
+      name: undefined,
+      area: undefined,
+      company: undefined,
+    });
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'contactsList/rUpdateState',
+      payload: { searchParamsCustomer: { ...values }, customers: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'contactsList/eLoadCustomers' });
+    e.preventDefault();
+  };
   showEditForm = (record) => {
     this.props.dispatch({
       type: 'contactsList/rUpdateState',
@@ -30,7 +44,7 @@ class Customers extends React.Component {
 
   deleteCustomer = ({ id, name }) => {
     const { dispatch } = this.props;
-    confirm({
+    Modal.confirm({
       title: '确定删除此客户信息', content: `若客户 ${name} 有关联的项目，将导致删除失败`,
       okText: '删除',
       okType: 'danger',
@@ -42,55 +56,44 @@ class Customers extends React.Component {
   };
   customersPaginationChange = (page, pageSize) => {
     this.props.dispatch({
-      type: 'contactsList/eGetCustomers',
+      type: 'contactsList/eLoadCustomers',
       payload: { page, page_size: pageSize },
     });
   };
 
   render() {
-    const { fetchingCustomers, deletingCustomer, mine, total, current, pageSize, customersList } = this.props;
+    const { form: { getFieldDecorator }, fetchingCustomers, deletingCustomer, mine, searchParamsCustomer, total, current, pageSize, customersList } = this.props;
     return (
       <React.Fragment>
         <CustomerProfileModal/>
-        <h3 style={{ marginTop: '1em' }}>查找客户</h3>
+        <h3>客户搜索</h3>
         <Form layout="horizontal" className="searchWrapper">
           <Row gutter={[80]}>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="姓名"><Input placeholder="请输入"/></Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="性别">
-                <Select placeholder="请选择">
-                  <Option key="male" value="male">男</Option>
-                  <Option key="female" value="female">女</Option>
-                </Select>
+              <Form.Item label="姓名">
+                {getFieldDecorator('name', { initialValue: searchParamsCustomer['name'] })(
+                  <Input placeholder="请输入"/>,
+                )}
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="地区"><Input placeholder="请输入"/></Form.Item>
+              <Form.Item label="地区">
+                {getFieldDecorator('area', { initialValue: searchParamsCustomer['area'] })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="公司"><Input placeholder="请输入"/></Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="职务"><Input placeholder="请输入"/></Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="手机号码"><Input placeholder="请输入"/></Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="微信"><Input placeholder="请输入"/></Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="邮箱"><Input placeholder="请输入"/></Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="是否公开"><Switch checked checkedChildren="不公开" unCheckedChildren="公开"/></Form.Item>
+              <Form.Item label="公司名称">
+                {getFieldDecorator('company', { initialValue: searchParamsCustomer['company'] })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
               <div className="searchButtons">
-                <Button type="primary">搜索</Button>
-                <Button style={{ marginLeft: '1em' }}>重置</Button>
+                <Button type="primary" onClick={this.searchCustomerList}>搜索</Button>
+                <Button style={{ marginLeft: '1em' }} onClick={this.resetSearch}>重置</Button>
               </div>
             </Col>
           </Row>
@@ -98,7 +101,7 @@ class Customers extends React.Component {
         <h3 style={{ marginBottom: '2em' }}>客户列表</h3>
         <Table size="middle" tableLayout="fixed" pagination={false} dataSource={customersList}
                loading={fetchingCustomers || deletingCustomer} rowKey={record => record.id}>
-          <Column title="姓名" dataIndex="name" render={(name, record) => (
+          <Table.Column title="姓名" dataIndex="name" render={(name, record) => (
             <Button type="link" onClick={() => {
               this.props.dispatch({
                 type: 'contactsList/rUpdateState',
@@ -108,42 +111,40 @@ class Customers extends React.Component {
               {name}
             </Button>
           )}/>
-          <Column title="性别" dataIndex="gender" render={(text) => (<span>{text === 'male' ? '男' : '女'}</span>)}/>
-          <Column title="地区" dataIndex="area"/>
-          <Column title="公司及职务" dataIndex="companyAndJob"
-                  render={(text, record) => (
-                    <React.Fragment>
-                      <span>{record['company']} </span>
-                      <span>{record['job_title']}</span>
-                    </React.Fragment>
-                  )}/>
-          <Column title="手机号码" dataIndex="phone"/>
-          <Column title="微信" dataIndex="wx"/>
-          <Column title="邮箱" dataIndex="email"/>
-          <Column title="状态" dataIndex="private"
-                  render={text => (text ? <Tag color="#108EE9 ">不公开</Tag> : <Tag color="#F50">公开</Tag>)}/>
-          <Column title="创建人" dataIndex="creator" render={(creator) => creator.name}/>
-          <Column title="创建日期" dataIndex="created_at" sorter={(a, b) => a['created_at'] - b['created_at']}
-                  render={(text) => (<span>{moment(1000 * text).format('YYYY-MM-DD')}</span>)}/>
-          <Column title="操作" dataIndex="action"
-                  render={(text, record) => (
-                    <div className="actionGroup">
-                      <Button type="link" icon="edit"
-                              disabled={!(record['creator']['id'] === mine['id'] || mine.level === 9)}
-                              onClick={() => {
-                                this.showEditForm(record);
-                              }}>
-                        修改
-                      </Button>
-                      <Button type="link" icon="delete" className="redButton"
-                              disabled={!(record['creator']['id'] === mine['id'] || mine.level === 9)}
-                              onClick={() => {
-                                this.deleteCustomer(record);
-                              }}>
-                        删除
-                      </Button>
-                    </div>
-                  )}/>
+          <Table.Column title="性别" dataIndex="gender" render={(text) => (<span>{text === 'male' ? '男' : '女'}</span>)}/>
+          <Table.Column title="地区" dataIndex="area"/>
+          <Table.Column title="公司及职务" dataIndex="companyAndJob"
+                        render={(text, record) => (
+                          <React.Fragment>
+                            <span>{record['company']} </span>
+                            <span>{record['job_title']}</span>
+                          </React.Fragment>
+                        )}/>
+          <Table.Column title="手机号码" dataIndex="phone"/>
+          <Table.Column title="微信" dataIndex="wx"/>
+          <Table.Column title="邮箱" dataIndex="email"/>
+          <Table.Column title="状态" dataIndex="private"
+                        render={text => (text ? <Tag color="green">不公开</Tag> : <Tag color="orange">公开</Tag>)}/>
+          <Table.Column title="创建人" dataIndex="creator" render={(creator) => creator.name}/>
+          <Table.Column title="操作" dataIndex="action"
+                        render={(text, record) => (
+                          <div className="actionGroup">
+                            <Button type="link" icon="edit"
+                                    disabled={!(record['creator']['id'] === mine['id'] || mine.level > 1)}
+                                    onClick={() => {
+                                      this.showEditForm(record);
+                                    }}>
+                              修改
+                            </Button>
+                            <Button type="link" icon="delete" className="redButton"
+                                    disabled={!(record['creator']['id'] === mine['id'] || mine.level > 1)}
+                                    onClick={() => {
+                                      this.deleteCustomer(record);
+                                    }}>
+                              删除
+                            </Button>
+                          </div>
+                        )}/>
         </Table>
         <div className="paginationWrapper">
           <Pagination showQuickJumper defaultCurrent={1} total={total} current={current} pageSize={pageSize}
@@ -154,12 +155,15 @@ class Customers extends React.Component {
   }
 }
 
+const WrappedForm = Form.create({ name: 'Customers' })(Customers);
+
 export default connect(({ loading, common, contactsList }) => ({
-  fetchingCustomers: loading.effects['contactsList/eGetCustomers'],
+  fetchingCustomers: loading.effects['contactsList/eLoadCustomers'],
   deletingCustomer: loading.effects['contactsList/eDeleteCustomer'],
   mine: common.mine,
+  searchParamsCustomer: contactsList.searchParamsCustomer,
   total: contactsList.customers.total,
   current: contactsList.customers.current,
   pageSize: contactsList.customers.pageSize,
   customersList: contactsList.customers.list,
-}))(Customers);
+}))(WrappedForm);

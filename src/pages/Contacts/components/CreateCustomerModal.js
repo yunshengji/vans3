@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { Modal, Form, Input, Select, Switch, Rate } from 'antd';
 
-const { Option } = Select;
-const { TextArea } = Input;
-
 class CreateCustomerModal extends React.Component {
 
   hideCreateCustomerModal = () => {
@@ -26,8 +23,7 @@ class CreateCustomerModal extends React.Component {
   };
 
   render() {
-    const { creatingCustomer, form, createCustomerModalVisible } = this.props;
-    const { getFieldDecorator } = form;
+    const { form: { getFieldDecorator }, creatingCustomer, createCustomerModalVisible } = this.props;
     return (
       <Modal title="新建客户" visible={createCustomerModalVisible} confirmLoading={creatingCustomer}
              afterClose={() => this.props.form.resetFields()}
@@ -44,11 +40,10 @@ class CreateCustomerModal extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('gender', { initialValue: 'unknown' })(
+            {getFieldDecorator('gender', { rules: [{ required: true, message: '请选择性别' }] })(
               <Select placeholder="请选择">
-                <Option key="unknown" value="unknown">不清楚</Option>
-                <Option key="male" value="male">男</Option>
-                <Option key="female" value="female">女</Option>
+                <Select.Option key="male" value="male">男</Select.Option>
+                <Select.Option key="female" value="female">女</Select.Option>
               </Select>,
             )}
           </Form.Item>
@@ -86,12 +81,12 @@ class CreateCustomerModal extends React.Component {
           </Form.Item>
           <Form.Item label="客户特点">
             {getFieldDecorator('personality', {})(
-              <TextArea placeholder="请输入"/>,
+              <Input.TextArea placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="备注">
             {getFieldDecorator('description', {})(
-              <TextArea placeholder="请输入"/>,
+              <Input.TextArea placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="重点关注度">
@@ -114,7 +109,7 @@ class CreateCustomerModal extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'createCustomer' })(CreateCustomerModal);
+const WrappedForm = Form.create({ name: 'CreateCustomerModal' })(CreateCustomerModal);
 
 export default connect(({ loading, contactsList }) => ({
   creatingCustomer: loading.effects['contactsList/eCreateCustomer'],

@@ -31,8 +31,11 @@ export default {
         { path: '/approvalProject/edit/:id', component: './ApprovalProjects/EditApprovalProject' },
 
         { path: '/workDiaries', component: './WorkDiaries/List' },
+
         { path: '/gossip', component: './Gossip/Gossip' },
+
         { path: '/contacts', component: './Contacts/List' },
+
         { path: '/experts', component: './Experts/Index' },
 
         { path: '/staff', component: './Staff/StaffList' },

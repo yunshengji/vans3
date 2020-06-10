@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'dva';
 import { Modal, Form, Input, Select, Switch, Rate } from 'antd';
 
-const { Option } = Select;
-const { TextArea } = Input;
-
 class EditCustomerModal extends React.Component {
 
   hideEditCustomerModal = () => {
@@ -44,11 +41,13 @@ class EditCustomerModal extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="性别">
-            {getFieldDecorator('gender', { initialValue: editCustomerForm['gender'] })(
+            {getFieldDecorator('gender', {
+              initialValue: editCustomerForm['gender'],
+              rules: [{ required: true, message: '请选择性别' }],
+            })(
               <Select placeholder="请选择">
-                <Option key="unknown" value="unknown">不清楚</Option>
-                <Option key="male" value="male">男</Option>
-                <Option key="female" value="female">女</Option>
+                <Select.Option key="male" value="male">男</Select.Option>
+                <Select.Option key="female" value="female">女</Select.Option>
               </Select>,
             )}
           </Form.Item>
@@ -87,12 +86,12 @@ class EditCustomerModal extends React.Component {
           </Form.Item>
           <Form.Item label="客户特点">
             {getFieldDecorator('personality', { initialValue: editCustomerForm['personality'] })(
-              <TextArea placeholder="请输入"/>,
+              <Input.TextArea placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="备注">
             {getFieldDecorator('description', { initialValue: editCustomerForm['description'] })(
-              <TextArea placeholder="请输入"/>,
+              <Input.TextArea placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="重点关注度">
@@ -115,7 +114,7 @@ class EditCustomerModal extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'editCustomer' })(EditCustomerModal);
+const WrappedForm = Form.create({ name: 'EditCustomerModal' })(EditCustomerModal);
 
 export default connect(({ loading, contactsList }) => ({
   updatingCustomer: loading.effects['contactsList/eUpdateCustomer'],
