@@ -151,12 +151,12 @@ class OriginList extends React.Component {
                                       }}>
                                 修改
                               </Button>
-                              <Button type="link" icon="delete" className="redButton"
-                                      onClick={() => {
-                                        this.deleteOrigin(record);
-                                      }}>
-                                删除
-                              </Button>
+                              {/*<Button type="link" icon="delete" className="redButton"*/}
+                              {/*        onClick={() => {*/}
+                              {/*          this.deleteOrigin(record);*/}
+                              {/*        }}>*/}
+                              {/*  删除*/}
+                              {/*</Button>*/}
                             </div>
                           )}/>
           </Table>
