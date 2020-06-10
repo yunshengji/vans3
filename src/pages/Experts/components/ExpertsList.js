@@ -1,15 +1,38 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Tag, Row, Col, Form, Input, Modal } from 'antd';
+import { Button, Table, Pagination, Tag, Row, Col, Form, Input, Modal, Select } from 'antd';
 import CreateExpert from '@/pages/Experts/components/CreateExpert';
 import EditExpert from '@/pages/Experts/components/EditExpert';
 
 class ExpertsList extends React.Component {
 
   componentDidMount() {
-    this.props.dispatch({ type: 'experts/eReloadExpertsList' });
+    this.props.dispatch({ type: 'experts/eLoadExperts' });
   }
 
+  searchExpertList = e => {
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'experts/rUpdateState',
+      payload: { searchExpertParams: { ...values }, expertsList: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'experts/eLoadExperts' });
+    e.preventDefault();
+  };
+  resetSearch = e => {
+    this.props.form.setFieldsValue({
+      name: undefined,
+      procurement_num: undefined,
+      law_num: undefined,
+    });
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'experts/rUpdateState',
+      payload: { searchExpertParams: { ...values }, expertsList: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'experts/eLoadExperts' });
+    e.preventDefault();
+  };
   showEditExpert = (record) => {
     this.props.dispatch({
       type: 'experts/rUpdateState',
@@ -34,36 +57,45 @@ class ExpertsList extends React.Component {
   };
   expertsListPaginationChange = (page, pageSize) => {
     this.props.dispatch({
-      type: 'experts/eGetExpertsList',
+      type: 'experts/eLoadExperts',
       payload: { page, page_size: pageSize },
     });
   };
 
   render() {
-    const { fetchingExpertsList, editingExpert, deletingExpert, level, total, current, pageSize, experts } = this.props;
+    const { form: { getFieldDecorator }, fetchingExpertsList, editingExpert, deletingExpert, searchExpertParams, total, current, pageSize, experts } = this.props;
     return (
       <React.Fragment>
         <CreateExpert/>
         <EditExpert/>
-        <h3>查找专家</h3>
+        <h3>专家搜索</h3>
         <Form layout="horizontal" className="searchWrapper">
           <Row gutter={[80]}>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="姓名"><Input placeholder="请输入"/></Form.Item>
+              <Form.Item label="姓名">
+                {getFieldDecorator('name', { initialValue: searchExpertParams['name'] })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="采购证号"><Input placeholder="请输入"/></Form.Item>
+              <Form.Item label="采购证号">
+                {getFieldDecorator('procurement_num', { initialValue: searchExpertParams['procurement_num'] })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="法改证号"><Input placeholder="请输入"/></Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="手机号码"><Input placeholder="请输入"/></Form.Item>
+              <Form.Item label="发改证号">
+                {getFieldDecorator('law_num', { initialValue: searchExpertParams['law_num'] })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
               <div className="searchButtons">
-                <Button type="primary">搜索</Button>
-                <Button style={{ marginLeft: '1em' }}>重置</Button>
+                <Button type="primary" onClick={this.searchExpertList}>搜索</Button>
+                <Button style={{ marginLeft: '1em' }} onClick={this.resetSearch}>重置</Button>
               </div>
             </Col>
           </Row>
@@ -118,13 +150,15 @@ class ExpertsList extends React.Component {
   }
 }
 
+const WrappedForm = Form.create({ name: 'ExpertsList' })(ExpertsList);
+
 export default connect(({ loading, common, experts }) => ({
-  fetchingExpertsList: loading.effects['experts/eGetExpertsList'],
+  fetchingExpertsList: loading.effects['experts/eLoadExperts'],
   editingExpert: loading.effects['experts/eEditExpert'],
   deletingExpert: loading.effects['experts/eDeleteExpert'],
-  level: common.mine.level,
+  searchExpertParams: experts.searchExpertParams,
   total: experts.expertsList.total,
   current: experts.expertsList.current,
   pageSize: experts.expertsList.pageSize,
   experts: experts.expertsList.list,
-}))(ExpertsList);
+}))(WrappedForm);

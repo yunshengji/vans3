@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import _ from 'lodash';
 import {
   CreateExpert, DeleteExpert, EditExpert, GetExpertsList,
   CreateProject, DeleteProject, EditProject, GetProjectsList, GetNewExpertFromProject,
@@ -11,10 +12,15 @@ export default {
   state: {
     activeKey: 'resultsLibrary',
     routes: {
-      resultsLibrary: [{ breadcrumbName: '抽取结果' }],
-      expertsLibrary: [{ breadcrumbName: '专家库' }],
+      resultsLibrary: [{ breadcrumbName: '专家组', path: '/experts' }, { breadcrumbName: '评审组' }],
+      expertsLibrary: [{ breadcrumbName: '专家组', path: '/experts' }, { breadcrumbName: '专家库' }],
     },
 
+    searchExpertParams: {
+      name: undefined,
+      procurement_num: undefined,
+      law_num: undefined,
+    },
     createExpertVisible: false,
     editExpertVisible: false,
     editExpert: {},
@@ -25,6 +31,9 @@ export default {
       list: [],
     },
 
+    searchProjectParams: {
+      name: undefined,
+    },
     createProjectVisible: false,
     editProjectVisible: false,
     editProject: {},
@@ -48,9 +57,9 @@ export default {
     * eCreateExpert({ payload }, { select, call, put }) {
       try {
         const { msg } = yield call(CreateExpert, payload);
-        message.success(msg);
         yield put({ type: 'rUpdateState', payload: { createExpertVisible: false } });
-        yield put({ type: 'eReloadExpertsList' });
+        message.success(msg);
+        yield put({ type: 'eLoadExperts' });
       } catch (err) {
         console.log(err);
       }
@@ -59,7 +68,7 @@ export default {
       try {
         const { msg } = yield call(DeleteExpert, id, payload);
         message.success(msg);
-        yield put({ type: 'eReloadExpertsList' });
+        yield put({ type: 'eLoadExperts' });
       } catch (err) {
         console.log(err);
       }
@@ -67,37 +76,30 @@ export default {
     * eEditExpert({ id, payload }, { select, call, put }) {
       try {
         const { msg } = yield call(EditExpert, id, payload);
-        message.success(msg);
         yield put({ type: 'rUpdateState', payload: { editExpertVisible: false } });
-        yield put({ type: 'eReloadExpertsList' });
+        message.success(msg);
+        yield put({ type: 'eLoadExperts' });
       } catch (err) {
         console.log(err);
       }
     },
-    * eGetExpertsList({ payload }, { select, call, put }) {
+    * eLoadExperts({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetExpertsList, payload);
-        yield put({ type: 'rUpdateExpertsList', payload: data });
-        window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+        const { searchExpertParams, expertsList: { current, pageSize } } = yield select(state => state['experts']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchExpertParams, payload);
+        const { data } = yield call(GetExpertsList, { ...queries });
+        yield put({ type: 'rUpdateState', payload: { expertsList: data } });
       } catch (err) {
         console.log(err);
       }
     },
-    * eReloadExpertsList({ payload }, { select, call, put }) {
-      try {
-        const { expertsList: { current, pageSize } } = yield select(state => state['experts']);
-        yield put({ type: 'eGetExpertsList', payload: { page: current, page_size: pageSize } });
-        window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
-      } catch (err) {
-        console.log(err);
-      }
-    },
+
     * eCreateProject({ payload }, { select, call, put }) {
       try {
         const { msg } = yield call(CreateProject, payload);
         message.success(msg);
         yield put({ type: 'rUpdateState', payload: { createProjectVisible: false } });
-        yield put({ type: 'eReloadProjectsList' });
+        yield put({ type: 'eLoadProjects' });
       } catch (err) {
         console.log(err);
       }
@@ -107,13 +109,11 @@ export default {
         const { data: expertList } = yield call(GetProjectsList, payload);
         const { chooseExpertsNumProjectId } = yield select(state => state['experts']);
         yield put({ type: 'rUpdateState', payload: { chooseExpertsNumVisible: false } });
-        let expertIds = [];
-        expertList.forEach(item => {
-          expertIds.push(item.id);
-        });
+
+        const expertIds = _.map(expertList, 'id');
         const { msg } = yield call(EditProject, chooseExpertsNumProjectId, { expert_list: expertIds });
         message.success(msg);
-        yield put({ type: 'eReloadProjectsList' });
+        yield put({ type: 'eLoadProjects' });
       } catch (err) {
         console.log(err);
       }
@@ -122,7 +122,7 @@ export default {
       try {
         const { msg } = yield call(DeleteProject, id, payload);
         message.success(msg);
-        yield put({ type: 'eReloadProjectsList' });
+        yield put({ type: 'eLoadProjects' });
       } catch (err) {
         console.log(err);
       }
@@ -131,15 +131,11 @@ export default {
       try {
         const { id, expertsList, record } = payload;
         const { data } = yield call(GetNewExpertFromProject, id, { action: 'reroll' });
-        const position = expertsList.indexOf(record);
-        expertsList.splice(position, 1, data);
-        let expertIds = [];
-        expertsList.forEach(item => {
-          expertIds.push(item.id);
-        });
+        expertsList.splice(expertsList.indexOf(record), 1, data);
+        const expertIds = _.map(expertsList, 'id');
         const { msg } = yield call(EditProject, id, { expert_list: expertIds });
         message.success(msg);
-        yield put({ type: 'eReloadProjectsList' });
+        yield put({ type: 'eLoadProjects' });
       } catch (err) {
         console.log(err);
       }
@@ -147,25 +143,19 @@ export default {
     * eEditProject({ id, payload }, { select, call, put }) {
       try {
         const { msg } = yield call(EditProject, id, payload);
-        message.success(msg);
         yield put({ type: 'rUpdateState', payload: { editProjectVisible: false } });
-        yield put({ type: 'eReloadProjectsList' });
+        message.success(msg);
+        yield put({ type: 'eLoadProjects' });
       } catch (err) {
         console.log(err);
       }
     },
-    * eReloadProjectsList({ payload }, { select, call, put }) {
+    * eLoadProjects({ payload }, { select, call, put }) {
       try {
-        const { projectsList: { current, pageSize } } = yield select(state => state['experts']);
-        yield put({ type: 'eGetProjectsList', payload: { page: current, page_size: pageSize } });
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    * eGetProjectsList({ payload }, { select, call, put }) {
-      try {
-        const { data } = yield call(GetProjectsList, payload);
-        yield put({ type: 'rUpdateProjectsList', payload: data });
+        const { searchProjectParams, projectsList: { current, pageSize } } = yield select(state => state['experts']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchProjectParams, payload);
+        const { data } = yield call(GetProjectsList, { ...queries });
+        yield put({ type: 'rUpdateState', payload: { projectsList: data } });
       } catch (err) {
         console.log(err);
       }
@@ -175,14 +165,6 @@ export default {
   reducers: {
     rUpdateState(state, { payload }) {
       return { ...state, ...payload };
-    },
-    rUpdateExpertsList(state, { payload }) {
-      state.expertsList = payload;
-      return state;
-    },
-    rUpdateProjectsList(state, { payload }) {
-      state.projectsList = payload;
-      return state;
     },
   },
 

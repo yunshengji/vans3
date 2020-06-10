@@ -14,9 +14,9 @@ import GossipIcon from '../../public/menu/gossip.svg';
 import GossipReverseIcon from '../../public/menu/gossip-reverse.svg';
 import ContactsIcon from '../../public/menu/contacts.svg';
 import ContactsReverseIcon from '../../public/menu/contacts-reverse.svg';
-import ExpertsIcon from '../../public/menu/experts.svg';
-import ExpertsReverseIcon from '../../public/menu/experts-reverse.svg';
 
+import ExpertGray from '../../public/menu/ExpertGray.svg';
+import ExpertWhite from '../../public/menu/ExpertWhite.svg';
 import HRGray from '../../public/menu/HRGray.svg';
 import HRWhite from '../../public/menu/HRWhite.svg';
 import LawGray from '../../public/menu/LawGray.svg';
@@ -39,7 +39,8 @@ class BasicSide extends React.Component {
     const { menuCollapsed, mine } = this.props;
     const selectKeys = this.props.history.location.pathname.split('/')[1];
     return (
-      <Layout.Sider width="200" collapsible breakpoint="lg" theme="dark" onCollapse={this.onCollapse}
+      <Layout.Sider width="200" collapsible breakpoint="lg" theme="dark"
+                    onCollapse={this.onCollapse}
                     className="basicSide">
         <Link className="systemName" to="/projects">
           {
@@ -48,6 +49,7 @@ class BasicSide extends React.Component {
               <img src="/system-name.svg" alt="万铭"/>
           }
         </Link>
+
         <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
           <Menu.SubMenu
             key="project"
@@ -131,21 +133,30 @@ class BasicSide extends React.Component {
           <Menu.Item key="contacts">
             <Icon component={selectKeys === 'contacts' ? ContactsReverseIcon : ContactsIcon}/><span>联系人</span>
           </Menu.Item>
-          <Menu.Item key="experts">
-            <Icon component={selectKeys === 'experts' ? ExpertsReverseIcon : ExpertsIcon}/><span>专家组</span>
-          </Menu.Item>
+
           {
-            (mine.level > 1 && mine.department.name === '行政部') || mine.level > 2
+            (mine.department.name === '招投标部' || mine.level > 2) &&
+            <Menu.Item key="experts">
+              <Icon component={selectKeys === 'experts' ? ExpertWhite : ExpertGray}/>
+              <span>专家组</span>
+            </Menu.Item>
+          }
+
+          {
+            ((mine.level > 1 && mine.department.name === '行政部') || mine.level > 2)
             &&
-            < Menu.Item key='staff'>
-              <Icon component={selectKeys === 'staff' ? HRWhite : HRGray}/><span>员工管理</span>
+            <Menu.Item key='staff'>
+              <Icon component={selectKeys === 'staff' ? HRWhite : HRGray}/>
+              <span>员工管理</span>
             </Menu.Item>
           }
           <Menu.Item key="laws">
-            <Icon component={selectKeys === 'laws' ? LawWhite : LawGray}/><span>法律法规</span>
+            <Icon component={selectKeys === 'laws' ? LawWhite : LawGray}/>
+            <span>法律法规</span>
           </Menu.Item>
           <Menu.Item key="users">
-            <Icon component={selectKeys === 'users' ? UserWhite : UserGray}/><span>系统用户</span>
+            <Icon component={selectKeys === 'users' ? UserWhite : UserGray}/>
+            <span>系统用户</span>
           </Menu.Item>
         </Menu>
       </Layout.Sider>

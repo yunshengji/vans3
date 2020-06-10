@@ -5,8 +5,6 @@ import { Breadcrumb, Button, Tabs } from 'antd';
 import ExpertsList from '@/pages/Experts/components/ExpertsList';
 import ProjectsList from '@/pages/Experts/components/ProjectsList';
 
-const { TabPane } = Tabs;
-
 class Experts extends React.Component {
   changeTab = (activeKey) => {
     this.props.dispatch({
@@ -52,24 +50,24 @@ class Experts extends React.Component {
             })}
           </Breadcrumb>
           {activeKey === 'resultsLibrary' &&
-          <Button size="small" type="link" onClick={this.showCreateProject}>
-            新建项目
+          <Button icon="plus-circle" onClick={this.showCreateProject}>
+            新建评审
           </Button>
           }
           {activeKey === 'expertsLibrary' &&
-          <Button size="small" type="link" onClick={this.showCreateExpert}>
+          <Button icon="plus-circle" onClick={this.showCreateExpert}>
             新建专家
           </Button>
           }
         </div>
         <div className="contentWrapper">
           <Tabs activeKey={activeKey} onChange={this.changeTab}>
-            <TabPane tab="抽取结果" key="resultsLibrary">
+            <Tabs.TabPane tab="评审组" key="resultsLibrary">
               <ProjectsList/>
-            </TabPane>
-            <TabPane tab="专家库" key="expertsLibrary">
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="专家库" key="expertsLibrary">
               <ExpertsList/>
-            </TabPane>
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </React.Fragment>

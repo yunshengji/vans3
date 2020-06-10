@@ -11,7 +11,7 @@ class StaffList extends React.Component {
       type: 'staffList/eGetDepartments',
       payload: { page_size: 10000 },
     });
-    this.props.dispatch({ type: 'staffList/eLoadStaffs', payload: {} });
+    this.props.dispatch({ type: 'staffList/eLoadStaffs' });
   }
 
   searchStaffList = e => {

@@ -23,8 +23,7 @@ class CreateExpert extends React.Component {
   };
 
   render() {
-    const { submittingExpert, form, createExpertVisible } = this.props;
-    const { getFieldDecorator } = form;
+    const { submittingExpert, form: { getFieldDecorator }, createExpertVisible } = this.props;
     return (
       <Modal title="新建专家" width={420} visible={createExpertVisible} confirmLoading={submittingExpert}
              afterClose={() => this.props.form.resetFields()}
@@ -64,7 +63,7 @@ class CreateExpert extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'createExpert' })(CreateExpert);
+const WrappedForm = Form.create({ name: 'CreateExpert' })(CreateExpert);
 
 export default connect(({ loading, experts }) => ({
   submittingExpert: loading.effects['experts/eCreateExpert'],

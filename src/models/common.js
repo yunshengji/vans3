@@ -9,7 +9,9 @@ export default {
     drawerMenuVisible: false,
     isLogOuting: false,
 
-    mine: {},
+    mine: {
+      department: {},
+    },
   },
 
 

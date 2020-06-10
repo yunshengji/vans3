@@ -26,7 +26,7 @@ class CreateProject extends React.Component {
     const { submittingProject, form, createProjectVisible } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <Modal title="新建项目" width={500} visible={createProjectVisible} confirmLoading={submittingProject}
+      <Modal title="新建评审" width={500} visible={createProjectVisible} confirmLoading={submittingProject}
              afterClose={() => this.props.form.resetFields()}
              onOk={this.submitCreatedProject}
              onCancel={this.hideCreateProject}>

@@ -24,8 +24,7 @@ class ChooseExpertsNumber extends React.Component {
   };
 
   render() {
-    const { submittingProject, form, chooseExpertsNumVisible } = this.props;
-    const { getFieldDecorator } = form;
+    const { submittingProject, form: { getFieldDecorator }, chooseExpertsNumVisible } = this.props;
     return (
       <Modal title="确定专家人数" width={420} visible={chooseExpertsNumVisible} confirmLoading={submittingProject}
              afterClose={() => this.props.form.resetFields()}
@@ -45,7 +44,7 @@ class ChooseExpertsNumber extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'chooseExpertsNumber' })(ChooseExpertsNumber);
+const WrappedForm = Form.create({ name: 'ChooseExpertsNumber' })(ChooseExpertsNumber);
 
 export default connect(({ loading, experts }) => ({
   submittingProject: loading.effects['experts/eCreateProject'],

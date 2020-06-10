@@ -23,10 +23,9 @@ class EditExpert extends React.Component {
   };
 
   render() {
-    const { form, submittingEditedExpert, editExpertVisible, editExpert } = this.props;
-    const { getFieldDecorator } = form;
+    const { form: { getFieldDecorator }, submittingEditedExpert, editExpertVisible, editExpert } = this.props;
     return (
-      <Modal title="编辑专家" width={420} visible={editExpertVisible} afterClose={() => this.props.form.resetFields()}
+      <Modal title="编辑专家信息" width={420} visible={editExpertVisible} afterClose={() => this.props.form.resetFields()}
              confirmLoading={submittingEditedExpert}
              onOk={this.submitEditedExpert} onCancel={this.hideEditExpert}>
         <Form layout="horizontal" labelCol={{ xs: 5 }} wrapperCol={{ xs: 17 }}>
@@ -72,7 +71,7 @@ class EditExpert extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'editExpert' })(EditExpert);
+const WrappedForm = Form.create({ name: 'EditExpert' })(EditExpert);
 
 export default connect(({ loading, experts }) => ({
   submittingEditedExpert: loading.effects['experts/eEditExpert'],
