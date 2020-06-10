@@ -19,7 +19,7 @@ class EditTableExecute extends React.Component {
 
   submit = () => {
     const { editOrigin, editExecute } = this.props;
-    if (Object.keys(editExecute).length === 0) {
+    if (Object.keys(editExecute).length === 1) {
       this.props.form.validateFields((err, values) => {
         if (!err) {
           if (values['created']) {

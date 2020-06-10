@@ -21,7 +21,7 @@ class EditTableService extends React.Component {
 
   submit = () => {
     const { editOrigin, editService } = this.props;
-    if (Object.keys(editService).length === 0) {
+    if (Object.keys(editService).length === 1) {
       this.props.form.validateFields((err, values) => {
         if (!err) {
           if (values['pay_time']) {
