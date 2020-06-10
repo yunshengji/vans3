@@ -100,7 +100,9 @@ export default {
         const { members = [], confirm_list = [] } = data;
         data.members = getIdsFromWholeList(members);
         data.confirm_list = getIdsFromManagerList(confirm_list);
-        data['sign_contract'] = _.map(data['sign_contract'], 'id');
+        if (Array.isArray(data['sign_contract']) && Array.isArray(data['sign_contract']).length > 0) {
+          data['sign_contract'] = _.map(data['sign_contract'], 'id');
+        }
         yield put({ type: 'rUpdateState', payload: { editOrigin: data } });
       } catch (err) {
         console.log(err);
@@ -153,7 +155,9 @@ export default {
     * eGetServiceTable({ payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetServiceTable, payload);
-        data['act_contract'] = _.map(data['act_contract'], 'id');
+        if(Array.isArray(data['act_contract']) && data['act_contract'].length >0){
+          data['act_contract'] = _.map(data['act_contract'], 'id');
+        }
         yield put({ type: 'rUpdateState', payload: { editService: data } });
       } catch (err) {
         console.log(err);
@@ -180,7 +184,9 @@ export default {
     * eGetExecuteTable({ payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetExecuteTable, payload);
-        data['sign_contract'] = _.map(data['sign_contract'], 'id');
+        if (Array.isArray(data['sign_contract']) && data['sign_contract'].length > 0) {
+          data['sign_contract'] = _.map(data['sign_contract'], 'id');
+        }
         yield put({ type: 'rUpdateState', payload: { editExecute: data } });
       } catch (err) {
         console.log(err);
