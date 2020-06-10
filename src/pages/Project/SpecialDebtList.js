@@ -25,12 +25,12 @@ class SpecialDebtList extends React.Component {
   //     },
   //   });
   // };
-  // originPaginationChange = (page, pageSize) => {
-  //   this.props.dispatch({
-  //     type: 'specialDebtList/GetSpecialDebtListList',
-  //     payload: { page, page_size: pageSize },
-  //   });
-  // };
+  paginationChange = (page, pageSize) => {
+    this.props.dispatch({
+      type: 'specialDebtList/eGetSpecialDebtList',
+      payload: { page, page_size: pageSize },
+    });
+  };
 
   render() {
     const { fetchingSpecialDebtList, routes, total, current, pageSize, specialDebtList } = this.props;
@@ -116,7 +116,7 @@ class SpecialDebtList extends React.Component {
           </Table>
           <div className="paginationWrapper">
             <Pagination showQuickJumper defaultCurrent={1} total={total} current={current} pageSize={pageSize}
-                        showTotal={() => `共 ${total} 条`} onChange={this.originPaginationChange}/>
+                        showTotal={() => `共 ${total} 条`} onChange={this.paginationChange}/>
           </div>
         </div>
       </React.Fragment>

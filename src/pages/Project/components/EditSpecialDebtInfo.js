@@ -101,7 +101,7 @@ class EditSpecialDebtInfo extends React.Component {
     const publishDebtFormItems = publishDebtFormItemsKeys.map((key) => (
       <Row gutter={[150]} type="flex" align="middle" key={`publishDebtFormItem${key}`}>
         <Col xl={6} md={10} sm={24}>
-          <Form.Item label="发债金额">
+          <Form.Item label="发债金额（万元）">
             {getFieldDecorator(`publishDebtCash[${key}]`, {
               initialValue: editSpecialDebt['debtDetails'][key] && editSpecialDebt['debtDetails'][key].cash,
               rules: [{ required: true, message: '请填写' }],
@@ -256,21 +256,21 @@ class EditSpecialDebtInfo extends React.Component {
           </Row>
           <Row gutter={[150]}>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="总投资">
+              <Form.Item label="总投资（万元）">
                 {getFieldDecorator('invest', { initialValue: editSpecialDebt['invest'] })(
                   <InputNumber min={0} style={{ width: '100%' }}/>,
                 )}
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="发债额度">
+              <Form.Item label="发债额度（万元）">
                 {getFieldDecorator('debt_cash', { initialValue: editSpecialDebt['debt_cash'] })(
                   <InputNumber min={0} style={{ width: '100%' }}/>,
                 )}
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="合同金额">
+              <Form.Item label="合同金额（万元）">
                 {getFieldDecorator('cash', { initialValue: editSpecialDebt['cash'] })(
                   <InputNumber min={0} style={{ width: '100%' }}/>,
                 )}
@@ -306,7 +306,7 @@ class EditSpecialDebtInfo extends React.Component {
           </Row>
           <Row gutter={[150]}>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="发债总额">
+              <Form.Item label="发债总额（万元）">
                 {getFieldDecorator('debt_total', { initialValue: editSpecialDebt['debt_total'] })(
                   <InputNumber min={0} style={{ width: '100%' }}/>,
                 )}
