@@ -10,11 +10,17 @@ import MakeProject from '../../public/menu/make-project.svg';
 import MakeProjectReverseIcon from '../../public/menu/make-projects-reverse.svg';
 
 
-import BrochureWhite from '../../public/menu/BrochureWhite.svg';
-import BrochureGray from '../../public/menu/BrochureGray.svg';
+import ProjectGray from '../../public/menu/ProjectGray.svg';
+import ProjectWhite from '../../public/menu/ProjectWhite.svg';
 
-import ArchiveWhite from '../../public/menu/ArchiveWhite.svg';
+import ApprovalGray from '../../public/menu/ApprovalGray.svg';
+import ApprovalWhite from '../../public/menu/ApprovalWhite.svg';
+
+import BrochureGray from '../../public/menu/BrochureGray.svg';
+import BrochureWhite from '../../public/menu/BrochureWhite.svg';
+
 import ArchiveGray from '../../public/menu/ArchiveGray.svg';
+import ArchiveWhite from '../../public/menu/ArchiveWhite.svg';
 
 import GossipGray from '../../public/menu/GossipGray.svg';
 import GossipWhite from '../../public/menu/GossipWhite.svg';
@@ -68,7 +74,7 @@ class BasicSide extends React.Component {
             key="project"
             title={
               <span>
-                <Icon component={selectKeys === 'project' ? MakeProject : MakeProject}/>
+                <Icon component={selectKeys.startsWith('specialDebt') ? ProjectWhite : ProjectGray}/>
                 <span>项目管理</span>
               </span>
             }
@@ -76,16 +82,18 @@ class BasicSide extends React.Component {
             <Menu.Item key="specialDebt">
               <Icon type="smile"/><span>专项债</span>
             </Menu.Item>
-            <Menu.Item key="ppp">
-              <Icon type="smile"/><span>PPP</span>
-            </Menu.Item>
+            {/*<Menu.Item key="ppp">*/}
+            {/*  <Icon type="smile"/><span>PPP</span>*/}
+            {/*</Menu.Item>*/}
           </Menu.SubMenu>
           <Menu.SubMenu
             key="approvalProject"
             title={
               <span>
-                <Icon component={selectKeys === 'approvalProject' ? MakeProject : MakeProject}/>
-                <span>销售部</span>
+                <Icon component={
+                  selectKeys.startsWith('originList') || selectKeys.startsWith('recordList') || selectKeys.startsWith('executeList') || selectKeys.startsWith('serviceList')
+                    ? ApprovalWhite : ApprovalGray}/>
+                <span>项目立项</span>
               </span>
             }
           >

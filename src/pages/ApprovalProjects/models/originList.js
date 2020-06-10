@@ -1,5 +1,6 @@
 import { DeleteOriginTable, GetOriginTableList } from '@/services/approvalProjects';
 import { message } from 'antd';
+import _ from 'lodash';
 
 export default {
 
@@ -8,7 +9,11 @@ export default {
   state: {
     routes: [{ breadcrumbName: '立项表' }],
 
-    searchParams: {},
+    searchParams: {
+      name: undefined,
+      area: undefined,
+      category: undefined,
+    },
 
     originTableList: {
       total: 0,
@@ -29,14 +34,16 @@ export default {
         const { msg } = yield call(DeleteOriginTable, id, payload);
         message.success(msg);
         const { originTableList: { current, pageSize } } = yield select(state => state['originList']);
-        yield put({ type: 'GetOriginTableList', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadOriginList', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
       }
     },
-    * GetOriginTableList({ payload }, { select, call, put }) {
+    * eLoadOriginList({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetOriginTableList, payload);
+        const { searchParams, originTableList: { current, pageSize } } = yield select(state => state['originList']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
+        const { data } = yield call(GetOriginTableList, { ...queries });
         yield put({ type: 'rUpdateState', payload: { originTableList: data } });
       } catch (err) {
         console.log(err);

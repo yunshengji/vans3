@@ -1,18 +1,38 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Breadcrumb, Form, Row, Col, Input, Select, Table, Pagination, Modal } from 'antd';
-import moment from 'moment';
+import { Button, Breadcrumb, Form, Row, Col, Input, Select, Table, Pagination, Modal, Tag } from 'antd';
+import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
+
 
 class OriginList extends React.Component {
   componentDidMount() {
-    const { dispatch, current, pageSize } = this.props;
-    dispatch({
-      type: 'originList/GetOriginTableList',
-      payload: { page: current, page_size: pageSize },
-    });
+    this.props.dispatch({ type: 'originList/eLoadOriginList' });
   }
 
+  searchOriginList = e => {
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'originList/rUpdateState',
+      payload: { searchParams: { ...values }, originTableList: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'originList/eLoadOriginList' });
+    e.preventDefault();
+  };
+  resetSearch = e => {
+    this.props.form.setFieldsValue({
+      name: undefined,
+      area: undefined,
+      category: undefined,
+    });
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'originList/rUpdateState',
+      payload: { searchParams: { ...values }, originTableList: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'originList/eLoadOriginList' });
+    e.preventDefault();
+  };
   deleteOrigin = ({ id, name }) => {
     const { dispatch } = this.props;
     Modal.confirm({
@@ -27,13 +47,13 @@ class OriginList extends React.Component {
   };
   originPaginationChange = (page, pageSize) => {
     this.props.dispatch({
-      type: 'originList/GetOriginTableList',
+      type: 'originList/eLoadOriginList',
       payload: { page, page_size: pageSize },
     });
   };
 
   render() {
-    const { fetchingOriginTable, routes, total, current, pageSize, originTableList } = this.props;
+    const { form: { getFieldDecorator }, fetchingOriginTable, routes, searchParams, total, current, pageSize, originTableList } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -55,36 +75,45 @@ class OriginList extends React.Component {
               }
             })}
           </Breadcrumb>
-          <Button type="link">
-            <a href="/approvalProject/edit">新建立项表</a>
-          </Button>
+          <a href="/approvalProject/edit" target="_blank">
+            <Button icon="plus-circle">新建立项表
+            </Button>
+          </a>
+
         </div>
         <div className="contentWrapper">
-          <h3 style={{ marginTop: '1em' }}>查找</h3>
+          <h3>立项表搜索</h3>
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
                 <Form.Item label="项目名称">
-                  <Input placeholder="请输入"/>
+                  {getFieldDecorator('name', { initialValue: searchParams['name'] })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col xl={6} md={12} sm={24}>
+                <Form.Item label="项目地区">
+                  {getFieldDecorator('area', { initialValue: searchParams['area'] })(
+                    <Input placeholder="请输入"/>,
+                  )}
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
                 <Form.Item label="项目类别">
-                  <Input placeholder="请输入"/>
-                </Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
-                <Form.Item label="项目状态">
-                  <Select placeholder="请选择">
-                    <Select.Option key="male" value="male">男</Select.Option>
-                    <Select.Option key="female" value="female">女</Select.Option>
-                  </Select>
+                  {getFieldDecorator('category', { initialValue: searchParams['category'] })(
+                    <Select placeholder="请选择" allowClear>
+                      {TABLE_FOR_MAKING_PROJECT_CATEGORIES.map(item =>
+                        <Select.Option key={item} value={item}>{item}</Select.Option>,
+                      )}
+                    </Select>,
+                  )}
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
                 <div className="searchButtons">
-                  <Button type="primary">搜索</Button>
-                  <Button style={{ marginLeft: '1em' }}>重置</Button>
+                  <Button type="primary" onClick={this.searchOriginList}>搜索</Button>
+                  <Button style={{ marginLeft: '1em' }} onClick={this.resetSearch}>重置</Button>
                 </div>
               </Col>
             </Row>
@@ -99,10 +128,20 @@ class OriginList extends React.Component {
                  }}>
             <Table.Column title="项目名称" dataIndex="name"/>
             <Table.Column title="项目类别" dataIndex="category"/>
-            <Table.Column title="签约时间" dataIndex="sign_date" render={text => {
-              return <span>{moment(1000 * text).format('YYYY-MM-DD')}</span>;
-            }}/>
-            <Table.Column title="实施机构" dataIndex="act_org"/>
+            <Table.Column title="立项状态" dataIndex="status" render={status => (
+              <React.Fragment>
+                {status === '执行中' && <Tag color="blue">{status}</Tag>}
+                {status === '已废弃' && <Tag color="orange">{status}</Tag>}
+                {status === '已完结' && <Tag color="green">{status}</Tag>}
+              </React.Fragment>
+            )}
+            />
+            <Table.Column title="流程" dataIndex="process" render={status => (
+              <React.Fragment>
+                {
+                  status === '流程未定' ? <Tag color="orange">{status}</Tag> : <Tag color="blue">{status}</Tag>}
+              </React.Fragment>
+            )}/>
             <Table.Column title="操作" dataIndex="action"
                           render={(text, record) => (
                             <div className="actionGroup">
@@ -131,12 +170,15 @@ class OriginList extends React.Component {
   }
 }
 
+const WrappedForm = Form.create({ name: 'OriginList' })(OriginList);
+
 export default connect(({ loading, common, originList }) => ({
-  fetchingOriginTable: loading.effects['originList/GetOriginTableList'],
+  fetchingOriginTable: loading.effects['originList/eLoadOriginList'],
   routes: originList.routes,
   mine: common.mine,
+  searchParams: originList.searchParams,
   total: originList.originTableList.total,
   current: originList.originTableList.current,
   pageSize: originList.originTableList.pageSize,
   originTableList: originList.originTableList.list,
-}))(OriginList);
+}))(WrappedForm);

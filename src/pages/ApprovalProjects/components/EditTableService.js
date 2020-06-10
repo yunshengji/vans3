@@ -51,7 +51,7 @@ class EditTableService extends React.Component {
   };
 
   render() {
-    const { form: { getFieldDecorator }, submittingCreatedService, submittingEditedService, loadingService, usersList, editService } = this.props;
+    const { form: { getFieldDecorator }, submittingCreatedService, submittingEditedService, loadingService, usersList, contracts, editService } = this.props;
     return (
       <Spin spinning={Boolean(submittingCreatedService) || Boolean(submittingEditedService) || Boolean(loadingService)}>
         <Form layout="horizontal">
@@ -167,7 +167,7 @@ class EditTableService extends React.Component {
                         <Select.Option key={item.id} value={item.name}>{item.name}</Select.Option>
                       );
                     })}
-                  </Select>
+                  </Select>,
                 )}
               </Form.Item>
             </Col>
@@ -185,7 +185,15 @@ class EditTableService extends React.Component {
             <Col xl={18} md={12} sm={24}>
               <Form.Item label="已经实施项目合同">
                 {getFieldDecorator('act_contract', { initialValue: editService['act_contract'] })(
-                  <Input.TextArea placeholder="请输入" autoSize={{ minRows: 4 }}/>,
+                  <Select placeholder="请选择" mode="multiple" allowClear={true}>
+                    {contracts.map((item, index) => {
+                      return (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.attachment['file_name_local']}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>,
                 )}
               </Form.Item>
             </Col>
@@ -224,6 +232,7 @@ export default connect(({ loading, common, editApprovalProject }) => ({
   submittingEditedService: loading.effects['editApprovalProject/eUpdateServiceTable'],
   loadingService: loading.effects['editApprovalProject/eGetServiceTable'],
   usersList: editApprovalProject.usersList,
+  contracts: editApprovalProject.contracts,
   editOrigin: editApprovalProject.editOrigin,
   editService: editApprovalProject.editService,
 }))(WrappedForm);

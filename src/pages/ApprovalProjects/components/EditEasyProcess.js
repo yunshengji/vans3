@@ -10,7 +10,7 @@ class EditEasyProcess extends React.Component {
 
   componentDidMount() {
     const { editOrigin } = this.props;
-    if(editOrigin['process'] !=='流程未定'){
+    if (editOrigin['process'] !== '流程未定') {
       this.props.dispatch({
         type: 'editApprovalProject/eGetEasyProcess',
         id: editOrigin['id'],
@@ -139,9 +139,9 @@ class EditEasyProcess extends React.Component {
     const companyOuterFormItems = keys.map((key) => (
       <Row gutter={[150]} type="flex" align="middle" key={`company_outer${key}`}>
         <Col xl={6} md={10} sm={24}>
-          <Form.Item label="外包公司名称" key={`company_outer${key}`}>
+          <Form.Item label="外包公司名称">
             {getFieldDecorator(`company_name[${key}]`, {
-              initialValue: editEasyProcess.company_outer[key] && editEasyProcess.company_outer[key].company_name,
+              initialValue: editEasyProcess.company_outer && editEasyProcess.company_outer[key] && editEasyProcess.company_outer[key].company_name,
               rules: [{ required: true, message: '请填写' }],
             })(
               <Input placeholder="请输入"/>,
@@ -151,7 +151,7 @@ class EditEasyProcess extends React.Component {
         <Col xl={6} md={10} sm={24}>
           <Form.Item label="价格（万元）">
             {getFieldDecorator(`price[${key}]`, {
-              initialValue: editEasyProcess.company_outer[key] && editEasyProcess.company_outer[key].price,
+              initialValue: editEasyProcess.company_outer && editEasyProcess.company_outer[key] && editEasyProcess.company_outer[key].price,
               rules: [{ required: true, message: '请填写' }],
             })(
               <InputNumber min={0} style={{ width: '100%' }}/>,

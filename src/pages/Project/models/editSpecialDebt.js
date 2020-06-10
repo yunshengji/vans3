@@ -70,12 +70,12 @@ export default {
             year: publishDebtYear[value],
             create: moment(publishDebtDate[value]).valueOf() / 1000,
           });
-          delete payload['publishDebtCash'];
-          delete payload['publishDebtYear'];
-          delete payload['publishDebtDate'];
-          delete payload['publishDebtFormItemsKeys'];
-          payload['debtDetails'] = debtDetails;
         });
+        delete payload['publishDebtCash'];
+        delete payload['publishDebtYear'];
+        delete payload['publishDebtDate'];
+        delete payload['publishDebtFormItemsKeys'];
+        payload['debtDetails'] = debtDetails;
 
         let outsourcings = [];
         _.forEach(outSourceFormItemsKeys, function(value) {
@@ -84,12 +84,13 @@ export default {
             category: outSourceCategory[value],
             contact: outSourceContact[value],
           });
-          delete payload['outSourceUser'];
-          delete payload['outSourceCategory'];
-          delete payload['outSourceContact'];
-          delete payload['outSourceFormItemsKeys'];
           payload['outsourcings'] = outsourcings;
         });
+        delete payload['outSourceUser'];
+        delete payload['outSourceCategory'];
+        delete payload['outSourceContact'];
+        delete payload['outSourceFormItemsKeys'];
+        delete payload['outSourceFormItemsKeys'];
 
         if (!_.isEmpty(fileList)) {
           const formData = new FormData();
@@ -110,6 +111,7 @@ export default {
     * eUpdateFiles({ id, payload }, { select, call, put }) {
       const { type, fileList } = payload;
       const field = SPECIAL_DEBT_FILE_TYPE[_.findIndex(SPECIAL_DEBT_FILE_TYPE, (o) => o.name === type)]['field'];
+      const { editSpecialDebt } = yield select(state => state['editSpecialDebt']);
 
       const formData = new FormData();
       formData.append('folder_path', 'special_debt');
@@ -119,7 +121,7 @@ export default {
       const { data: files } = yield call(UploadFile, formData);
 
       const { msg, data } = yield call(UpdateSpecialDebt, id, {
-        [field]: _.map(files, 'id'),
+        [field]: _.concat(_.map(editSpecialDebt[field], 'id'), _.map(files, 'id')),
       });
 
       yield put({ type: 'rUpdateState', payload: { uploadVisible: false } });

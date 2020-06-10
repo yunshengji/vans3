@@ -1,8 +1,10 @@
 import { router } from 'umi';
 import { message } from 'antd';
+import _ from 'lodash';
 import { getIdsFromWholeList, getIdsFromManagerList } from '@/utils/transfer';
 import { GetUsersList } from '@/services/user';
 import { UploadFile } from '@/services/files';
+import { GetContractArchiveList } from '@/services/archive';
 
 import {
   CreateOriginTable, UpdateOriginTable, GetOriginTable,
@@ -24,6 +26,7 @@ export default {
 
     usersList: [],
     managersList: [],
+    contracts: [],
 
     editOrigin: {},
     editRecord: {},
@@ -50,8 +53,17 @@ export default {
     * eGetUsers({ payload }, { select, call, put }) {
       try {
         const { data: { list: users } } = yield call(GetUsersList, { page_size: 10000 });
-        const managers = users.filter(item => item.level === 2);
+        const managers = users.filter(item => item.level > 1);
         yield put({ type: 'rUpdateState', payload: { usersList: users, managersList: managers } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eGetContracts({ payload }, { select, call, put }) {
+      try {
+        const { data: { list: contracts } } = yield call(GetContractArchiveList, { page_size: 10000 });
+        console.log(contracts);
+        yield put({ type: 'rUpdateState', payload: { contracts } });
       } catch (err) {
         console.log(err);
       }
@@ -74,12 +86,21 @@ export default {
         console.log(err);
       }
     },
+    * eUpdateOriginConfirms({ id, payload }, { select, call, put }) {
+      try {
+        const { msg, data } = yield call(UpdateOriginTable, id, payload);
+        message.success(msg);
+      } catch (err) {
+        console.log(err);
+      }
+    },
     * eGetOriginTable({ id, payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetOriginTable, id, payload);
         const { members = [], confirm_list = [] } = data;
         data.members = getIdsFromWholeList(members);
         data.confirm_list = getIdsFromManagerList(confirm_list);
+        data['sign_contract'] = _.map(data['sign_contract'], 'id');
         yield put({ type: 'rUpdateState', payload: { editOrigin: data } });
       } catch (err) {
         console.log(err);
@@ -132,6 +153,7 @@ export default {
     * eGetServiceTable({ payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetServiceTable, payload);
+        data['act_contract'] = _.map(data['act_contract'], 'id');
         yield put({ type: 'rUpdateState', payload: { editService: data } });
       } catch (err) {
         console.log(err);
@@ -158,6 +180,7 @@ export default {
     * eGetExecuteTable({ payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetExecuteTable, payload);
+        data['sign_contract'] = _.map(data['sign_contract'], 'id');
         yield put({ type: 'rUpdateState', payload: { editExecute: data } });
       } catch (err) {
         console.log(err);

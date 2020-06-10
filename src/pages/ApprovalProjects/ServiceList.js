@@ -57,35 +57,6 @@ class ServiceList extends React.Component {
           </Breadcrumb>
         </div>
         <div className="contentWrapper">
-          <h3 style={{ marginTop: '1em' }}>查找</h3>
-          <Form layout="horizontal" className="searchWrapper">
-            <Row gutter={[80]}>
-              <Col xl={6} md={12} sm={24}>
-                <Form.Item label="项目名称">
-                  <Input placeholder="请输入"/>
-                </Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
-                <Form.Item label="项目类别">
-                  <Input placeholder="请输入"/>
-                </Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
-                <Form.Item label="项目状态">
-                  <Select placeholder="请选择">
-                    <Select.Option key="male" value="male">男</Select.Option>
-                    <Select.Option key="female" value="female">女</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
-                <div className="searchButtons">
-                  <Button type="primary">搜索</Button>
-                  <Button style={{ marginLeft: '1em' }}>重置</Button>
-                </div>
-              </Col>
-            </Row>
-          </Form>
           <h3 style={{ marginBottom: '2em' }}>跟踪服务表</h3>
           <Table size="middle" tableLayout="fixed" pagination={false} dataSource={serviceTableList}
                  loading={fetchingServiceTable} rowKey={service => service.id}

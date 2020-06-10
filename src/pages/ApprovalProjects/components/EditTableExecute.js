@@ -49,7 +49,7 @@ class EditTableExecute extends React.Component {
   };
 
   render() {
-    const { form: { getFieldDecorator }, submittingCreatedExecute, submittingEditedExecute, loadingExecute, editExecute } = this.props;
+    const { form: { getFieldDecorator }, submittingCreatedExecute, submittingEditedExecute, loadingExecute, editExecute, contracts } = this.props;
     return (
       <Spin spinning={Boolean(submittingCreatedExecute) || Boolean(submittingEditedExecute) || Boolean(loadingExecute)}>
         <Form layout="horizontal">
@@ -133,7 +133,15 @@ class EditTableExecute extends React.Component {
             <Col xl={18} md={12} sm={24}>
               <Form.Item label="已经签署合同名称">
                 {getFieldDecorator('sign_contract', { initialValue: editExecute['sign_contract'] })(
-                  <Input.TextArea placeholder="请输入" autoSize={{ minRows: 4 }}/>,
+                  <Select placeholder="请选择" mode="multiple" allowClear={true}>
+                    {contracts.map((item, index) => {
+                      return (
+                        <Select.Option key={item.id} value={item.id}>
+                          {item.attachment['file_name_local']}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>,
                 )}
               </Form.Item>
             </Col>
@@ -224,6 +232,7 @@ export default connect(({ loading, common, editApprovalProject }) => ({
   submittingEditedExecute: loading.effects['editApprovalProject/eUpdateExecuteTable'],
   loadingExecute: loading.effects['editApprovalProject/eGetExecuteTable'],
   usersList: editApprovalProject.usersList,
+  contracts: editApprovalProject.contracts,
   editOrigin: editApprovalProject.editOrigin,
   editExecute: editApprovalProject.editExecute,
 }))(WrappedForm);

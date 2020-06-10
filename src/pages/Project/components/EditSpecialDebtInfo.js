@@ -206,7 +206,7 @@ class EditSpecialDebtInfo extends React.Component {
           <Row gutter={[150]}>
             <Col xl={12} md={12} sm={24}>
               <Form.Item label="项目名称">
-                <Input value={editSpecialDebt.origin} disabled/>
+                <Input value={editSpecialDebt.origin && editSpecialDebt.origin.name} disabled/>
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>

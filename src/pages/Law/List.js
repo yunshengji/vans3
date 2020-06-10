@@ -84,11 +84,7 @@ class LawsList extends React.Component {
               }
             })}
           </Breadcrumb>
-          {
-            level > 1
-            &&
-            <Button icon="plus-circle" onClick={this.showUploadLawsModal}>上传</Button>
-          }
+          <Button icon="plus-circle" onClick={this.showUploadLawsModal}>上传</Button>
         </div>
         <div className="contentWrapper">
           <h3>资料搜索</h3>
