@@ -10,6 +10,9 @@ import MakeProject from '../../public/menu/make-project.svg';
 import MakeProjectReverseIcon from '../../public/menu/make-projects-reverse.svg';
 
 
+import BrochureWhite from '../../public/menu/BrochureWhite.svg';
+import BrochureGray from '../../public/menu/BrochureGray.svg';
+
 import ArchiveWhite from '../../public/menu/ArchiveWhite.svg';
 import ArchiveGray from '../../public/menu/ArchiveGray.svg';
 
@@ -71,10 +74,10 @@ class BasicSide extends React.Component {
             }
           >
             <Menu.Item key="specialDebt">
-              <Icon type="smile" theme="twoTone"/><span>专项债</span>
+              <Icon type="smile"/><span>专项债</span>
             </Menu.Item>
             <Menu.Item key="ppp">
-              <Icon type="smile" theme="twoTone"/><span>PPP</span>
+              <Icon type="smile"/><span>PPP</span>
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
@@ -87,42 +90,46 @@ class BasicSide extends React.Component {
             }
           >
             <Menu.Item key="originList">
-              <Icon type="smile" theme="twoTone"/><span>立项表</span>
+              <Icon type="smile"/><span>立项表</span>
             </Menu.Item>
             <Menu.Item key="recordList">
-              <Icon type="smile" theme="twoTone"/><span>备案表</span>
+              <Icon type="smile"/><span>备案表</span>
             </Menu.Item>
             <Menu.Item key="executeList">
-              <Icon type="smile" theme="twoTone"/><span>营销实施情况表</span>
+              <Icon type="smile"/><span>营销实施情况表</span>
             </Menu.Item>
             <Menu.Item key="serviceList">
-              <Icon type="smile" theme="twoTone"/><span>跟踪服务表</span>
+              <Icon type="smile"/><span>跟踪服务表</span>
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
             key="brochure"
             title={
               <span>
-                <Icon component={selectKeys === 'brochure' ? MakeProject : MakeProject}/>
-                <span>宣传册管理</span>
+                <Icon component={
+                  selectKeys.startsWith('pamphlet') || selectKeys.startsWith('performance') || selectKeys.startsWith('aptitude')
+                    ? BrochureWhite : BrochureGray}/>
+                <span>公司宣传</span>
               </span>
             }
           >
             <Menu.Item key="pamphlet">
-              <Icon type="smile" theme="twoTone"/><span>宣传册</span>
+              <Icon type="smile"/><span>宣传册</span>
             </Menu.Item>
             <Menu.Item key="performance">
-              <Icon type="smile" theme="twoTone"/><span>业绩表</span>
+              <Icon type="smile"/><span>业绩表</span>
             </Menu.Item>
             <Menu.Item key="aptitude">
-              <Icon type="smile" theme="twoTone"/><span>资质库</span>
+              <Icon type="smile"/><span>资质库</span>
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.SubMenu
             key="archive"
             title={
               <span>
-                <Icon component={selectKeys === 'archive' ? ArchiveWhite : ArchiveGray}/>
+                <Icon component={
+                  selectKeys.startsWith('projectArchive') || selectKeys.startsWith('contractArchive')
+                    ? ArchiveWhite : ArchiveGray}/>
                 <span>档案管理</span>
               </span>
             }
@@ -130,13 +137,13 @@ class BasicSide extends React.Component {
             {
               (mine.level > 1) &&
               <Menu.Item key="projectArchive">
-                <Icon type="smile" theme="twoTone"/><span>项目档案</span>
+                <Icon type="smile"/><span>项目档案</span>
               </Menu.Item>
             }
             {
               (mine.level > 1 || mine.department.name === '产品技术部' || mine.department.name === '营销部') &&
               <Menu.Item key="contractArchive">
-                <Icon type="smile" theme="twoTone"/><span>合同档案</span>
+                <Icon type="smile"/><span>合同档案</span>
               </Menu.Item>
             }
           </Menu.SubMenu>

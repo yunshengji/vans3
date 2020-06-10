@@ -8,7 +8,7 @@ export default {
   namespace: 'aptitudeList',
 
   state: {
-    routes: [{ breadcrumbName: '宣传册' }],
+    routes: [{ breadcrumbName: '资质库' }],
 
     uploadAptitudesModalVisible: false,
 

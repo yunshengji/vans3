@@ -2,10 +2,9 @@ import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
 import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal, Input } from 'antd';
-import moment from 'moment';
-import UploadProjectArchive from '@/pages/Archive/components/UploadProjectArchive';
-import { getFileURL } from '@/utils/transfer';
 import _ from 'lodash';
+import { getFileURL } from '@/utils/transfer';
+import UploadProjectArchive from '@/pages/Archive/components/UploadProjectArchive';
 
 class ProjectArchive extends React.Component {
   componentDidMount() {

@@ -4,9 +4,8 @@ import { connect } from 'dva';
 import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
-import UploadAptitude from '@/pages/Brochure/components/UploadAptitude';
 import { getFileURL } from '@/utils/transfer';
-import { PAMPHLET_CATEGORIES } from '../../../config/constant';
+import UploadAptitude from '@/pages/Brochure/components/UploadAptitude';
 
 const { Column } = Table;
 const { Option } = Select;
@@ -28,14 +27,7 @@ class Aptitude extends React.Component {
       payload: { uploadAptitudesModalVisible: true },
     });
   };
-  // searchLawsList = () => {
-  //   const values = this.props.form.getFieldsValue();
-  //   const { dispatch, current, pageSize } = this.props;
-  //   dispatch({
-  //     type: 'aptitudeList/eGetAptitudes',
-  //     payload: { page: current, page_size: pageSize, ...values },
-  //   });
-  // };
+
   showDeleteConfirm = ({ id, attachment: { file_name_local } }) => {
     const { dispatch } = this.props;
     confirm({
@@ -58,7 +50,7 @@ class Aptitude extends React.Component {
   };
 
   render() {
-    const { form, fetchingAptitudes, deletingAptitude, routes, level, belong_to, total, current, pageSize, aptitudeList } = this.props;
+    const {  fetchingAptitudes, deletingAptitude, routes, total, current, pageSize, aptitudeList } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -80,35 +72,10 @@ class Aptitude extends React.Component {
               }
             })}
           </Breadcrumb>
-          <Button type="link" size="small" onClick={this.showUploadAptitudesModal}>上传</Button>
+          <Button icon="plus-circle" onClick={this.showUploadAptitudesModal}>上传</Button>
         </div>
         <UploadAptitude/>
         <div className="contentWrapper">
-          <h3>资质筛选</h3>
-          <Form layout="horizontal" className="searchWrapper">
-            <Row gutter={[80]}>
-              <Col xl={6} md={12} sm={24}>
-                <Form.Item label="类别">
-                  {form.getFieldDecorator('belong_to', {
-                    initialValue: belong_to,
-                  })(
-                    <Select placeholder="请选择">
-                      <Option key="全部" value="">全部</Option>
-                      {PAMPHLET_CATEGORIES.map((item) =>
-                        <Option key={item} value={item}>{item}</Option>,
-                      )}
-                    </Select>,
-                  )}
-                </Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
-                <div className="searchButtons">
-                  <Button type="primary" onClick={this.searchLawsList}>搜索</Button>
-                  <Button style={{ marginLeft: '1em' }}>重置</Button>
-                </div>
-              </Col>
-            </Row>
-          </Form>
           <h3>资质列表</h3>
           <Table tableLayout="fixed" size="middle" pagination={false} dataSource={aptitudeList}
                  loading={fetchingAptitudes || deletingAptitude} rowKey={record => record.id}
