@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Modal, Select, Upload, Icon, Button, Input, Col, Row, InputNumber, DatePicker } from 'antd';
 import _ from 'lodash';
+import { Form, Modal, Select, Upload, Icon, Button, InputNumber, DatePicker } from 'antd';
 
 class UploadContractArchive extends React.Component {
   hideUploadContractArchivesModal = () => {

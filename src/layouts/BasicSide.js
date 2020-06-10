@@ -2,13 +2,16 @@ import React from 'react';
 import { Link, router, withRouter } from 'umi';
 import { Layout, Menu, Icon } from 'antd';
 import { connect } from 'dva';
-import DashboardIcon from '../../public/menu/dashboard.svg';
-import DashboardReverseIcon from '../../public/menu/dashboard-reverse.svg';
+import DashboardIcon from '../../public/menu/ArchiveWhite.svg';
+import DashboardReverseIcon from '../../public/menu/ArchiveGray.svg';
 import ContractsIcon from '../../public/menu/contracts.svg';
 import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
 import MakeProject from '../../public/menu/make-project.svg';
 import MakeProjectReverseIcon from '../../public/menu/make-projects-reverse.svg';
 
+
+import ArchiveWhite from '../../public/menu/ArchiveWhite.svg';
+import ArchiveGray from '../../public/menu/ArchiveGray.svg';
 
 import GossipGray from '../../public/menu/GossipGray.svg';
 import GossipWhite from '../../public/menu/GossipWhite.svg';
@@ -119,17 +122,23 @@ class BasicSide extends React.Component {
             key="archive"
             title={
               <span>
-                <Icon component={selectKeys === 'archive' ? MakeProject : MakeProject}/>
+                <Icon component={selectKeys === 'archive' ? ArchiveWhite : ArchiveGray}/>
                 <span>档案管理</span>
               </span>
             }
           >
-            <Menu.Item key="projectArchive">
-              <Icon type="smile" theme="twoTone"/><span>项目档案</span>
-            </Menu.Item>
-            <Menu.Item key="contractArchive">
-              <Icon type="smile" theme="twoTone"/><span>合同档案</span>
-            </Menu.Item>
+            {
+              (mine.level > 1) &&
+              <Menu.Item key="projectArchive">
+                <Icon type="smile" theme="twoTone"/><span>项目档案</span>
+              </Menu.Item>
+            }
+            {
+              (mine.level > 1 || mine.department.name === '产品技术部' || mine.department.name === '营销部') &&
+              <Menu.Item key="contractArchive">
+                <Icon type="smile" theme="twoTone"/><span>合同档案</span>
+              </Menu.Item>
+            }
           </Menu.SubMenu>
           <Menu.Item key="gossip">
             <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipGray}/><span>吐槽角</span>

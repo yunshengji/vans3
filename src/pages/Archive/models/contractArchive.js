@@ -3,6 +3,8 @@ import { GetOriginTableList } from '@/services/approvalProjects';
 import { message } from 'antd';
 import moment from 'moment';
 import { UploadFile } from '@/services/files';
+import _ from 'lodash';
+import { GetStaffList } from '@/services/staff';
 
 export default {
 
@@ -17,7 +19,9 @@ export default {
     options: [],
 
     searchParams: {
-      belong_to: '',
+      name: undefined,
+      category: undefined,
+      settlement: undefined,
     },
 
     contractArchives: {
@@ -73,7 +77,7 @@ export default {
         message.success(msg);
 
         // 更新列表数据
-        yield put({ type: 'eGetContractArchives', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadContracts', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
       }
@@ -83,15 +87,16 @@ export default {
         const { msg } = yield call(DeleteContractArchive, id, payload);
         message.success(msg);
         const { contractArchives: { current, pageSize } } = yield select(state => state['contractArchiveList']);
-        yield put({ type: 'eGetContractArchives', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadContracts', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
       }
     },
-
-    * eGetContractArchives({ payload }, { select, call, put }) {
+    * eLoadContracts({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetContractArchiveList, payload);
+        const { searchParams, contractArchives: { current, pageSize } } = yield select(state => state['contractArchiveList']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
+        const { data } = yield call(GetContractArchiveList, { ...queries });
         yield put({ type: 'rUpdateState', payload: { contractArchives: data } });
       } catch (err) {
         console.log(err);

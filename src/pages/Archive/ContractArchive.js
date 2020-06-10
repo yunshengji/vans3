@@ -1,46 +1,52 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal } from 'antd';
+import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal, Input } from 'antd';
 import moment from 'moment';
-import UploadContractArchive from '@/pages/Archive/components/UploadContractArchive';
 import { getFileURL } from '@/utils/transfer';
-import _ from 'lodash';
-
-const { Column } = Table;
-const { confirm } = Modal;
-
+import UploadContractArchive from '@/pages/Archive/components/UploadContractArchive';
 
 class ContractArchive extends React.Component {
   componentDidMount() {
-    const { dispatch, current, pageSize } = this.props;
-    dispatch({
-      type: 'contractArchiveList/eGetContractArchives',
-      payload: { page: current, page_size: pageSize },
-    });
-    dispatch({
+    this.props.dispatch({ type: 'contractArchiveList/eLoadContracts' });
+    this.props.dispatch({
       type: 'contractArchiveList/eGetOriginList',
       payload: { page: 1, page_size: 10000 },
     });
   }
 
+  searchContractList = e => {
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'contractArchiveList/rUpdateState',
+      payload: { searchParams: { ...values }, staffs: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'contractArchiveList/eLoadContracts' });
+    e.preventDefault();
+  };
+  resetSearch = e => {
+    this.props.form.setFieldsValue({
+      name: undefined,
+      category: undefined,
+      settlement: undefined,
+    });
+    const values = this.props.form.getFieldsValue();
+    this.props.dispatch({
+      type: 'contractArchiveList/rUpdateState',
+      payload: { searchParams: { ...values }, staffs: { current: 1, pageSize: 10 } },
+    });
+    this.props.dispatch({ type: 'contractArchiveList/eLoadContracts' });
+    e.preventDefault();
+  };
   showUploadContractArchivesModal = () => {
     this.props.dispatch({
       type: 'contractArchiveList/rUpdateState',
       payload: { uploadContractArchivesModalVisible: true },
     });
   };
-  // searchLawsList = () => {
-  //   const values = this.props.form.getFieldsValue();
-  //   const { dispatch, current, pageSize } = this.props;
-  //   dispatch({
-  //     type: 'contractArchiveList/eGetContractArchives',
-  //     payload: { page: current, page_size: pageSize, ...values },
-  //   });
-  // };
   showDeleteConfirm = ({ id, attachment: { file_name_local } }) => {
     const { dispatch } = this.props;
-    confirm({
+    Modal.confirm({
       title: '确定删除此档案',
       content: <p>文件 <b>《{file_name_local}》</b> 删除后将无法恢复</p>,
       okText: '删除',
@@ -52,15 +58,14 @@ class ContractArchive extends React.Component {
     });
   };
   contractArchivesPaginationChange = (page, pageSize) => {
-    const values = this.props.form.getFieldsValue();
     this.props.dispatch({
-      type: 'contractArchiveList/eGetContractArchives',
-      payload: { page, page_size: pageSize, ...values },
+      type: 'contractArchiveList/eLoadContracts',
+      payload: { page, page_size: pageSize },
     });
   };
 
   render() {
-    const { form, fetchingContractArchives, deletingContractArchive, routes, level, belong_to, total, current, pageSize, contractArchiveList } = this.props;
+    const { form, fetchingContractArchives, deletingContractArchive, routes, searchParams, total, current, pageSize, contractArchiveList } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -82,7 +87,7 @@ class ContractArchive extends React.Component {
               }
             })}
           </Breadcrumb>
-          <Button type="link" size="small" onClick={this.showUploadContractArchivesModal}>上传</Button>
+          <Button icon="plus-circle" onClick={this.showUploadContractArchivesModal}>上传</Button>
         </div>
         <UploadContractArchive/>
         <div className="contentWrapper">
@@ -90,33 +95,42 @@ class ContractArchive extends React.Component {
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
-                <Form.Item label="档案类型">
-                  {form.getFieldDecorator('belong_to', {
-                    initialValue: belong_to,
+                <Form.Item label="合同名称">
+                  {form.getFieldDecorator('name', {
+                    initialValue: searchParams['name'],
                   })(
-                    <Select placeholder="请选择">
-                      <Select.Option key="上游档案" value="">上游档案</Select.Option>
-                      <Select.Option key="下游档案" value="">下游档案</Select.Option>
+                    <Input placeholder="请输入"/>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col xl={6} md={12} sm={24}>
+                <Form.Item label="档案类型">
+                  {form.getFieldDecorator('category', {
+                    initialValue: searchParams['category'],
+                  })(
+                    <Select placeholder="请选择" allowClear>
+                      <Select.Option key="上游档案" value="上游档案">上游档案</Select.Option>
+                      <Select.Option key="下游档案" value="下游档案">下游档案</Select.Option>
                     </Select>,
                   )}
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
                 <Form.Item label="是否结算">
-                  {form.getFieldDecorator('belong_to', {
-                    initialValue: belong_to,
+                  {form.getFieldDecorator('settlement', {
+                    initialValue: searchParams['settlement'],
                   })(
-                    <Select placeholder="请选择">
-                      <Select.Option key="已结算" value="">已结算</Select.Option>
-                      <Select.Option key="未结算" value="">未结算</Select.Option>
+                    <Select placeholder="请选择" allowClear>
+                      <Select.Option key="已结算" value="已结算">已结算</Select.Option>
+                      <Select.Option key="未结算" value="未结算">未结算</Select.Option>
                     </Select>,
                   )}
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
                 <div className="searchButtons">
-                  <Button type="primary" onClick={this.searchLawsList}>搜索</Button>
-                  <Button style={{ marginLeft: '1em' }}>重置</Button>
+                  <Button type="primary" onClick={this.searchContractList}>搜索</Button>
+                  <Button style={{ marginLeft: '1em' }} onClick={this.resetSearch}>重置</Button>
                 </div>
               </Col>
             </Row>
@@ -129,29 +143,29 @@ class ContractArchive extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Column title="合同" dataIndex="attachment" render={(attachment) => (
+            <Table.Column title="合同" dataIndex="attachment" render={(attachment) => (
               <a href={getFileURL(attachment.id)} target="_blank">{attachment['file_name_local']}</a>
             )}/>
-            <Column title="关联项目" dataIndex="origin"
-                    render={(origin) => (
-                      <a target="_blank" href={`/approvalProject/edit/${origin.id}`}>{origin.name}</a>)}/>
-            <Column title="合同类型" dataIndex="category"/>
-            <Column title="是否结算" dataIndex="settlement"/>
-            <Column title="合同金额（元）" dataIndex="cash"/>
-            <Column title="差旅费（元）" dataIndex="travel_cash"/>
-            <Column title="所属年份" dataIndex="time"
-                    render={(text) => (<span>{moment(1000 * text).format('YYYY')}</span>)}/>/>
-            <Column title="操作" dataIndex="action"
-                    render={(text, record) => (
-                      <div className="actionGroup">
-                        <Button type="link" icon="delete" className="redButton"
-                                onClick={() => {
-                                  this.showDeleteConfirm(record);
-                                }}>
-                          删除
-                        </Button>
-                      </div>
-                    )}/>
+            <Table.Column title="关联项目" dataIndex="origin"
+                          render={(origin) => (
+                            <a target="_blank" href={`/approvalProject/edit/${origin.id}`}>{origin.name}</a>)}/>
+            <Table.Column title="合同类型" dataIndex="category"/>
+            <Table.Column title="是否结算" dataIndex="settlement"/>
+            <Table.Column title="合同金额（元）" dataIndex="cash"/>
+            <Table.Column title="差旅费（元）" dataIndex="travel_cash"/>
+            <Table.Column title="所属年份" dataIndex="time"
+                          render={(text) => (<span>{moment(1000 * text).format('YYYY')}</span>)}/>/>
+            <Table.Column title="操作" dataIndex="action"
+                          render={(text, record) => (
+                            <div className="actionGroup">
+                              <Button type="link" icon="delete" className="redButton"
+                                      onClick={() => {
+                                        this.showDeleteConfirm(record);
+                                      }}>
+                                删除
+                              </Button>
+                            </div>
+                          )}/>
           </Table>
           <div className="paginationWrapper">
             <Pagination showQuickJumper total={total} current={current} pageSize={pageSize}
@@ -167,11 +181,11 @@ class ContractArchive extends React.Component {
 const WrappedForm = Form.create({ name: 'ContractArchive' })(ContractArchive);
 
 export default connect(({ loading, common, contractArchiveList }) => ({
-  fetchingContractArchives: loading.effects['contractArchiveList/eGetContractArchives'],
+  fetchingContractArchives: loading.effects['contractArchiveList/eLoadContracts'],
   deletingContractArchive: loading.effects['contractArchiveList/eDeleteContractArchive'],
   level: common.mine.level,
   routes: contractArchiveList.routes,
-  belong_to: contractArchiveList.searchParams.belong_to,
+  searchParams: contractArchiveList.searchParams,
   total: contractArchiveList.contractArchives.total,
   current: contractArchiveList.contractArchives.current,
   pageSize: contractArchiveList.contractArchives.pageSize,

@@ -2,6 +2,7 @@ import { UploadProjectArchive, DeleteProjectArchive, GetProjectArchiveList } fro
 import { message } from 'antd';
 import { UploadFile } from '@/services/files';
 import _ from 'lodash';
+import { GetStaffList } from '@/services/staff';
 
 export default {
 
@@ -13,7 +14,9 @@ export default {
     uploadProjectArchivesModalVisible: false,
 
     searchParams: {
-      belong_to: '',
+      name: undefined,
+      category: undefined,
+      settlement: undefined,
     },
 
     projectArchives: {
@@ -62,7 +65,7 @@ export default {
         message.success(msg);
 
         // 更新列表数据
-        yield put({ type: 'eGetProjectArchives', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadProjectArchive', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
       }
@@ -72,15 +75,16 @@ export default {
         const { msg } = yield call(DeleteProjectArchive, id, payload);
         message.success(msg);
         const { projectArchives: { current, pageSize } } = yield select(state => state['projectArchiveList']);
-        yield put({ type: 'eGetProjectArchives', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadProjectArchive', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
       }
     },
-
-    * eGetProjectArchives({ payload }, { select, call, put }) {
+    * eLoadProjectArchive({ payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetProjectArchiveList, payload);
+        const { searchParams, projectArchives: { current, pageSize } } = yield select(state => state['projectArchiveList']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
+        const { data } = yield call(GetProjectArchiveList, { ...queries });
         yield put({ type: 'rUpdateState', payload: { projectArchives: data } });
       } catch (err) {
         console.log(err);

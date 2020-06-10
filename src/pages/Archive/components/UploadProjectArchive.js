@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Modal, Select, Upload, Icon, Button, Input, Col, Row } from 'antd';
+import { Form, Modal, Select, Upload, Icon, Button, Input } from 'antd';
 
 class UploadProjectArchive extends React.Component {
   hideUploadProjectArchivesModal = () => {
