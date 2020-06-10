@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import _ from 'lodash';
 import { WriteGossip, publishComment, GetGossipWritings } from '@/services/gossip';
 import { UploadFile } from '@/services/files';
 
@@ -11,8 +12,8 @@ export default {
 
     gossipPicturesPreviewFileList: [],
     gossipPicturesFileList: [],
-    uploadPicturePreviewModalVisible: false,
     uploadPicturePreviewImage: null,
+    uploadPicturePreviewModalVisible: false,
 
     writingsPictureDetailModalVisible: false,
     writingsPictureDetailImage: null,
@@ -33,23 +34,22 @@ export default {
   effects: {
     * eWriteGossip({ payload }, { select, call, put }) {
       try {
-        let attachment_ids = [];
+        let attachments = [];
         const { content, isPrivate, form } = payload;
         const { gossipPicturesFileList, gossipWritings: { current, pageSize } } = yield select(state => state['gossipList']);
         // 上传文件
         if (gossipPicturesFileList.length > 0) {
           const formData = new FormData();
           formData.append('folder_path', 'gossip');
-          gossipPicturesFileList.forEach(item => {
+          _.forEach(gossipPicturesFileList, item => {
             formData.append('file', item);
           });
           const { data } = yield call(UploadFile, formData);
-          data.forEach(item => {
-            attachment_ids.push(item.id);
-          });
+          attachments = _.map(data, 'id');
         }
-        // 提交文件和分类信息
-        const { msg } = yield call(WriteGossip, { content, private: isPrivate, attachment_ids });
+        // 提交图片和内容
+        const { msg } = yield call(WriteGossip, { content, private: isPrivate, attachments });
+
         yield put({
           type: 'rUpdateState',
           payload: {
@@ -60,7 +60,6 @@ export default {
         });
         form.resetFields();
         message.success(msg);
-        // 更新列表数据
         yield put({ type: 'eGetGossipWritings', payload: { page: current, page_size: pageSize } });
       } catch (err) {
         console.log(err);
@@ -81,8 +80,7 @@ export default {
     * eGetGossipWritings({ payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetGossipWritings, payload);
-        yield put({ type: 'rUpdateGossipWritings', payload: data });
-        window.scrollTo({ left: 0, top: 0, behavior: 'smooth' });
+        yield put({ type: 'rUpdateState', payload: { gossipWritings: data } });
       } catch (err) {
         console.log(err);
       }
@@ -91,12 +89,7 @@ export default {
 
   reducers: {
     rUpdateState(state, { payload }) {
-      console.log(payload);
       return { ...state, ...payload };
-    },
-    rUpdateGossipWritings(state, { payload }) {
-      state.gossipWritings = payload;
-      return state;
     },
   },
 

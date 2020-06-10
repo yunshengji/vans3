@@ -52,8 +52,7 @@ class WorkDiariesList extends React.Component {
   };
 
   render() {
-    const { fetchingWorkDiaries, submittingWorkDiary, routes, form, editWorkDiaryDrawerVisible, total, current, pageSize, workDiariesList } = this.props;
-    const { getFieldDecorator } = form;
+    const { fetchingWorkDiaries, submittingWorkDiary, routes, form: { getFieldDecorator }, editWorkDiaryDrawerVisible, total, current, pageSize, workDiariesList } = this.props;
     const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link'];
     return (
       <React.Fragment>
@@ -157,7 +156,7 @@ class WorkDiariesList extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'createWorkDiary' })(WorkDiariesList);
+const WrappedForm = Form.create({ name: 'WorkDiariesList' })(WorkDiariesList);
 
 export default connect(({ loading, workDiariesList }) => ({
   fetchingWorkDiaries: loading.effects['workDiariesList/eGetWorkDiaries'],

@@ -6,9 +6,6 @@ import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/index.css';
 import styles from '../List.less';
 
-const { confirm } = Modal;
-
-
 class EditWorkDiaryDrawer extends React.Component {
   componentDidMount() {
     const { editWorkDiary } = this.props;
@@ -26,7 +23,7 @@ class EditWorkDiaryDrawer extends React.Component {
   deleteWorkDiary = () => {
     const { dispatch, editWorkDiary } = this.props;
     const { id } = editWorkDiary;
-    confirm({
+    Modal.confirm({
       title: '确定删除此工作日志',
       okText: '删除',
       okType: 'danger',
@@ -40,8 +37,7 @@ class EditWorkDiaryDrawer extends React.Component {
     });
   };
   handleSubmit = e => {
-    const { dispatch, form, editWorkDiary } = this.props;
-    const { id } = editWorkDiary;
+    const { dispatch, form, editWorkDiary: { id } } = this.props;
     form.validateFields((err, values) => {
       if (!err) {
         dispatch({
@@ -114,7 +110,7 @@ class EditWorkDiaryDrawer extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'editWorkDiary' })(EditWorkDiaryDrawer);
+const WrappedForm = Form.create({ name: 'EditWorkDiaryDrawer' })(EditWorkDiaryDrawer);
 
 export default connect(({ loading, workDiariesList }) => ({
   deletingWorkDiary: loading.effects['workDiariesList/eDeleteWorkDiary'],

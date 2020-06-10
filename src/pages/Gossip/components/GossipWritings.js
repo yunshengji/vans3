@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { List, Tooltip, Modal, Comment, Avatar, Button, Form, Input, Col, Row, Pagination, message } from 'antd';
 import moment from 'moment';
+import _ from 'lodash';
 import { getFileURL } from '@/utils/transfer';
 
 const { TextArea } = Input;
@@ -9,15 +10,19 @@ const { TextArea } = Input;
 const CommentList = ({ comments }) => (
   <List
     dataSource={comments}
-    // header={`${comments.length} 条评论`}
+    header={`${comments.length} 条评论`}
     itemLayout="horizontal"
     renderItem={item =>
-      <Comment avatar={getFileURL(item.creator.avatar)} author={item.creator.name} content={item.content}
-               datetime={
-                 <Tooltip title={moment(item['created_at'] * 1000).format('YYYY-MM-DD HH:mm')}>
-                   <span>{moment(item['created_at'] * 1000).fromNow()}</span>
-                 </Tooltip>
-               }
+      <Comment
+        avatar={
+          item.creator.avatar ? getFileURL(item.creator.avatar) : <Avatar size="large" shape="square" icon="user"/>
+        }
+        author={item.creator.name} content={item.content}
+        datetime={
+          <Tooltip title={moment(item['created_at'] * 1000).format('YYYY-MM-DD HH:mm')}>
+            <span>{moment(item['created_at'] * 1000).fromNow()}</span>
+          </Tooltip>
+        }
       />
     }
   />
@@ -55,7 +60,7 @@ class GossipWritings extends React.Component {
     this.props.dispatch({
       type: 'gossipList/ePublishComment',
       resetFields,
-      payload: { gossip_id: id, content: comment },
+      payload: { gossip_id: id, content: comment, private: isPrivate },
     });
   };
   gossipWritingsPaginationChange = (page, pageSize) => {
@@ -69,7 +74,7 @@ class GossipWritings extends React.Component {
     const { form, fetchingGossipWritings, writingsPictureDetailModalVisible, writingsPictureDetailImage, total, current, pageSize, gossipWritingsList } = this.props;
     const { getFieldDecorator } = form;
     return (
-      <div className="contentWrapper">
+      <React.Fragment>
         <div className="gossipWritingsWrapper">
           <List size="small" itemLayout="vertical" dataSource={gossipWritingsList} loading={fetchingGossipWritings}
                 renderItem={item => (
@@ -79,12 +84,12 @@ class GossipWritings extends React.Component {
                     //   mine.id === item.creator.id &&
                     //   <Button type="link" icon="delete" className="redButton">删帖</Button>]}
                   >
-
                     <List.Item.Meta
-                      avatar={item.creator ?
+                      avatar={item.creator.avatar ?
                         <Avatar size="large" shape="square" src={getFileURL(item.creator.avatar)}/> :
-                        <Avatar size="large" shape="square" icon="user"/>}
-                      title={(item.creator && item.creator.name) ? item.creator.name : '匿名用户'}
+                        <Avatar size="large" shape="square" icon="user"/>
+                      }
+                      title={item.creator.name ? item.creator.name : '匿名用户'}
                       description={
                         <Tooltip title={moment(item['created_at'] * 1000).format('YYYY-MM-DD HH:mm')}>
                           {moment(item['created_at'] * 1000).fromNow()}
@@ -96,13 +101,12 @@ class GossipWritings extends React.Component {
 
                     <div className="gossipThumbnailWrapper">
                       {
-                        item.attachment_ids.map((item) => {
+                        _.map(item.attachments, item => {
                           return (
-                            <div key={item} className="gossipThumbnail"
-                                 style={{ backgroundImage: `url(${getFileURL(item)})` }}
-                                 onClick={() => {
-                                   this.showImageDetail(item);
-                                 }}/>
+                            <div key={item.id} className="gossipThumbnail"
+                                 style={{ backgroundImage: `url(${getFileURL(item.id)})` }}
+                                 onClick={() => this.showImageDetail(item.id)}
+                            />
                           );
                         })
                       }
@@ -147,12 +151,12 @@ class GossipWritings extends React.Component {
                onCancel={this.cancelImageDetail}>
           <img style={{ width: '100%' }} src={writingsPictureDetailImage}/>
         </Modal>
-      </div>
+      </React.Fragment>
     );
   }
 }
 
-const WrappedForm = Form.create({ name: 'gossipList' })(GossipWritings);
+const WrappedForm = Form.create({ name: 'GossipWritings' })(GossipWritings);
 
 export default connect(({ loading, gossipList }) => ({
   fetchingGossipWritings: loading.effects['gossipList/eGetGossipWritings'],

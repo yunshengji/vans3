@@ -30,9 +30,9 @@ export default {
         { path: '/approvalProject/edit', component: './ApprovalProjects/EditApprovalProject' },
         { path: '/approvalProject/edit/:id', component: './ApprovalProjects/EditApprovalProject' },
 
-        { path: '/workDiaries', component: './WorkDiaries/List' },
-
         { path: '/gossip', component: './Gossip/Gossip' },
+
+        { path: '/workDiaries', component: './WorkDiaries/List' },
 
         { path: '/contacts', component: './Contacts/List' },
 

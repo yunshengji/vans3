@@ -8,20 +8,27 @@ import ContractsIcon from '../../public/menu/contracts.svg';
 import ContractsReverseIcon from '../../public/menu/contracts-reverse.svg';
 import MakeProject from '../../public/menu/make-project.svg';
 import MakeProjectReverseIcon from '../../public/menu/make-projects-reverse.svg';
-import WorkDiaries from '../../public/menu/workDiaries.svg';
-import WorkDiariesReverseIcon from '../../public/menu/workDiaries-reverse.svg';
-import GossipIcon from '../../public/menu/gossip.svg';
-import GossipReverseIcon from '../../public/menu/gossip-reverse.svg';
+
+
+import GossipGray from '../../public/menu/GossipGray.svg';
+import GossipWhite from '../../public/menu/GossipWhite.svg';
+
+import WorkDiaryGray from '../../public/menu/WorkDiaryGray.svg';
+import WorkDiaryWhite from '../../public/menu/WorkDiaryWhite.svg';
 
 import ContactGray from '../../public/menu/ContactGray.svg';
 import ContactWhite from '../../public/menu/ContactWhite.svg';
+
 import ExpertGray from '../../public/menu/ExpertGray.svg';
 import ExpertWhite from '../../public/menu/ExpertWhite.svg';
+
 import HRGray from '../../public/menu/HRGray.svg';
 import HRWhite from '../../public/menu/HRWhite.svg';
+
 import LawGray from '../../public/menu/LawGray.svg';
 import LawWhite from '../../public/menu/LawWhite.svg';
-import UserGray from '../../public/menu/HRGray.svg';
+
+import UserGray from '../../public/menu/users.svg';
 import UserWhite from '../../public/menu/UserWhite.svg';
 
 class BasicSide extends React.Component {
@@ -67,9 +74,6 @@ class BasicSide extends React.Component {
               <Icon type="smile" theme="twoTone"/><span>PPP</span>
             </Menu.Item>
           </Menu.SubMenu>
-          <Menu.Item key="workDiaries">
-            <Icon component={selectKeys === 'workDiaries' ? WorkDiariesReverseIcon : WorkDiaries}/><span>工作日志</span>
-          </Menu.Item>
           <Menu.SubMenu
             key="approvalProject"
             title={
@@ -128,7 +132,10 @@ class BasicSide extends React.Component {
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.Item key="gossip">
-            <Icon component={selectKeys === 'gossip' ? GossipReverseIcon : GossipIcon}/><span>吐槽角</span>
+            <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipGray}/><span>吐槽角</span>
+          </Menu.Item>
+          <Menu.Item key="workDiaries">
+            <Icon component={selectKeys === 'workDiaries' ? WorkDiaryWhite : WorkDiaryGray}/><span>工作日志</span>
           </Menu.Item>
           <Menu.Item key="contacts">
             <Icon component={selectKeys === 'contacts' ? ContactWhite : ContactGray}/><span>联系人</span>
