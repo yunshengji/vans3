@@ -40,7 +40,7 @@ import HRWhite from '../../public/menu/HRWhite.svg';
 import LawGray from '../../public/menu/LawGray.svg';
 import LawWhite from '../../public/menu/LawWhite.svg';
 
-import UserGray from '../../public/menu/users.svg';
+import UserGray from '../../public/menu/UserGray.svg';
 import UserWhite from '../../public/menu/UserWhite.svg';
 
 class BasicSide extends React.Component {
@@ -61,13 +61,13 @@ class BasicSide extends React.Component {
       <Layout.Sider width="200" collapsible breakpoint="lg" theme="dark"
                     onCollapse={this.onCollapse}
                     className="basicSide">
-        <Link className="systemName" to="/projects">
+        <a className="systemName" href="http://www.cdwmzx.cn/" target="_blank">
           {
             menuCollapsed ?
               <img src="/system-icon.svg" alt="万铭"/> :
               <img src="/system-name.svg" alt="万铭"/>
           }
-        </Link>
+        </a>
 
         <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
           <Menu.SubMenu

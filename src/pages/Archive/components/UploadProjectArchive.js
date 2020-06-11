@@ -78,7 +78,6 @@ class UploadProjectArchive extends React.Component {
           </Form.Item>
           <Form.Item label="普通文件">
             {getFieldDecorator('fileListOrdinary', {
-              rules: [{ required: true, message: '请选择文件' }],
               valuePropName: 'fileList',
               getValueFromEvent: (e) => {
                 if (Array.isArray(e)) {
@@ -96,7 +95,6 @@ class UploadProjectArchive extends React.Component {
           </Form.Item>
           <Form.Item label="明细文件">
             {getFieldDecorator('fileListDetail', {
-              rules: [{ required: true, message: '请选择文件' }],
               valuePropName: 'fileList',
               getValueFromEvent: (e) => {
                 if (Array.isArray(e)) {

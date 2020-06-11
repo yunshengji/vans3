@@ -55,9 +55,7 @@ class UploadContractArchive extends React.Component {
              onCancel={this.hideUploadContractArchivesModal}>
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
           <Form.Item label="关联项目">
-            {form.getFieldDecorator('origin', {
-              rules: [{ required: true, message: '请选择' }],
-            })(
+            {form.getFieldDecorator('origin', {})(
               <Select placeholder="请选择" showSearch onSearch={this.handleSearch}>
                 {options.map((item, index) => {
                   return (
@@ -78,9 +76,7 @@ class UploadContractArchive extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="合同金额">
-            {form.getFieldDecorator('cash', {
-              rules: [{ required: true, message: '请输入' }],
-            })(
+            {form.getFieldDecorator('cash', {})(
               <InputNumber min={0} style={{ width: '100%' }}/>,
             )}
           </Form.Item>
@@ -90,10 +86,8 @@ class UploadContractArchive extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="是否结算">
-            {form.getFieldDecorator('settlement', {
-              rules: [{ required: true, message: '请选择' }],
-            })(
-              <Select placeholder="请选择">
+            {form.getFieldDecorator('settlement', {initialValue:'未结算'})(
+              <Select placeholder="请选择" allowClear>
                 <Select.Option key="已结算" value="已结算">已结算</Select.Option>
                 <Select.Option key="未结算" value="未结算">未结算</Select.Option>
               </Select>,
