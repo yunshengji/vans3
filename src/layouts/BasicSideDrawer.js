@@ -49,9 +49,9 @@ class BasicSideDrawer extends React.Component {
       <Drawer placement="left" closable={false} width="12rem" visible={drawerMenuVisible} onClose={this.onClose}
               className="basicSideDrawer">
         <div className="basicSideDrawerWrapper">
-          <Link to="/projects">
+          <a target="_blank" href="http://www.cdwmzx.cn/">
             <img src="/system-name.svg" alt="万铭"/>
-          </Link>
+          </a>
           <Menu mode="inline" theme="dark" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
             <Menu.SubMenu
               key="project"
