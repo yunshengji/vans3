@@ -1,4 +1,4 @@
-#web:
-#  image: vmirror/vans
-#  ports:
-#    - "8085:8085"
+web:
+  image: vmirror/vans:prod
+  ports:
+    - "8085:3000"

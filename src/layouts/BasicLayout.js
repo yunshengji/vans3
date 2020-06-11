@@ -1,29 +1,38 @@
 import React from 'react';
 import { connect } from 'dva';
+import { Layout, Icon, ConfigProvider } from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
+import 'moment/locale/zh-cn';
+import styles from './BasicLayout.less';
+import GlobalHeader from '@/layouts/BasicHeader.js';
+import GlobalSide from '@/layouts/BasicSide.js';
+import GlobalSideDrawer from '@/layouts/BasicSideDrawer.js';
 
-import Header from '@/components/BasicLayout/Header';
-import Footer from '@/components/BasicLayout/Footer';
+const { Content, Footer } = Layout;
 
 class BasicLayout extends React.Component {
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  componentDidMount() {
+    this.props.dispatch({ type: 'common/eGetMe' });
+  }
 
   render() {
     return (
-      <React.Fragment>
-        <Header/>
-        <div style={{ flexGrow: 1 }}>
-          {this.props.children}
-          {this.props.name}
-        </div>
-        <Footer/>
-      </React.Fragment>
+      <ConfigProvider csp={{ nonce: 'YourNonceCode' }} locale={zhCN}>
+        <Layout>
+          <GlobalSide/>
+          <GlobalSideDrawer/>
+          <Layout className={styles.main}>
+            <GlobalHeader/>
+            <Content>{this.props.children}</Content>
+            <Footer className={styles.footer}>
+              万铭星系统 <Icon type="copyright"/> 2020 万铭研发部出品
+            </Footer>
+          </Layout>
+        </Layout>
+      </ConfigProvider>
     );
   }
+}
 
-};
-
-// export default connect(({ settings }) => ({ ...settings }))(BasicLayout);
-export default BasicLayout;
+export default connect()(BasicLayout);

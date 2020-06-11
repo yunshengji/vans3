@@ -1,15 +1,51 @@
 export default {
   treeShaking: true,
   routes: [
-    {
-      path: '/login',
-      component: './login',
-    },
+    { path: '/login', component: './User/Login' },
     {
       path: '/',
       component: '../layouts/BasicLayout',
+      Routes: ['src/components/AuthToken'],
       routes: [
-        { path: '/', component: '../pages/index' },
+        { path: '/', redirect: '/users' },
+        { path: '/403', component: './Exception/403' },
+        { path: '/404', component: './Exception/404' },
+        { path: '/500', component: './Exception/500' },
+
+        { path: '/pamphlet/', component: './Brochure/Pamphlet' },
+        { path: '/performance/', component: './Brochure/Performance' },
+        { path: '/aptitude/', component: './Brochure/Aptitude' },
+
+        { path: '/projectArchive', component: './Archive/ProjectArchive' },
+        { path: '/contractArchive', component: './Archive/ContractArchive' },
+
+        { path: '/specialDebt', component: './Project/SpecialDebtList' },
+        { path: '/specialDebt/edit/:id', component: './Project/EditSpecialDebt' },
+
+
+        { path: '/originList', component: './ApprovalProjects/OriginList' },
+        { path: '/recordList', component: './ApprovalProjects/RecordList' },
+        { path: '/executeList', component: './ApprovalProjects/ExecuteList' },
+        { path: '/serviceList', component: './ApprovalProjects/ServiceList' },
+        { path: '/approvalProject/edit', component: './ApprovalProjects/EditApprovalProject' },
+        { path: '/approvalProject/edit/:id', component: './ApprovalProjects/EditApprovalProject' },
+
+        { path: '/gossip', component: './Gossip/Gossip' },
+
+        { path: '/workDiaries', component: './WorkDiaries/List' },
+
+        { path: '/contacts', component: './Contacts/List' },
+
+        { path: '/experts', component: './Experts/Index' },
+
+        { path: '/staff', component: './Staff/StaffList' },
+        { path: '/staff/edit', component: './Staff/EditStaff' },
+        { path: '/staff/edit/:id', component: './Staff/EditStaff' },
+
+        { path: '/laws', component: './Law/List' },
+
+        { path: '/users', component: './User/List' },
+        { path: '/users/setting', component: './User/Setting' },
       ],
     },
   ],
@@ -17,15 +53,21 @@ export default {
     ['umi-plugin-react', {
       antd: true,
       dva: true,
-      dynamicImport: { webpackChunkName: true, loadingComponent: '../src/components/RouteLoading' },
+      dynamicImport: { webpackChunkName: true, loadingComponent: './components/RouteLoading' },
       dll: true,
-      locale: { enable: true, default: 'en-US' },
-      title: '万铭星系统',
-      metas: [{ 'http-equiv': 'X-UA-Compatible', content: 'IE=edge' }],
-      links: [{ rel: 'icon', href: '../src/assets/favicon.ico', type: 'image/x-icon' }],
-      routes: {
-        exclude: [/models\//, /services\//, /model\.(t|j)sx?$/, /service\.(t|j)sx?$/, /components\//],
-      },
     }],
   ],
+  urlLoaderExcludes: [/\.svg$/],
+  chainWebpack(config) {
+    config.module
+      .rule('svg')
+      .test(/\.svg(\?v=\d+\.\d+\.\d+)?$/)
+      .use([
+        { loader: 'babel-loader' },
+        {
+          loader: '@svgr/webpack', options: { babel: false, icon: true },
+        },
+      ])
+      .loader(require.resolve('@svgr/webpack'));
+  },
 };

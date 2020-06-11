@@ -1,0 +1,51 @@
+.gossipWritingsWrapper {
+  width: 500px;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  .ant-list-item-meta {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .ant-list-item-meta-title {
+    margin-top: 2px !important;
+  }
+
+  .ant-list-item {
+    padding: 2em 0 !important;
+  }
+}
+
+.gossipThumbnailWrapper {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.gossipThumbnail {
+  margin: 15px 15px 0 0;
+  width: 150px;
+  height: 150px;
+  border-radius: 2px;
+  background-size: cover;
+
+  &:last-child {
+    margin-right: auto;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+.commentAvatar > img {
+  width: 100% !important;
+  height: 100% !important;
+}

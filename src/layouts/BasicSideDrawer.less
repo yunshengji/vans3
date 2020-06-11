@@ -1,0 +1,28 @@
+.basicSideDrawer {
+  .ant-drawer-body {
+    height: 100vh;
+    display: flex;
+    padding: 0;
+  }
+
+  .basicSideDrawerWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+
+    > a {
+      padding: 2rem 1.5rem;
+      background-color: #001529;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .ant-menu {
+    border-right: none;
+    flex-grow: 1;
+  }
+}

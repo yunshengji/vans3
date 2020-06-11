@@ -1,4 +1,4 @@
 web:
-  image: vanmirror/vans:dev
+  image: vmirror/vans:dev
   ports:
-    - "8085:3000"
+    - "8088:3000"

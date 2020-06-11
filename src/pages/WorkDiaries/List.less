@@ -1,0 +1,33 @@
+:global {
+  .editDrawerWrapper {
+    .ant-drawer-content-wrapper {
+      max-width: 100vw !important;
+    }
+  }
+}
+
+.listItem {
+  padding: 14px;
+  transition: background-color .3s;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #F4F4F4;
+  }
+}
+
+.content {
+  height: 1.5rem;
+  overflow: hidden;
+
+  * {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.editWrapper {
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+}
