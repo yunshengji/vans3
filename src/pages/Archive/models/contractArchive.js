@@ -21,6 +21,7 @@ export default {
       name: undefined,
       category: undefined,
       settlement: undefined,
+      time: undefined,
     },
 
     contractArchives: {
@@ -90,6 +91,7 @@ export default {
     * eLoadContracts({ payload }, { select, call, put }) {
       try {
         const { searchParams, contractArchives: { current, pageSize } } = yield select(state => state['contractArchiveList']);
+        searchParams['time'] = searchParams['time'] ? moment(searchParams['time'], 'YYYY').valueOf() / 1000 : searchParams['time'];
         const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
         const { data } = yield call(GetContractArchiveList, { ...queries });
         yield put({ type: 'rUpdateState', payload: { contractArchives: data } });

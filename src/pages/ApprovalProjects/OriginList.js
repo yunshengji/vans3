@@ -126,7 +126,7 @@ class OriginList extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="项目名称" dataIndex="name"/>
+            <Table.Column title="项目名称" dataIndex="name" width={400}/>
             <Table.Column title="项目类别" dataIndex="category"/>
             <Table.Column title="立项状态" dataIndex="status" render={status => (
               <React.Fragment>

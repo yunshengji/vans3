@@ -82,7 +82,7 @@ class UploadContractArchive extends React.Component {
               </Select>,
             )}
           </Form.Item>
-          <Form.Item label="合同金额">
+          <Form.Item label="合同金额（元）">
             {form.getFieldDecorator('cash', {})(
               <InputNumber min={0} style={{ width: '100%' }}/>,
             )}

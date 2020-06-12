@@ -29,6 +29,8 @@ export default {
         { path: '/serviceList', component: './ApprovalProjects/ServiceList' },
         { path: '/approvalProject/edit', component: './ApprovalProjects/EditApprovalProject' },
         { path: '/approvalProject/edit/:id', component: './ApprovalProjects/EditApprovalProject' },
+        { path: '/approvalProject/profile/:id', component: './ApprovalProjects/ProfileOriginTable' },
+
 
         { path: '/gossip', component: './Gossip/Gossip' },
 
