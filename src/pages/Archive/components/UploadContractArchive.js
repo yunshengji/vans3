@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import _ from 'lodash';
-import { Form, Modal, Select, Upload, Icon, Button, InputNumber, DatePicker } from 'antd';
+import moment from 'moment';
+import { Form, Modal, Select, Upload, Icon, Button, InputNumber, DatePicker, Input } from 'antd';
+import { selectYearList } from '../../../utils/transfer';
 
 class UploadContractArchive extends React.Component {
   hideUploadContractArchivesModal = () => {
@@ -41,9 +43,9 @@ class UploadContractArchive extends React.Component {
       showUploadList: true,
       beforeUpload: () => false,
       onRemove: file => {
-        const fileListDetail = getFieldValue('fileListDetail');
-        fileListDetail.splice(fileListDetail.indexOf(file), 1);
-        setFieldsValue({ fileListDetail });
+        const fileList = getFieldValue('fileList');
+        fileList.splice(fileList.indexOf(file), 1);
+        setFieldsValue({ fileList });
       },
     };
     return (
@@ -54,6 +56,11 @@ class UploadContractArchive extends React.Component {
              onOk={this.submitCreatedContractArchive}
              onCancel={this.hideUploadContractArchivesModal}>
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
+          <Form.Item label="合同名称">
+            {form.getFieldDecorator('name', {})(
+              <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
           <Form.Item label="关联项目">
             {form.getFieldDecorator('origin', {})(
               <Select placeholder="请选择" showSearch onSearch={this.handleSearch}>
@@ -86,8 +93,11 @@ class UploadContractArchive extends React.Component {
             )}
           </Form.Item>
           <Form.Item label="是否结算">
-            {form.getFieldDecorator('settlement', {initialValue:'未结算'})(
-              <Select placeholder="请选择" allowClear>
+            {form.getFieldDecorator('settlement', {
+              initialValue: '未结算',
+              rules: [{ required: true, message: '请选择' }],
+            })(
+              <Select placeholder="请选择">
                 <Select.Option key="已结算" value="已结算">已结算</Select.Option>
                 <Select.Option key="未结算" value="未结算">未结算</Select.Option>
               </Select>,
@@ -95,16 +105,19 @@ class UploadContractArchive extends React.Component {
           </Form.Item>
           <Form.Item label="合同年份">
             {form.getFieldDecorator('time', {
+              initialValue: moment().get('year'),
               rules: [{ required: true, message: '请选择' }],
             })(
-              <DatePicker.MonthPicker style={{ width: '100%' }}/>,
+              <Select>
+                {_.map(selectYearList, item => <Select.Option key={item} value={item}>{item}</Select.Option>)}
+              </Select>,
             )}
           </Form.Item>
           <Form.Item label="合同文件">
             {getFieldDecorator('fileList', {
               rules: [{ required: true, message: '请选择文件' }],
               valuePropName: 'fileList',
-              getValueFromEvent: ({ file }) => [file],
+              getValueFromEvent: ({ file, fileList }) => fileList,
             })(
               <Upload {...uploadConfig}>
                 <Button>

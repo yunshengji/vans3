@@ -2,7 +2,6 @@ import { UploadProjectArchive, DeleteProjectArchive, GetProjectArchiveList } fro
 import { message } from 'antd';
 import { UploadFile } from '@/services/files';
 import _ from 'lodash';
-import { GetStaffList } from '@/services/staff';
 
 export default {
 
