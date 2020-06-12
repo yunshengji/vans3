@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
 import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal, Input } from 'antd';
+import _ from 'lodash';
 import moment from 'moment';
 import { getFileURL } from '@/utils/transfer';
 import UploadContractArchive from '@/pages/Archive/components/UploadContractArchive';
@@ -143,12 +144,16 @@ class ContractArchive extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="合同" dataIndex="attachment" render={(attachment) => (
-              <a href={getFileURL(attachment.id)} target="_blank">{attachment['file_name_local']}</a>
-            )}/>
-            <Table.Column title="关联项目" dataIndex="origin"
-                          render={(origin) => (
-                            <a target="_blank" href={`/approvalProject/edit/${origin.id}`}>{origin.name}</a>)}/>
+            <Table.Column title="合同名称" dataIndex="name"/>
+            <Table.Column title="合同文件" dataIndex="attachment"
+                          render={attachments => (
+                            _.map(attachments, item => {
+                              return <p><a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a></p>;
+                            }))}
+            />
+            {/*<Table.Column title="关联项目" dataIndex="origin"*/}
+            {/*              render={(origin) => (*/}
+            {/*                <a target="_blank" href={`/approvalProject/edit/${origin.id}`}>{origin.name}</a>)}/>*/}
             <Table.Column title="合同类型" dataIndex="category"/>
             <Table.Column title="是否结算" dataIndex="settlement"/>
             <Table.Column title="合同金额（元）" dataIndex="cash"/>

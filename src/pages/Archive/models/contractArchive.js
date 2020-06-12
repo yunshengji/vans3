@@ -4,7 +4,6 @@ import { message } from 'antd';
 import moment from 'moment';
 import { UploadFile } from '@/services/files';
 import _ from 'lodash';
-import { GetStaffList } from '@/services/staff';
 
 export default {
 
@@ -48,20 +47,16 @@ export default {
     },
     * eUploadContractArchives({ payload }, { select, call, put }) {
       try {
-        let { category, cash, travel_cash, settlement, time, fileList, origin } = payload;
-        let attachment, name;
+        let { name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
         const { contractArchives: { current, pageSize } } = yield select(state => state['contractArchiveList']);
-
-        // 上传文件
+        // 上传文件;
         const formData = new FormData();
         formData.append('folder_path', 'archive_contract');
-        formData.append('file', fileList[0]);
+        _.forEach(fileList, (item => {
+          formData.append('file', item.originFileObj);
+        }));
         const { data } = yield call(UploadFile, formData);
-        attachment = data[0].id;
-        name = data[0]['file_name_local'].split('.')[0];
-
-        // 时间转换
-        time = moment(time).valueOf() / 1000;
+        const attachment = _.map(data, 'id');
 
         const { msg } = yield call(UploadContractArchive, {
           name,
@@ -69,7 +64,7 @@ export default {
           cash,
           travel_cash,
           settlement,
-          time,
+          time: moment(time, 'YYYY').valueOf() / 1000,
           attachment,
           origin,
         });

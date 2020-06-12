@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const Cookies = require('js-cookie');
 const { prefix } = require('../../config/api');
 
@@ -32,9 +33,19 @@ const getIdsFromManagerList = list => {
   });
   return transferList;
 };
+
+const selectYearList = (start = 2000, end = 2030) => {
+  const yearsList = [];
+  for (let i = start; i <= end; i++) {
+    yearsList.push(i);
+  }
+  return yearsList;
+};
+
 module.exports = {
   getFileURL,
   limitDecimals,
   getIdsFromWholeList,
   getIdsFromManagerList,
+  selectYearList: selectYearList(),
 };
