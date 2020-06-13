@@ -9,53 +9,39 @@ import MessageGray from '../../public/menu/MessageGray.svg';
 
 class BasicHeader extends React.Component {
   controlDrawerMenuVisible = (drawerMenuVisible) => {
-    this.props.dispatch({
-      type: 'common/rUpdateState',
-      payload: { drawerMenuVisible },
-    });
+    this.props.dispatch({ type: 'common/rUpdateState', payload: { drawerMenuVisible } });
   };
   logout = () => {
     Cookies.remove('token');
-    this.props.dispatch({
-      type: 'common/rUpdateState',
-      payload: { isLogOuting: true },
-    });
+    this.props.dispatch({ type: 'common/rUpdateState', payload: { isLogOuting: true } });
     setTimeout(() => {
-      this.props.dispatch({
-        type: 'common/rUpdateState',
-        payload: { isLogOuting: false },
-      });
+      this.props.dispatch({ type: 'common/rUpdateState', payload: { isLogOuting: false } });
       router.push('/login');
     }, 1200);
   };
 
   render() {
-    const { drawerMenuVisible, avatar, isLogOuting } = this.props;
+    const { drawerMenuVisible, avatar } = this.props;
     const menu = (
       <Menu>
         <Menu.Item>
           <Link to="/users/setting">
             <Icon type="setting"/>
-            <span className={styles.item}>个人设置</span>
+            <span className={styles.dropdownItem}>个人设置</span>
           </Link>
         </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
           <div onClick={this.logout}>
             <Icon type="logout"/>
-            <span className={styles.item}>退出登录</span>
+            <span className={styles.dropdownItem}>退出登录</span>
           </div>
         </Menu.Item>
       </Menu>
     );
     return (
       <Layout.Header className={styles.header}>
-
-        <Spin size="large" tip="正在退出登录 ..." spinning={true} className={styles.loading}
-              style={{ display: isLogOuting ? 'flex' : 'none' }}/>
-
         <div className={styles.leftWrapper}>
-          <img src="/system-icon.svg" alt="万铭"/>
           <span className={styles.controlDrawerMenu}>
               {drawerMenuVisible ?
                 <Icon type="menu-fold" style={{ color: '#FFF' }}
@@ -66,7 +52,6 @@ class BasicHeader extends React.Component {
               }
             </span>
         </div>
-
         <div className={styles.rightWrapper}>
           <Badge dot>
             <Icon component={MessageGray} style={{ fontSize: '18px' }}/>
@@ -76,14 +61,13 @@ class BasicHeader extends React.Component {
               <Dropdown overlay={menu}>
                 <div className={styles.dropdown}>
                   <Avatar src={getFileURL(avatar)}/>
-                  <Icon type="caret-down" style={{ marginLeft: '.5em', color: '#606D85', fontSize: '12px' }}/>
+                  <Icon type="caret-down" className={styles.icon}/>
                 </div>
               </Dropdown>
               :
               <Spin/>
           }
         </div>
-
       </Layout.Header>
     );
   }
@@ -91,6 +75,5 @@ class BasicHeader extends React.Component {
 
 export default connect(({ common }) => ({
   drawerMenuVisible: common.drawerMenuVisible,
-  isLogOuting: common.isLogOuting,
   avatar: common.mine.avatar,
 }))(BasicHeader);

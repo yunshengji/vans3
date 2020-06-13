@@ -5,15 +5,10 @@ export default {
   namespace: 'common',
 
   state: {
-    menuCollapsed: false,
     drawerMenuVisible: false,
     isLogOuting: false,
-
-    mine: {
-      department: {},
-    },
+    mine: { department: {} },
   },
-
 
   subscriptions: {
     setup({ dispatch, history }) {

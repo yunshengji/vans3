@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Icon, ConfigProvider } from 'antd';
-import zhCN from 'antd/es/locale/zh_CN';
+import { Layout, Icon, ConfigProvider, Spin } from 'antd';
 import 'moment/locale/zh-cn';
+import zhCN from 'antd/es/locale/zh_CN';
+import BasicSide from '@/layouts/BasicSide.js';
+import BasicSideDrawer from '@/layouts/BasicSideDrawer.js';
+import BasicHeader from '@/layouts/BasicHeader.js';
 import styles from './BasicLayout.less';
-import GlobalHeader from '@/layouts/BasicHeader.js';
-import GlobalSide from '@/layouts/BasicSide.js';
-import GlobalSideDrawer from '@/layouts/BasicSideDrawer.js';
-
-const { Content, Footer } = Layout;
 
 class BasicLayout extends React.Component {
 
@@ -17,22 +15,28 @@ class BasicLayout extends React.Component {
   }
 
   render() {
+    const { isLogOuting } = this.props;
     return (
-      <ConfigProvider csp={{ nonce: 'YourNonceCode' }} locale={zhCN}>
+      <ConfigProvider locale={zhCN}>
         <Layout>
-          <GlobalSide/>
-          <GlobalSideDrawer/>
+          <BasicSide/><BasicSideDrawer/>
           <Layout className={styles.main}>
-            <GlobalHeader/>
-            <Content>{this.props.children}</Content>
-            <Footer className={styles.footer}>
+            <BasicHeader/>
+            <Layout.Content>{this.props.children}</Layout.Content>
+            <Layout.Footer className={styles.footer}>
               万铭星系统 <Icon type="copyright"/> 2020 万铭研发部出品
-            </Footer>
+            </Layout.Footer>
           </Layout>
         </Layout>
+        {
+          isLogOuting &&
+          <Spin size="large" tip="正在退出登录 ..." spinning={true} className={styles.loading}/>
+        }
       </ConfigProvider>
     );
   }
 }
 
-export default connect()(BasicLayout);
+export default connect(({ common }) => ({
+  isLogOuting: common.isLogOuting,
+}))(BasicLayout);

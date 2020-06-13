@@ -7,58 +7,17 @@
   box-shadow: 2px 0 4px rgba(0, 20, 40, 0.08);
   z-index: 10;
 
-  .loading {
-    position: fixed;
-    z-index: 10;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, .7);
-
-    > * {
-      margin: 10px 0;
-    }
-  }
-
   .leftWrapper {
     display: flex;
     align-items: center;
 
-    > img {
-      display: none;
-      width: 30px;
-      margin-right: 25px;
-    }
-
     .controlDrawerMenu {
       display: none;
       font-size: 20px;
-
-      * {
-        display: none;
-      }
-
-    }
-
-    @media (max-width: 768px) {
-      > img {
-        display: inline;
-      }
-
-      .controlDrawerMenu {
-        display: inline-block;
-
-        * {
-          display: inline-block;
-        }
+      @media (max-width: 768px) {
+        display: block;
       }
     }
-
-
   }
 
   .rightWrapper {
@@ -71,11 +30,17 @@
 
     .dropdown {
       margin-left: 2em;
+
+      .icon {
+        margin-left: .5em;
+        color: #606D85;
+        font-size: 12px;
+      }
     }
   }
 }
 
-.item {
+.dropdownItem {
   margin-left: .5em;
 }
 
