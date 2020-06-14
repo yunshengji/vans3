@@ -99,30 +99,33 @@ class BasicMenu extends React.Component {
             <Icon type="smile"/><span>资质库</span>
           </Menu.Item>
         </Menu.SubMenu>
-        <Menu.SubMenu
-          key="archive"
-          title={
-            <span>
+        {
+          (mine.level > 1 || mine.department.name === '产品技术部' || mine.department.name === '营销部') &&
+          <Menu.SubMenu
+            key="archive"
+            title={
+              <span>
                 <Icon component={
                   selectKeys.startsWith('projectArchive') || selectKeys.startsWith('contractArchive')
                     ? ArchiveWhite : ArchiveGray}/>
                 <span>档案管理</span>
               </span>
-          }
-        >
-          {
-            (mine.level > 1) &&
-            <Menu.Item key="projectArchive">
-              <Icon type="smile"/><span>项目档案</span>
-            </Menu.Item>
-          }
-          {
-            (mine.level > 1 || mine.department.name === '产品技术部' || mine.department.name === '营销部') &&
-            <Menu.Item key="contractArchive">
-              <Icon type="smile"/><span>合同档案</span>
-            </Menu.Item>
-          }
-        </Menu.SubMenu>
+            }
+          >
+            {
+              (mine.level > 1) &&
+              <Menu.Item key="projectArchive">
+                <Icon type="smile"/><span>项目档案</span>
+              </Menu.Item>
+            }
+            {
+              (mine.level > 1 || mine.department.name === '产品技术部' || mine.department.name === '营销部') &&
+              <Menu.Item key="contractArchive">
+                <Icon type="smile"/><span>合同档案</span>
+              </Menu.Item>
+            }
+          </Menu.SubMenu>
+        }
         <Menu.Item key="gossip">
           <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipGray}/><span>吐槽角</span>
         </Menu.Item>
