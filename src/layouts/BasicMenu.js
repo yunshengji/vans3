@@ -156,13 +156,10 @@ class BasicMenu extends React.Component {
           <Icon component={selectKeys === 'laws' ? LawWhite : LawGray}/>
           <span>法律法规</span>
         </Menu.Item>
-        {
-          (mine.level > 2) &&
-          <Menu.Item key="users">
-            <Icon component={selectKeys === 'users' ? UserWhite : UserGray}/>
-            <span>系统用户</span>
-          </Menu.Item>
-        }
+        <Menu.Item key="users">
+          <Icon component={selectKeys === 'users' ? UserWhite : UserGray}/>
+          <span>系统用户</span>
+        </Menu.Item>
       </Menu>
     );
   }
