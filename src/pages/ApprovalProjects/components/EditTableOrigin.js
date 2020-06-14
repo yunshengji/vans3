@@ -224,7 +224,7 @@ class EditTableOrigin extends React.Component {
               }
             </Row>
             <Row>
-              <Col>
+              <Col xl={6} md={12} sm={24}>
                 {
                   editOrigin['confirm_list'] &&
                   <List dataSource={editOrigin['confirm_list']} renderItem={item => (
@@ -235,7 +235,7 @@ class EditTableOrigin extends React.Component {
                                    {item['confirmed'] === false && <Tag color="orange">未确认</Tag>}
                                  </React.Fragment>,
                                ]}>
-                      <p>{item['confirm_user']['name']}</p>
+                      <span>{item['confirm_user']['name']}</span>
                     </List.Item>
                   )}
                   />
