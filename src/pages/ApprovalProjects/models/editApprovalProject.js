@@ -228,7 +228,7 @@ export default {
         console.log(err);
       }
     },
-    * eUpdateEasyProcess({ id, payload }, { select, call, put }) {
+    * eUpdateEasyProcess({ id, form, payload }, { select, call, put }) {
       try {
         const { company_outer, company_worker_list, fileList, uploadedEasyFile } = payload;
 
@@ -258,10 +258,10 @@ export default {
           updatedProcess.company_worker_list = company_worker_list;
         }
         updatedProcess.formal_files = formal_files;
-        console.log(updatedProcess);
-        const { msg, data } = yield call(UpdateEasyProcess, id, updatedProcess);
-        yield put({ type: 'rUpdateState', payload: { editEasyProcess: data } });
+        const { msg, data: { origin: { id: originId } } } = yield call(UpdateEasyProcess, id, updatedProcess);
         message.success(msg);
+        form.resetFields();
+        yield put({ type: 'eGetEasyProcess', id: originId });
       } catch (err) {
         console.log(err);
       }
@@ -331,7 +331,7 @@ export default {
         console.log(err);
       }
     },
-    * eUpdatePurchaseProcess({ id, payload }, { select, call, put }) {
+    * eUpdatePurchaseProcess({ id, form, payload }, { select, call, put }) {
       try {
         let { base_files, formal_files, bid_win_files, uploadedPurchaseBaseFiles, uploadedPurchaseFormalFiles, uploadedPurchaseBidWinFiles } = payload;
 
@@ -395,9 +395,10 @@ export default {
         payload['bid_win_files'] = bid_win_files_ids;
         delete payload['uploadedPurchaseBidWinFiles'];
 
-        const { msg, data } = yield call(UpdatePurchaseProcess, id, payload);
-        yield put({ type: 'rUpdateState', payload: { editPurchaseProcess: data } });
+        const { msg, data: { origin: { id: originId } } } = yield call(UpdatePurchaseProcess, id, payload);
         message.success(msg);
+        form.resetFields();
+        yield put({ type: 'eGetPurchaseProcess', id: originId });
       } catch (err) {
         console.log(err);
       }

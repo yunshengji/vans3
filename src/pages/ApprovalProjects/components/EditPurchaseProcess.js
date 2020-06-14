@@ -250,6 +250,7 @@ class EditPurchaseProcess extends React.Component {
           dispatch({
             type: 'editApprovalProject/eUpdatePurchaseProcess',
             id: processId,
+            form,
             payload,
           });
         }
