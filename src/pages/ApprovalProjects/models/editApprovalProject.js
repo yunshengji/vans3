@@ -7,7 +7,7 @@ import { UploadFile } from '@/services/files';
 import { GetContractArchiveList } from '@/services/archive';
 
 import {
-  CreateOriginTable, UpdateOriginTable, GetOriginTable,
+  CreateOriginTable, UpdateOriginTable, GetOriginTable, ConfirmOrigin,
   CreateRecordTable, UpdateRecordTable, GetRecordTable,
   CreateServiceTable, UpdateServiceTable, GetServiceTable,
   CreateExecuteTable, UpdateExecuteTable, GetExecuteTable,
@@ -94,6 +94,14 @@ export default {
         console.log(err);
       }
     },
+    * eConfirmOrigin({ id, payload }, { select, call, put }) {
+      try {
+        const { msg, data } = yield call(ConfirmOrigin, id, payload);
+        message.success(msg);
+      } catch (err) {
+        console.log(err);
+      }
+    },
     * eGetOriginTable({ id, payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetOriginTable, id, payload);
@@ -154,7 +162,7 @@ export default {
     * eGetServiceTable({ payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetServiceTable, payload);
-        if(Array.isArray(data['act_contract']) && data['act_contract'].length >0){
+        if (Array.isArray(data['act_contract']) && data['act_contract'].length > 0) {
           data['act_contract'] = _.map(data['act_contract'], 'id');
         }
         yield put({ type: 'rUpdateState', payload: { editService: data } });

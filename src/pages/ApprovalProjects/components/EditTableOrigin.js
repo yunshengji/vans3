@@ -1,10 +1,10 @@
 import React from 'react';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
-import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button } from 'antd';
+import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button, List, Tag } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
-import { limitDecimals } from '@/utils/transfer';
+import { getFileURL, limitDecimals } from '@/utils/transfer';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../../config/constant';
 
 class EditTableOrigin extends React.Component {
@@ -18,6 +18,11 @@ class EditTableOrigin extends React.Component {
       this.props.dispatch({ type: 'editApprovalProject/eGetOriginTable', id });
     }
   }
+
+  confirmSign = () => {
+    const { params: { id } } = this.props.match;
+    this.props.dispatch({ type: 'editApprovalProject/eConfirmOrigin', id, payload: {} });
+  };
 
   submit = () => {
     const { path, params } = this.props.match;
@@ -206,19 +211,38 @@ class EditTableOrigin extends React.Component {
                   )}
                 </Form.Item>
               </Col>
+              <Col xl={6} md={12} sm={24}>
+                <Button type="primary" onClick={this.submitConfirm} disabled={isEditing ? false : true}>提交</Button>
+              </Col>
               {
                 editOrigin['need_confirm'] &&
                 <Col xl={6} md={12} sm={24}>
                   <Form.Item label="我的确认">
-                    <Button>确认</Button>
+                    <Button onClick={this.confirmSign}>确认</Button>
                   </Form.Item>
                 </Col>
               }
             </Row>
+            <Row>
+              <Col>
+                {
+                  editOrigin['confirm_list'] &&
+                  <List dataSource={editOrigin['confirm_list']} renderItem={item => (
+                    <List.Item key={item.id}
+                               actions={[
+                                 <React.Fragment>
+                                   {item['confirmed'] === true && <Tag color="green">已确认</Tag>}
+                                   {item['confirmed'] === false && <Tag color="orange">未确认</Tag>}
+                                 </React.Fragment>,
+                               ]}>
+                      <p>{item['confirm_user']['name']}</p>
+                    </List.Item>
+                  )}
+                  />
+                }
+              </Col>
+            </Row>
           </Spin>
-          <Row>
-            <Button type="primary" onClick={this.submitConfirm} disabled={isEditing ? false : true}>提交</Button>
-          </Row>
         </Form>
       </Spin>
     );
