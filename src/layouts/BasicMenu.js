@@ -1,6 +1,6 @@
 import React from 'react';
 import { router, withRouter } from 'umi';
-import { Layout, Menu, Icon } from 'antd';
+import { Menu, Icon } from 'antd';
 import { connect } from 'dva';
 import ProjectGray from '../../public/menu/ProjectGray.svg';
 import ProjectWhite from '../../public/menu/ProjectWhite.svg';

@@ -4,9 +4,9 @@ import { Breadcrumb, Col, Row, Tag, Icon } from 'antd';
 import { Link } from 'umi';
 import moment from 'moment';
 import _ from 'lodash';
-import styles from './ProfileOriginTable.less';
+import styles from './ProfileApprovalProject.less';
 
-class ProfileOriginTable extends React.Component {
+class ProfileApprovalProject extends React.Component {
   componentDidMount() {
     const { params: { id } } = this.props.match;
     this.props.dispatch({ type: 'profileApprovalProject/eGetOriginTable', id });
@@ -17,7 +17,6 @@ class ProfileOriginTable extends React.Component {
 
   render() {
     const { routes, profileOrigin, profileRecord, profileExecute, profileService } = this.props;
-    console.log(profileOrigin);
     return (
       <React.Fragment>
         <div className="headerWrapper">
@@ -142,11 +141,11 @@ class ProfileOriginTable extends React.Component {
                     _.map(profileOrigin['confirm_list'], item => {
                       return (
                         item['confirmed'] ?
-                          <Tag color="green">
+                          <Tag color="green" key={item['confirm_user']['id']}>
                             {item['confirm_user'].name} <Icon type="check-circle"/>
                           </Tag>
                           :
-                          <Tag color="orange">
+                          <Tag color="orange" key={item['confirm_user']['id']}>
                             {item['confirm_user'].name} <Icon type="exclamation-circle"/>
                           </Tag>
                       );
@@ -269,7 +268,7 @@ class ProfileOriginTable extends React.Component {
                 <p>已经签署合同名称：</p>
                 <div>
                   {_.map(profileExecute['sign_contract'], item => {
-                    return <p>{item.name}</p>;
+                    return <p key={item.id}>{item.name}</p>;
                   })}
                 </div>
               </div>
@@ -326,6 +325,99 @@ class ProfileOriginTable extends React.Component {
               </div>
             </Col>
           </Row>
+
+
+          <h3>跟踪服务表</h3>
+          <Row gutter={[80]}>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>项目跟踪服务年报编号：</p>
+                <p>{profileService['number']}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>团队名称：</p>
+                <p>{profileService['team']}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>业务主管单位对接领导级别：</p>
+                <p>{profileService['leader_level']}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>是否完成收款：</p>
+                <p>
+                  {profileService['receipt_status'] === true && '是'}
+                  {profileService['receipt_status'] === false && '否'}
+                </p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>未收款拟收回时间：</p>
+                <p>{profileService['pay_time'] && moment(profileService['pay_time'] * 1000).format('YYYY-MM-DD')}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>该项目可能滋生服务需求描述：</p>
+                <p>{profileService['requirement']}</p>
+              </div>
+            </Col>
+            <Col span={24} style={{ marginBottom: '2em' }}/>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>拟对接领导级别：</p>
+                <p>{profileService['prepared_leader_level']}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>拟安排跟踪服务营销人员：</p>
+                <p>{_.join(profileService['prepared_marketers'], '、')}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>拟安排跟踪服务专业人员：</p>
+                <p>{_.join(profileService['prepared_Professionals'],'、')}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>项目来源：</p>
+                <p>{profileService['location']}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>已经实施项目合同：</p>
+                <div>
+                  {_.map(profileService['act_contract'], item => {
+                    return <p key={item.id}>{item.name}</p>;
+                  })}
+                </div>
+              </div>
+            </Col>
+
+            <Col span={24} style={{ marginBottom: '2em' }}/>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>后续跟踪计划：</p>
+                <p>{profileService['after_plan']}</p>
+              </div>
+            </Col>
+            <Col xl={8} md={12} sm={24}>
+              <div className={styles.largeItemContainer}>
+                <p>其他需要说明的事项：</p>
+                <p>{profileService['remarks']}</p>
+              </div>
+            </Col>
+          </Row>
         </div>
       </React.Fragment>);
   }
@@ -333,10 +425,9 @@ class ProfileOriginTable extends React.Component {
 
 
 export default connect(({ loading, common, profileApprovalProject }) => ({
-  activeKey: profileApprovalProject.activeKey,
   routes: profileApprovalProject.routes,
   profileOrigin: profileApprovalProject.profileOrigin,
   profileRecord: profileApprovalProject.profileRecord,
   profileExecute: profileApprovalProject.profileExecute,
   profileService: profileApprovalProject.profileService,
-}))(ProfileOriginTable);
+}))(ProfileApprovalProject);

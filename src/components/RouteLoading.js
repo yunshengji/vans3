@@ -1,11 +1,10 @@
 import React from 'react';
 import { Spin } from 'antd';
-import styles from './RouteLoading.less';
 
 class RouteLoading extends React.Component {
   render() {
     return (
-      <div className={styles.root}>
+      <div style={{ width: '100%', marginTop: '2em', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Spin size="large"/>
       </div>
     );

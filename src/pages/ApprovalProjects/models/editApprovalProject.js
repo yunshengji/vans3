@@ -97,9 +97,8 @@ export default {
     * eGetOriginTable({ id, payload }, { select, call, put }) {
       try {
         const { data } = yield call(GetOriginTable, id, payload);
-        const { members = [], confirm_list = [] } = data;
+        const { members = [] } = data;
         data.members = getIdsFromWholeList(members);
-        data.confirm_list = getIdsFromManagerList(confirm_list);
         if (Array.isArray(data['sign_contract']) && Array.isArray(data['sign_contract']).length > 0) {
           data['sign_contract'] = _.map(data['sign_contract'], 'id');
         }
