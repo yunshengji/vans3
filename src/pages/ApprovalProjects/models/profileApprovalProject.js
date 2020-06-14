@@ -12,7 +12,7 @@ import {
   CreateServiceTable, UpdateServiceTable, GetServiceTable,
   CreateExecuteTable, UpdateExecuteTable, GetExecuteTable,
   CreateEasyProcess, UpdateEasyProcess, GetEasyProcess,
-  CreatePurchaseProcess, UpdatePurchaseProcess, GetPurchaseProcess,
+  CreatePurchaseProcess, UpdatePurchaseProcess, GetPurchaseProcess, ConfirmOrigin,
 } from '@/services/approvalProjects';
 
 export default {
@@ -48,6 +48,15 @@ export default {
         const { data: { list: users } } = yield call(GetUsersList, { page_size: 10000 });
         const managers = users.filter(item => item.level > 1);
         yield put({ type: 'rUpdateState', payload: { usersList: users, managersList: managers } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eConfirmOrigin({ id, payload }, { select, call, put }) {
+      try {
+        const { msg, data } = yield call(ConfirmOrigin, id, payload);
+        message.success(msg);
+        yield put({ type: 'eGetOriginTable', id, payload: {} });
       } catch (err) {
         console.log(err);
       }

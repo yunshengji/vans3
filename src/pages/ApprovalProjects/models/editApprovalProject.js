@@ -81,6 +81,7 @@ export default {
     * eUpdateOriginTable({ id, payload }, { select, call, put }) {
       try {
         const { msg, data } = yield call(UpdateOriginTable, id, payload);
+        yield put({ type: 'eGetOriginTable', id, payload: {} });
         message.success(msg);
       } catch (err) {
         console.log(err);
@@ -89,14 +90,7 @@ export default {
     * eUpdateOriginConfirms({ id, payload }, { select, call, put }) {
       try {
         const { msg, data } = yield call(UpdateOriginTable, id, payload);
-        message.success(msg);
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    * eConfirmOrigin({ id, payload }, { select, call, put }) {
-      try {
-        const { msg, data } = yield call(ConfirmOrigin, id, payload);
+        yield put({ type: 'eGetOriginTable', id, payload: {} });
         message.success(msg);
       } catch (err) {
         console.log(err);

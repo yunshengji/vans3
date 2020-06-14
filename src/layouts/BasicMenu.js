@@ -68,15 +68,24 @@ class BasicMenu extends React.Component {
           <Menu.Item key="originList">
             <Icon type="smile"/><span>立项表</span>
           </Menu.Item>
-          <Menu.Item key="recordList">
-            <Icon type="smile"/><span>备案表</span>
-          </Menu.Item>
-          <Menu.Item key="executeList">
-            <Icon type="smile"/><span>营销实施情况表</span>
-          </Menu.Item>
-          <Menu.Item key="serviceList">
-            <Icon type="smile"/><span>跟踪服务表</span>
-          </Menu.Item>
+          {
+            (mine.department.name === '营销部' || mine.level > 2) &&
+            <Menu.Item key="recordList">
+              <Icon type="smile"/><span>备案表</span>
+            </Menu.Item>
+          }
+          {
+            (mine.department.name === '营销部' || mine.level > 2) &&
+            <Menu.Item key="executeList">
+              <Icon type="smile"/><span>营销实施情况表</span>
+            </Menu.Item>
+          }
+          {
+            (mine.department.name === '营销部' || mine.level > 2) &&
+            <Menu.Item key="serviceList">
+              <Icon type="smile"/><span>跟踪服务表</span>
+            </Menu.Item>
+          }
         </Menu.SubMenu>
         <Menu.SubMenu
           key="brochure"
@@ -126,16 +135,10 @@ class BasicMenu extends React.Component {
             }
           </Menu.SubMenu>
         }
-        <Menu.Item key="gossip">
-          <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipGray}/><span>吐槽角</span>
+        <Menu.Item key="laws">
+          <Icon component={selectKeys === 'laws' ? LawWhite : LawGray}/>
+          <span>法律法规</span>
         </Menu.Item>
-        <Menu.Item key="workDiaries">
-          <Icon component={selectKeys === 'workDiaries' ? WorkDiaryWhite : WorkDiaryGray}/><span>工作日志</span>
-        </Menu.Item>
-        <Menu.Item key="contacts">
-          <Icon component={selectKeys === 'contacts' ? ContactWhite : ContactGray}/><span>联系人</span>
-        </Menu.Item>
-
         {
           (mine.department.name === '招投标部' || mine.level > 2) &&
           <Menu.Item key="experts">
@@ -143,7 +146,15 @@ class BasicMenu extends React.Component {
             <span>专家组</span>
           </Menu.Item>
         }
-
+        <Menu.Item key="contacts">
+          <Icon component={selectKeys === 'contacts' ? ContactWhite : ContactGray}/><span>联系人</span>
+        </Menu.Item>
+        <Menu.Item key="workDiaries">
+          <Icon component={selectKeys === 'workDiaries' ? WorkDiaryWhite : WorkDiaryGray}/><span>工作日志</span>
+        </Menu.Item>
+        <Menu.Item key="gossip">
+          <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipGray}/><span>吐槽角</span>
+        </Menu.Item>
         {
           ((mine.level > 1 && mine.department.name === '行政部') || mine.level > 2)
           &&
@@ -152,10 +163,6 @@ class BasicMenu extends React.Component {
             <span>员工管理</span>
           </Menu.Item>
         }
-        <Menu.Item key="laws">
-          <Icon component={selectKeys === 'laws' ? LawWhite : LawGray}/>
-          <span>法律法规</span>
-        </Menu.Item>
         <Menu.Item key="users">
           <Icon component={selectKeys === 'users' ? UserWhite : UserGray}/>
           <span>系统用户</span>

@@ -57,7 +57,7 @@ class EditSpecialDebtFiles extends React.Component {
           <Table.Column title="类型" dataIndex="name" width={300} render={(text) => (<span>{text}</span>)}/>
           <Table.Column title="文件" dataIndex="files"
                         render={(text, record) => {
-                          return editSpecialDebt[record['field']].length > 0 ?
+                          return editSpecialDebt[record['field']].length > 0 &&
                             <List itemLayout="horizontal" split={false} dataSource={editSpecialDebt[record['field']]}
                                   renderItem={(item, index) => (
                                     <List.Item
@@ -72,7 +72,7 @@ class EditSpecialDebtFiles extends React.Component {
                                         </span>
                                     </List.Item>
                                   )}
-                            /> : <p>暂无</p>;
+                            />;
                         }
                         }/>
           <Table.Column title="历史记录" dataIndex="action" align="right" width={100}

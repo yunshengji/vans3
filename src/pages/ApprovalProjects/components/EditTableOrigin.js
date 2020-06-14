@@ -19,11 +19,6 @@ class EditTableOrigin extends React.Component {
     }
   }
 
-  confirmSign = () => {
-    const { params: { id } } = this.props.match;
-    this.props.dispatch({ type: 'editApprovalProject/eConfirmOrigin', id, payload: {} });
-  };
-
   submit = () => {
     const { path, params } = this.props.match;
     const isEditing = path === '/approvalProject/edit/:id';
@@ -95,8 +90,22 @@ class EditTableOrigin extends React.Component {
                 )}
               </Form.Item>
             </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="项目状态">
+                {getFieldDecorator('status', {
+                  initialValue: editOrigin['status'],
+                  rules: [{ required: true, message: '请选择' }],
+                })(
+                  <Select placeholder="请选择">
+                    <Select.Option key="执行中" value="执行中">执行中</Select.Option>
+                    <Select.Option key="已完结" value="已完结">已完结</Select.Option>
+                    <Select.Option key="已废弃" value="已废弃">已废弃</Select.Option>
+                  </Select>,
+                )}
+              </Form.Item>
+            </Col>
           </Row>
-          <h3>项目概况</h3>
+          <h4>项目概况</h4>
           <Row gutter={[80]}>
             <Col xl={6} md={12} sm={24}>
               <Form.Item label="项目类别">
@@ -195,8 +204,9 @@ class EditTableOrigin extends React.Component {
             <Button type="primary" onClick={this.submit}>提交</Button>
           </Row>
           <Spin spinning={Boolean(loadingUsers)}>
+            <h3 style={{marginTop:'5em'}}>股东确认</h3>
             <Row gutter={[80]}>
-              <Col xl={6} md={12} sm={24}>
+              <Col xl={7} md={12} sm={24}>
                 <Form.Item label="需要确认的股东">
                   {getFieldDecorator('confirm_list', {
                     initialValue: editOrigin['confirm_list'] && _.map(_.map(editOrigin['confirm_list'], 'confirm_user'), 'id'),
@@ -211,20 +221,7 @@ class EditTableOrigin extends React.Component {
                   )}
                 </Form.Item>
               </Col>
-              <Col xl={6} md={12} sm={24}>
-                <Button type="primary" onClick={this.submitConfirm} disabled={isEditing ? false : true}>提交</Button>
-              </Col>
-              {
-                editOrigin['need_confirm'] &&
-                <Col xl={6} md={12} sm={24}>
-                  <Form.Item label="我的确认">
-                    <Button onClick={this.confirmSign}>确认</Button>
-                  </Form.Item>
-                </Col>
-              }
-            </Row>
-            <Row>
-              <Col xl={6} md={12} sm={24}>
+              <Col xl={7} md={12} sm={24}>
                 {
                   editOrigin['confirm_list'] &&
                   <List dataSource={editOrigin['confirm_list']} renderItem={item => (
@@ -240,6 +237,11 @@ class EditTableOrigin extends React.Component {
                   )}
                   />
                 }
+              </Col>
+            </Row>
+            <Row gutter={[80]}>
+              <Col xl={6} md={12} sm={24}>
+                <Button type="primary" onClick={this.submitConfirm} disabled={isEditing ? false : true}>添加股东</Button>
               </Col>
             </Row>
           </Spin>

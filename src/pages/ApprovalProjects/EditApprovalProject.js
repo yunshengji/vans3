@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Tabs } from 'antd';
+import { Breadcrumb, Button, Tabs } from 'antd';
 import { Link } from 'umi';
 import EditTableOrigin from '@/pages/ApprovalProjects/components/EditTableOrigin';
 import EditTableRecord from '@/pages/ApprovalProjects/components/EditTableRecord';
 import EditTableService from '@/pages/ApprovalProjects/components/EditTableService';
 import EditTableExecute from '@/pages/ApprovalProjects/components/EditTableExecute';
 import ChooseProcess from '@/pages/ApprovalProjects/components/ChooseProcess';
-import EditEasyProcess from '@/pages/ApprovalProjects/components/EditEasyProcess';
 
 class EditApprovalProject extends React.Component {
   changeTab = (activeKey) => {
