@@ -1,5 +1,9 @@
 export default {
   treeShaking: true,
+  hash: true,
+  targets: {
+    ie: 11,
+  },
   routes: [
     { path: '/login', component: './User/Login' },
     {
