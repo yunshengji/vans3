@@ -156,7 +156,7 @@ class BasicMenu extends React.Component {
           <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipGray}/><span>吐槽角</span>
         </Menu.Item>
         {
-          ((mine.level > 1 && mine.department.name === '行政部') || mine.level > 2)
+          ((mine.level > 1 && mine.department.name === '运营部') || mine.level > 2)
           &&
           <Menu.Item key='staff'>
             <Icon component={selectKeys === 'staff' ? HRWhite : HRGray}/>

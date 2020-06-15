@@ -24,7 +24,7 @@ class BasicLayout extends React.Component {
             <BasicHeader/>
             <Layout.Content>{this.props.children}</Layout.Content>
             <Layout.Footer className={styles.footer}>
-              万铭星系统 <Icon type="copyright"/> 2020 万铭研发部出品
+              万铭星系统 <Icon type="copyright"/> 2020 登月团队
             </Layout.Footer>
           </Layout>
         </Layout>

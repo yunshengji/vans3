@@ -113,7 +113,7 @@ class EditTableOrigin extends React.Component {
                   initialValue: editOrigin['category'],
                   rules: [{ required: true, message: '请选择' }],
                 })(
-                  <Select placeholder="请选择" disabled={isEditing ? true : false}>
+                  <Select placeholder="请选择">
                     {TABLE_FOR_MAKING_PROJECT_CATEGORIES.map((item, index) => {
                       return (
                         <Select.Option key={index} value={item}>{item}</Select.Option>
