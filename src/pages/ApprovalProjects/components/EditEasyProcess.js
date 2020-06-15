@@ -105,6 +105,7 @@ class EditEasyProcess extends React.Component {
           dispatch({
             type: 'editApprovalProject/eUpdateEasyProcess',
             id: processId,
+            form,
             payload,
           });
         }

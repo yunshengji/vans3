@@ -6,8 +6,7 @@ import Cookies from 'js-cookie';
 class AuthToken extends React.Component {
 
   componentDidMount() {
-    const token = Cookies.get('token');
-    if (!token) {
+    if (!Cookies.get('token')) {
       notification.warn({
         message: '认证失败',
         description: '登录后使用系统功能',

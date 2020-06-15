@@ -21,6 +21,13 @@ export async function UpdateOriginTable(id, data) {
   });
 }
 
+export async function ConfirmOrigin(id, data) {
+  return request(`/origin_confirm/${id}`, {
+    method: 'POST',
+    data,
+  });
+}
+
 export async function GetOriginTable(id, params) {
   return request(`/origin/${id}`, {
     method: 'GET',

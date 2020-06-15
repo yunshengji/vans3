@@ -136,7 +136,8 @@ class Customers extends React.Component {
                                     }}>
                               修改
                             </Button>
-                            <Button type="link" icon="delete" className="redButton"
+                            <Button type="link" icon="delete"
+                                    className={!(record['creator']['id'] === mine['id'] || mine.level > 1) ? 'disabledRedButton' : 'redButton'}
                                     disabled={!(record['creator']['id'] === mine['id'] || mine.level > 1)}
                                     onClick={() => {
                                       this.deleteCustomer(record);

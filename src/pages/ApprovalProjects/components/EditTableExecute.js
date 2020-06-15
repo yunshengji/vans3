@@ -137,7 +137,7 @@ class EditTableExecute extends React.Component {
                     {contracts.map((item, index) => {
                       return (
                         <Select.Option key={item.id} value={item.id}>
-                          {item.attachment['file_name_local']}
+                          {item.name}
                         </Select.Option>
                       );
                     })}

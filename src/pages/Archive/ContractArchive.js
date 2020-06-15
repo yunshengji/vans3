@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal, Input } from 'antd';
+import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal, Input, List, Typography } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
-import { getFileURL } from '@/utils/transfer';
+import { getFileURL, selectYearList } from '@/utils/transfer';
 import UploadContractArchive from '@/pages/Archive/components/UploadContractArchive';
 
 class ContractArchive extends React.Component {
@@ -16,6 +16,21 @@ class ContractArchive extends React.Component {
     });
   }
 
+  expandedRowRender = (record) => {
+    const attachments = record['attachment'];
+    return (
+      attachments.length > 0 ?
+        <List dataSource={attachments} renderItem={item => (
+          <List.Item key={item.id}>
+            <p>
+              <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+            </p>
+          </List.Item>
+        )}
+        />
+        : null
+    );
+  };
   searchContractList = e => {
     const values = this.props.form.getFieldsValue();
     this.props.dispatch({
@@ -30,6 +45,7 @@ class ContractArchive extends React.Component {
       name: undefined,
       category: undefined,
       settlement: undefined,
+      time: undefined,
     });
     const values = this.props.form.getFieldsValue();
     this.props.dispatch({
@@ -92,7 +108,7 @@ class ContractArchive extends React.Component {
         </div>
         <UploadContractArchive/>
         <div className="contentWrapper">
-          <h3>档案筛选</h3>
+          <h3>合同筛选</h3>
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
@@ -129,6 +145,17 @@ class ContractArchive extends React.Component {
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
+                <Form.Item label="合同年限">
+                  {form.getFieldDecorator('time', {
+                    initialValue: searchParams['time'],
+                  })(
+                    <Select allowClear>
+                      {_.map(selectYearList, item => <Select.Option key={item} value={item}>{item}</Select.Option>)}
+                    </Select>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col xl={6} md={12} sm={24}>
                 <div className="searchButtons">
                   <Button type="primary" onClick={this.searchContractList}>搜索</Button>
                   <Button style={{ marginLeft: '1em' }} onClick={this.resetSearch}>重置</Button>
@@ -136,24 +163,20 @@ class ContractArchive extends React.Component {
               </Col>
             </Row>
           </Form>
-          <h3>档案列表</h3>
+          <h3>合同列表</h3>
           <Table tableLayout="fixed" size="middle" pagination={false} dataSource={contractArchiveList}
+                 expandedRowRender={this.expandedRowRender}
                  loading={fetchingContractArchives || deletingContractArchive} rowKey={record => record.id}
                  rowClassName={(record, index) => {
                    if (index % 2 === 1) {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="合同名称" dataIndex="name"/>
-            <Table.Column title="合同文件" dataIndex="attachment"
-                          render={attachments => (
-                            _.map(attachments, item => {
-                              return <p><a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a></p>;
-                            }))}
+            <Table.Column title="合同名称" dataIndex="name" width={400}/>
+            <Table.Column title="关联项目" dataIndex="origin"
+                          render={(origin) => (
+                            origin && <a target="_blank" href={`/approvalProject/edit/${origin.id}`}>{origin.name}</a>)}
             />
-            {/*<Table.Column title="关联项目" dataIndex="origin"*/}
-            {/*              render={(origin) => (*/}
-            {/*                <a target="_blank" href={`/approvalProject/edit/${origin.id}`}>{origin.name}</a>)}/>*/}
             <Table.Column title="合同类型" dataIndex="category"/>
             <Table.Column title="是否结算" dataIndex="settlement"/>
             <Table.Column title="合同金额（元）" dataIndex="cash"/>

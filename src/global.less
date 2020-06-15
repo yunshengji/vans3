@@ -1,11 +1,32 @@
-@import "./layouts/BasicSide";
 @import "./layouts/BasicSideDrawer";
 @import "./pages/Gossip/components/GossipWritings";
 
 body {
-  //font-family: STFangsong, sans-serif;
   font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
 }
+
+*::-webkit-scrollbar {
+  width: 8px; /*定义纵向滚动条宽度*/
+  height: 8px; /*定义横向滚动条高度*/
+}
+
+*::-webkit-scrollbar-thumb {
+  /*滚动条内部滑块*/
+  border-radius: 8px;
+  background-color: #77797C;
+  transition: background-color 0.3s;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  /*鼠标悬停滚动条内部滑块*/
+  background: #77797C;
+}
+
+*::-webkit-scrollbar-track {
+  /*滚动条内部轨道*/
+  background: #ededed;
+}
+
 
 .ant-upload.ant-upload-drag .ant-upload {
   padding: 0 !important;
@@ -21,27 +42,6 @@ body {
 
 .ant-input, .ant-select-selection, .ant-input-number-input {
   background-color: #F8F9FB !important;
-}
-
-.zebraHighlight {
-  background: rgb(244, 249, 250);
-  border: none;
-}
-
-.textRight {
-  text-align: right;
-}
-
-.redButton {
-  color: #F27651 !important;
-
-  &:hover {
-    color: #f97953 !important;;
-  }
-
-  &:focus {
-    color: #F27651 !important;;
-  }
 }
 
 .headerWrapper {
@@ -143,6 +143,40 @@ body {
     &:focus {
       color: #F27651;
     }
+  }
+
+  .disabledRedButton {
+    color: rgba(0, 0, 0, .25);
+
+    &:hover {
+      color: rgba(0, 0, 0, .25);
+    }
+
+    &:focus {
+      color: rgba(0, 0, 0, .25);
+    }
+  }
+}
+
+.zebraHighlight {
+  background: rgb(244, 249, 250);
+  border: none;
+}
+
+.textRight {
+  color: #999ba5;
+  text-align: right;
+}
+
+.redButton {
+  color: #F27651 !important;
+
+  &:hover {
+    color: #f97953 !important;;
+  }
+
+  &:focus {
+    color: #F27651 !important;;
   }
 }
 

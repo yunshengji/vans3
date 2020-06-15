@@ -87,6 +87,9 @@ class Setting extends React.Component {
                     <Input placeholder="请输入"/>,
                   )}
                 </Form.Item>
+                <Form.Item label="部门">
+                  <Input placeholder="请输入" value={mine.department.name} disabled/>
+                </Form.Item>
                 <Form.Item label="账号">
                   {getFieldDecorator('username', {
                     initialValue: mine['username'],

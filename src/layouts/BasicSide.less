@@ -1,6 +1,12 @@
 .basicSide {
-  box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
   z-index: 20;
+  box-shadow: 2px 4px 4px rgba(69, 60, 60, 0.4);
+
   @media (max-width: 768px) {
     display: none;
   }
@@ -9,16 +15,11 @@
     height: 64px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background-color: #001121;
+    padding-left: 22px;
+    background-color: #001122;
 
     img {
-      width: 65%;
+      width: 74%;
     }
-  }
-
-  ul.ant-menu-root {
-    margin-top: 2rem;
-    border: none;
   }
 }

@@ -53,7 +53,7 @@ class OriginList extends React.Component {
   };
 
   render() {
-    const { form: { getFieldDecorator }, fetchingOriginTable, routes, searchParams, total, current, pageSize, originTableList } = this.props;
+    const { form: { getFieldDecorator }, fetchingOriginTable, routes, mine, searchParams, total, current, pageSize, originTableList } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -126,7 +126,14 @@ class OriginList extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="项目名称" dataIndex="name"/>
+            <Table.Column title="项目名称" dataIndex="name" width={400} render={(name, record) => {
+              return (
+                (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '行政部') || mine.level > 2) ?
+                  <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>
+                  :
+                  <span>{name}</span>
+              );
+            }}/>
             <Table.Column title="项目类别" dataIndex="category"/>
             <Table.Column title="立项状态" dataIndex="status" render={status => (
               <React.Fragment>
@@ -142,23 +149,21 @@ class OriginList extends React.Component {
                   status === '流程未定' ? <Tag color="orange">{status}</Tag> : <Tag color="blue">{status}</Tag>}
               </React.Fragment>
             )}/>
-            <Table.Column title="操作" dataIndex="action"
-                          render={(text, record) => (
-                            <div className="actionGroup">
-                              <Button type="link" icon="edit"
-                                      onClick={() => {
-                                        window.location.href = `/approvalProject/edit/${record.id}`;
-                                      }}>
-                                修改
-                              </Button>
-                              {/*<Button type="link" icon="delete" className="redButton"*/}
-                              {/*        onClick={() => {*/}
-                              {/*          this.deleteOrigin(record);*/}
-                              {/*        }}>*/}
-                              {/*  删除*/}
-                              {/*</Button>*/}
-                            </div>
-                          )}/>
+            {
+              (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '行政部') || mine.level > 2) &&
+              <Table.Column title="操作" dataIndex="action"
+                            render={(text, record) => {
+                              return (
+                                <div className="actionGroup">
+                                  <Button type="link" icon="edit" onClick={() => {
+                                    window.location.href = `/approvalProject/edit/${record.id}`;
+                                  }}>
+                                    修改
+                                  </Button>
+                                </div>
+                              );
+                            }}/>
+            }
           </Table>
           <div className="paginationWrapper">
             <Pagination showQuickJumper defaultCurrent={1} total={total} current={current} pageSize={pageSize}
@@ -166,7 +171,8 @@ class OriginList extends React.Component {
           </div>
         </div>
       </React.Fragment>
-    );
+    )
+      ;
   }
 }
 
