@@ -62,12 +62,13 @@ class UsersList extends React.Component {
   };
 
   render() {
-    const { form: { getFieldDecorator }, fetchingUsers, routes, departments, searchParams, level, total, current, pageSize, users } = this.props;
+    const { form: { getFieldDecorator }, fetchingUsers, routes, departments, searchParams, mine, total, current, pageSize, users } = this.props;
     return (
       <React.Fragment>
         <CreateUserModal/>
         <EditUserModal/>
-        <div className={level === 9 ? 'headerWrapperWithCreate' : 'headerWrapper'}>
+        <div
+          className={(mine.level === 9 || (mine.level > 1 && mine.department.name === '运营部')) ? 'headerWrapperWithCreate' : 'headerWrapper'}>
           <Breadcrumb>
             {routes.map((item, index) => {
               const { path, breadcrumbName } = item;
@@ -87,7 +88,7 @@ class UsersList extends React.Component {
             })}
           </Breadcrumb>
           {
-            level === 9
+            (mine.level === 9 || (mine.level > 1 && mine.department.name === '运营部'))
             &&
             <Button icon="plus-circle" onClick={this.showCreateUserModal}>创建用户</Button>
           }
@@ -162,7 +163,7 @@ class UsersList extends React.Component {
               </React.Fragment>
             )}/>
             {
-              level === 9 &&
+              (mine.level === 9 || (mine.level > 1 && mine.department.name === '运营部')) &&
               <Table.Column title="操作" dataIndex="action" width={150}
                             render={(text, record) => (
                               <Button disabled={record.level === 9} type="link" icon="edit"
@@ -188,7 +189,7 @@ const WrappedForm = Form.create({ name: 'UsersList' })(UsersList);
 export default connect(({ loading, common, userList }) => ({
   fetchingUsers: loading.effects['userList/eLoadUsers'],
   routes: userList.routes,
-  level: common.mine.level,
+  mine: common.mine,
   createUserModalVisible: userList.createUserModalVisible,
   departments: userList.departments,
   searchParams: userList.searchParams,
