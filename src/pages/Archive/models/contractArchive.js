@@ -1,9 +1,14 @@
-import { UploadContractArchive, DeleteContractArchive, GetContractArchiveList } from '@/services/archive';
-import { GetOriginTableList } from '@/services/approvalProjects';
 import { message } from 'antd';
 import moment from 'moment';
-import { UploadFile } from '@/services/files';
 import _ from 'lodash';
+import { UploadFile } from '@/services/files';
+import { GetOriginTableList } from '@/services/approvalProjects';
+import {
+  UploadContractArchive,
+  DeleteContractArchive,
+  UpdateContractArchive,
+  GetContractArchiveList,
+} from '@/services/archive';
 
 export default {
 
@@ -12,7 +17,9 @@ export default {
   state: {
     routes: [{ breadcrumbName: '合同档案' }],
 
-    uploadContractArchivesModalVisible: false,
+    isEditing: false,
+    editContractArchiveVisible: false,
+    editContractArchive: {},
 
     originList: [],
     options: [],
@@ -46,34 +53,27 @@ export default {
         console.log(err);
       }
     },
-    * eUploadContractArchives({ payload }, { select, call, put }) {
+    * eUploadContractArchive({ payload }, { select, call, put }) {
       try {
-        let { name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
-        const { contractArchives: { current, pageSize } } = yield select(state => state['contractArchiveList']);
-        // 上传文件;
-        const formData = new FormData();
-        formData.append('folder_path', 'archive_contract');
-        _.forEach(fileList, (item => {
-          formData.append('file', item.originFileObj);
-        }));
-        const { data } = yield call(UploadFile, formData);
-        const attachment = _.map(data, 'id');
+        const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
+        let attachment = [];
+
+        if (!_.isEmpty(fileList)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_contract');
+          _.forEach(fileList, (item => formData.append('file', item.originFileObj)));
+          const { data } = yield call(UploadFile, formData);
+          attachment = _.map(data, 'id');
+        }
 
         const { msg } = yield call(UploadContractArchive, {
-          name,
-          category,
-          cash,
-          travel_cash,
-          settlement,
+          number, name, category, cash, travel_cash, settlement,
           time: moment(time, 'YYYY').valueOf() / 1000,
-          attachment,
-          origin,
+          attachment, origin,
         });
-        yield put({ type: 'rUpdateState', payload: { uploadContractArchivesModalVisible: false } });
+        yield put({ type: 'rUpdateState', payload: { editContractArchiveVisible: false } });
         message.success(msg);
-
-        // 更新列表数据
-        yield put({ type: 'eLoadContracts', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadContracts' });
       } catch (err) {
         console.log(err);
       }
@@ -82,8 +82,33 @@ export default {
       try {
         const { msg } = yield call(DeleteContractArchive, id, payload);
         message.success(msg);
-        const { contractArchives: { current, pageSize } } = yield select(state => state['contractArchiveList']);
-        yield put({ type: 'eLoadContracts', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadContracts' });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eUpdateContractArchive({ id, payload }, { select, call, put }) {
+      try {
+        const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
+        const { editContractArchive } = yield select(state => state['contractArchiveList']);
+        let attachment = _.map(editContractArchive['attachment'], 'id');
+
+        if (!_.isEmpty(fileList)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_contract');
+          _.forEach(fileList, (item => formData.append('file', item.originFileObj)));
+          const { data } = yield call(UploadFile, formData);
+          attachment = _.concat(attachment, _.map(data, 'id'));
+        }
+
+        const { msg } = yield call(UpdateContractArchive, editContractArchive['id'], {
+          number, name, category, cash, travel_cash, settlement,
+          time: moment(time, 'YYYY').valueOf() / 1000,
+          attachment, origin,
+        });
+        yield put({ type: 'rUpdateState', payload: { editContractArchiveVisible: false } });
+        message.success(msg);
+        yield put({ type: 'eLoadContracts' });
       } catch (err) {
         console.log(err);
       }
@@ -104,6 +129,12 @@ export default {
   reducers: {
     rUpdateState(state, { payload }) {
       return { ...state, ...payload };
+    },
+    rUpdateContractFiles(state, { payload }) {
+      return {
+        ...state,
+        editContractArchive: { ...state['editContractArchive'], attachment: payload },
+      };
     },
   },
 

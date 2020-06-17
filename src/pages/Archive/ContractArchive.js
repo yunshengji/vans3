@@ -5,7 +5,7 @@ import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal, I
 import _ from 'lodash';
 import moment from 'moment';
 import { getFileURL, selectYearList } from '@/utils/transfer';
-import UploadContractArchive from '@/pages/Archive/components/UploadContractArchive';
+import UploadContractArchive from '@/pages/Archive/components/EditContractArchive';
 
 class ContractArchive extends React.Component {
   componentDidMount() {
@@ -55,17 +55,30 @@ class ContractArchive extends React.Component {
     this.props.dispatch({ type: 'contractArchiveList/eLoadContracts' });
     e.preventDefault();
   };
-  showUploadContractArchivesModal = () => {
+  showUploadContractArchive = () => {
     this.props.dispatch({
       type: 'contractArchiveList/rUpdateState',
-      payload: { uploadContractArchivesModalVisible: true },
+      payload: {
+        isEditing: false,
+        editContractArchiveVisible: true,
+      },
     });
   };
-  showDeleteConfirm = ({ id, attachment: { file_name_local } }) => {
+  showEditContractArchive = record => {
+    this.props.dispatch({
+      type: 'contractArchiveList/rUpdateState',
+      payload: {
+        isEditing: true,
+        editContractArchiveVisible: true,
+        editContractArchive: record,
+      },
+    });
+  };
+  showDeleteConfirm = ({ id, name }) => {
     const { dispatch } = this.props;
     Modal.confirm({
       title: '确定删除此档案',
-      content: <p>文件 <b>《{file_name_local}》</b> 删除后将无法恢复</p>,
+      content: <p>合同档案 <b>《{name}》</b> 删除后将无法恢复</p>,
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
@@ -104,7 +117,7 @@ class ContractArchive extends React.Component {
               }
             })}
           </Breadcrumb>
-          <Button icon="plus-circle" onClick={this.showUploadContractArchivesModal}>上传</Button>
+          <Button icon="plus-circle" onClick={this.showUploadContractArchive}>上传</Button>
         </div>
         <UploadContractArchive/>
         <div className="contentWrapper">
@@ -172,24 +185,27 @@ class ContractArchive extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
+            <Table.Column title="编号" dataIndex="number" width={50}/>
             <Table.Column title="合同名称" dataIndex="name" width={400}/>
             <Table.Column title="关联项目" dataIndex="origin"
                           render={(origin) => (
-                            origin && <a target="_blank" href={`/approvalProject/edit/${origin.id}`}>{origin.name}</a>)}
-            />
-            <Table.Column title="合同类型" dataIndex="category"/>
-            <Table.Column title="是否结算" dataIndex="settlement"/>
-            <Table.Column title="合同金额（元）" dataIndex="cash"/>
-            <Table.Column title="差旅费（元）" dataIndex="travel_cash"/>
-            <Table.Column title="所属年份" dataIndex="time"
+                            origin &&
+                            <a target="_blank" href={`/approvalProject/profile/${origin.id}`}>{origin.name}</a>
+                          )}/>
+            <Table.Column title="档案类型" dataIndex="category" width={100}/>
+            <Table.Column title="结算情况" dataIndex="settlement" width={100}/>
+            <Table.Column title="合同金额（元）" dataIndex="cash" width={120}/>
+            <Table.Column title="差旅费（元）" dataIndex="travel_cash" width={100}/>
+            <Table.Column title="合同年份" dataIndex="time" width={100}
                           render={(text) => (<span>{moment(1000 * text).format('YYYY')}</span>)}/>/>
-            <Table.Column title="操作" dataIndex="action"
+            <Table.Column title="操作" dataIndex="action" width={150}
                           render={(text, record) => (
                             <div className="actionGroup">
+                              <Button type="link" icon="edit" onClick={() => this.showEditContractArchive(record)}>
+                                修改
+                              </Button>
                               <Button type="link" icon="delete" className="redButton"
-                                      onClick={() => {
-                                        this.showDeleteConfirm(record);
-                                      }}>
+                                      onClick={() => this.showDeleteConfirm(record)}>
                                 删除
                               </Button>
                             </div>

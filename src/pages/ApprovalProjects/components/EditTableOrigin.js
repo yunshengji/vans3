@@ -57,6 +57,13 @@ class EditTableOrigin extends React.Component {
         <Form layout="horizontal">
           <h3>基础信息</h3>
           <Row gutter={[80]}>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="序号" placeholder="请输入">
+                {getFieldDecorator('num', { initialValue: editOrigin['num'] })(
+                  <InputNumber min={1} formatter={limitDecimals} parser={limitDecimals} style={{ width: '100%' }}/>,
+                )}
+              </Form.Item>
+            </Col>
             <Col xl={12} md={12} sm={24}>
               <Form.Item label="项目名称">
                 {getFieldDecorator('name', {
@@ -67,26 +74,19 @@ class EditTableOrigin extends React.Component {
                 )}
               </Form.Item>
             </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="序号" placeholder="请输入">
-                {getFieldDecorator('num', { initialValue: editOrigin['num'] })(
-                  <InputNumber min={1} formatter={limitDecimals} parser={limitDecimals} style={{ width: '100%' }}/>,
-                )}
-              </Form.Item>
-            </Col>
           </Row>
           <Row gutter={[80]}>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="签约时间">
-                {getFieldDecorator('sign_date', { initialValue: editOrigin['sign_date'] && moment(editOrigin['sign_date'] * 1000) })(
-                  <DatePicker style={{ width: '100%' }}/>,
-                )}
-              </Form.Item>
-            </Col>
             <Col xl={6} md={12} sm={24}>
               <Form.Item label="实施机构">
                 {getFieldDecorator('act_org', { initialValue: editOrigin['act_org'] })(
                   <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
+            </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="签约时间">
+                {getFieldDecorator('sign_date', { initialValue: editOrigin['sign_date'] && moment(editOrigin['sign_date'] * 1000) })(
+                  <DatePicker style={{ width: '100%' }}/>,
                 )}
               </Form.Item>
             </Col>
