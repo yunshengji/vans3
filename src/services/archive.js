@@ -35,6 +35,13 @@ export async function DeleteContractArchive(id, data) {
   });
 }
 
+export async function UpdateContractArchive(id, data) {
+  return request(`/contract/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
 export async function GetContractArchiveList(params) {
   return request('/contract', {
     method: 'GET',
