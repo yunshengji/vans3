@@ -42,7 +42,7 @@ class CreateExpert extends React.Component {
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
-          <Form.Item label="法改证号">
+          <Form.Item label="发改证号">
             {getFieldDecorator('law_num', {})(
               <Input placeholder="请输入"/>,
             )}

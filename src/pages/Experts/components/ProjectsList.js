@@ -38,7 +38,7 @@ class ProjectsList extends React.Component {
       <Table size="middle" dataSource={expertList} pagination={false} rowKey={record => record.id}>
         <Table.Column title="专家姓名" dataIndex="name"/>
         <Table.Column title="采购证号" dataIndex="procurement_num"/>
-        <Table.Column title="法改证号" dataIndex="law_num"/>
+        <Table.Column title="发改证号" dataIndex="law_num"/>
         <Table.Column title="电话号码" dataIndex="phone" render={(text, record) => (
           <React.Fragment>
             {record['phone_inner'] && <div>库内：{record['phone_inner']}</div>}

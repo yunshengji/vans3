@@ -110,7 +110,7 @@ class ExpertsList extends React.Component {
                loading={fetchingExpertsList || editingExpert || deletingExpert} rowKey={record => record.id}>
           <Table.Column title="姓名" dataIndex="name"/>
           <Table.Column title="采购证号" dataIndex="procurement_num"/>
-          <Table.Column title="法改证号" dataIndex="law_num"/>
+          <Table.Column title="发改证号" dataIndex="law_num"/>
           <Table.Column title="电话号码" render={(text, record) => (
             <React.Fragment>
               {record['phone_inner'] && <div>库内：{record['phone_inner']}</div>}

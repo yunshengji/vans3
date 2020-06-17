@@ -147,7 +147,8 @@ class GossipWritings extends React.Component {
           <Pagination showQuickJumper defaultCurrent={1} total={total} current={current} pageSize={pageSize}
                       showTotal={() => `共 ${total} 条`} onChange={this.gossipWritingsPaginationChange}/>
         </div>
-        <Modal width="30vw" visible={writingsPictureDetailModalVisible} footer={null}
+        <Modal width="65vw" style={{ minWidth: '360px' }} visible={writingsPictureDetailModalVisible}
+               footer={null}
                onCancel={this.cancelImageDetail}>
           <img style={{ width: '100%' }} src={writingsPictureDetailImage}/>
         </Modal>
