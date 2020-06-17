@@ -126,7 +126,8 @@ class OriginList extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="项目名称" dataIndex="name" width={400} render={(name, record) => {
+            <Table.Column title="编号" dataIndex="num" width={100}/>
+            <Table.Column title="项目名称" dataIndex="name" width={550} render={(name, record) => {
               return (
                 (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
                   <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>
@@ -134,8 +135,8 @@ class OriginList extends React.Component {
                   <span>{name}</span>
               );
             }}/>
-            <Table.Column title="项目类别" dataIndex="category"/>
-            <Table.Column title="立项状态" dataIndex="status" render={status => (
+            <Table.Column title="项目类别" dataIndex="category" width={200}/>
+            <Table.Column title="立项状态" dataIndex="status" width={100} render={status => (
               <React.Fragment>
                 {status === '执行中' && <Tag color="blue">{status}</Tag>}
                 {status === '已废弃' && <Tag color="orange">{status}</Tag>}
@@ -143,7 +144,7 @@ class OriginList extends React.Component {
               </React.Fragment>
             )}
             />
-            <Table.Column title="流程" dataIndex="process" render={status => (
+            <Table.Column title="执行流程" dataIndex="process" width={100} render={status => (
               <React.Fragment>
                 {
                   status === '流程未定' ? <Tag color="orange">{status}</Tag> : <Tag color="blue">{status}</Tag>}
@@ -151,7 +152,7 @@ class OriginList extends React.Component {
             )}/>
             {
               (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) &&
-              <Table.Column title="操作" dataIndex="action"
+              <Table.Column title="操作" dataIndex="action" width={100}
                             render={(text, record) => {
                               return (
                                 <div className="actionGroup">
