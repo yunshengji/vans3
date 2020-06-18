@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Switch } from 'antd';
 
 class CreateExpert extends React.Component {
 
@@ -55,6 +55,15 @@ class CreateExpert extends React.Component {
           <Form.Item label="库外号码">
             {getFieldDecorator('phone_outer', {})(
               <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
+          <Form.Item label="状态">
+            {getFieldDecorator('alive', {
+              valuePropName: 'checked',
+              initialValue: true,
+              rules: [{ required: true }],
+            })(
+              <Switch checkedChildren="正常" unCheckedChildren="不可用"/>,
             )}
           </Form.Item>
         </Form>

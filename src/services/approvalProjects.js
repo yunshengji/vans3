@@ -7,13 +7,6 @@ export async function CreateOriginTable(data) {
   });
 }
 
-export async function DeleteOriginTable(id, data) {
-  return request(`/origin/${id}`, {
-    method: 'DELETE',
-    data,
-  });
-}
-
 export async function UpdateOriginTable(id, data) {
   return request(`/origin/${id}`, {
     method: 'PUT',

@@ -19,7 +19,6 @@ import {
 } from 'antd';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
 
-
 class OriginList extends React.Component {
   componentDidMount() {
     this.props.dispatch({ type: 'originList/eLoadOriginList' });
@@ -56,7 +55,7 @@ class OriginList extends React.Component {
       cancelText: '取消',
       onOk() {
         if (updatedStatus !== status) {
-          dispatch({ type: 'editApprovalProject/eUpdateOriginStatus', id, payload: { status: updatedStatus } });
+          dispatch({ type: 'originList/eUpdateOriginStatus', id, payload: { status: updatedStatus } });
         }
       },
     });
@@ -69,7 +68,10 @@ class OriginList extends React.Component {
   };
 
   render() {
-    const { form: { getFieldDecorator }, fetchingOriginTable, routes, mine, searchParams, total, current, pageSize, originTableList } = this.props;
+    const {
+      form: { getFieldDecorator }, fetchingOriginTable, updatingOriginStatus,
+      routes, mine, searchParams, total, current, pageSize, originTableList,
+    } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -91,12 +93,11 @@ class OriginList extends React.Component {
               }
             })}
           </Breadcrumb>
-          <a href="/approvalProject/edit" target="_blank">
-            <Button icon="plus-circle">新建立项表
-            </Button>
+          <a target="_blank" href="/approvalProject/edit">
+            <Button icon="plus-circle">新建立项表</Button>
           </a>
-
         </div>
+
         <div className="contentWrapper">
           <h3>立项表搜索</h3>
           <Form layout="horizontal" className="searchWrapper">
@@ -136,7 +137,7 @@ class OriginList extends React.Component {
           </Form>
           <h3 style={{ marginBottom: '2em' }}>立项表</h3>
           <Table size="middle" tableLayout="fixed" pagination={false} dataSource={originTableList}
-                 loading={fetchingOriginTable} rowKey={record => record.id}
+                 loading={fetchingOriginTable || updatingOriginStatus} rowKey={record => record.id}
                  rowClassName={(record, index) => {
                    if (index % 2 === 1) {
                      return 'zebraHighlight';
@@ -153,17 +154,24 @@ class OriginList extends React.Component {
             }}/>
             <Table.Column title="项目类别" dataIndex="category" width={200}/>
             <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
-              <Dropdown trigger={['click']} overlay={
-                <Menu>
-                  <Menu.Item onClick={() => this.changeStatus(record, '执行中')}>执行中</Menu.Item>
-                  <Menu.Item onClick={() => this.changeStatus(record, '已完结')}>已完结</Menu.Item>
-                  <Menu.Item onClick={() => this.changeStatus(record, '已废弃')}>已废弃</Menu.Item>
-                </Menu>
-              }>
-                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                  {status} <Icon type="down"/>
-                </a>
-              </Dropdown>
+              (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
+                <Dropdown trigger={['click']} overlay={
+                  <Menu>
+                    <Menu.Item onClick={() => this.changeStatus(record, '执行中')}>执行中</Menu.Item>
+                    <Menu.Item onClick={() => this.changeStatus(record, '已完结')}>已完结</Menu.Item>
+                    <Menu.Item onClick={() => this.changeStatus(record, '已废弃')}>已废弃</Menu.Item>
+                  </Menu>
+                }>
+                  <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                    {status} <Icon type="down"/>
+                  </a>
+                </Dropdown>
+                :
+                <React.Fragment>
+                  {status === '执行中' && <Tag color="blue">{status}</Tag>}
+                  {status === '已废弃' && <Tag color="orange">{status}</Tag>}
+                  {status === '已完结' && <Tag color="green">{status}</Tag>}
+                </React.Fragment>
             )}
             />
             <Table.Column title="执行流程" dataIndex="process" width={100} render={status => (
@@ -177,13 +185,11 @@ class OriginList extends React.Component {
               <Table.Column title="操作" dataIndex="action" width={100}
                             render={(text, record) => {
                               return (
-                                <div className="actionGroup">
-                                  <Button type="link" icon="edit" onClick={() => {
-                                    window.location.href = `/approvalProject/edit/${record.id}`;
-                                  }}>
+                                <a target="_blank" href={`/approvalProject/edit/${record.id}`}>
+                                  <Button type="link" icon="edit">
                                     修改
                                   </Button>
-                                </div>
+                                </a>
                               );
                             }}/>
             }
@@ -202,6 +208,7 @@ class OriginList extends React.Component {
 const WrappedForm = Form.create({ name: 'OriginList' })(OriginList);
 
 export default connect(({ loading, common, originList }) => ({
+  updatingOriginStatus: loading.effects['originList/eUpdateOriginStatus'],
   fetchingOriginTable: loading.effects['originList/eLoadOriginList'],
   routes: originList.routes,
   mine: common.mine,

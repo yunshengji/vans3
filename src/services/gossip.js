@@ -7,6 +7,13 @@ export async function WriteGossip(data) {
   });
 }
 
+export async function deleteGossip(id, data) {
+  return request(`/gossip/${id}`, {
+    method: 'DELETE',
+    data,
+  });
+}
+
 export async function publishComment(data) {
   return request(`/comment`, {
     method: 'POST',

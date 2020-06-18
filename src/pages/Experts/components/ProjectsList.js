@@ -59,10 +59,9 @@ class ProjectsList extends React.Component {
     const project = projects[index];
     const { expert_list: expertsList, id } = project;
     Modal.confirm({
-      title: '确定移除此评审专家',
-      content: <p>确认移除此项目的评审专家 : <b>{record.name}</b> ?</p>,
-      okText: '删除',
-      okType: 'danger',
+      title: '确定更换此评审专家',
+      content: <p>确认更换此项目的评审专家 : <b>{record.name}</b> ?</p>,
+      okText: '更换',
       cancelText: '取消',
       onOk() {
         dispatch({

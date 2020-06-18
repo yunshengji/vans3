@@ -1,6 +1,6 @@
-import { DeleteOriginTable, GetOriginTableList } from '@/services/approvalProjects';
 import { message } from 'antd';
 import _ from 'lodash';
+import { GetOriginTableList, UpdateOriginTable } from '@/services/approvalProjects';
 
 export default {
 
@@ -29,12 +29,11 @@ export default {
   },
 
   effects: {
-    * eDeleteOriginTable({ id, payload }, { select, call, put }) {
+    * eUpdateOriginStatus({ id, payload }, { select, call, put }) {
       try {
-        const { msg } = yield call(DeleteOriginTable, id, payload);
+        const { msg } = yield call(UpdateOriginTable, id, payload);
         message.success(msg);
-        const { originTableList: { current, pageSize } } = yield select(state => state['originList']);
-        yield put({ type: 'eLoadOriginList', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'originList/eLoadOriginList', id, payload: {} });
       } catch (err) {
         console.log(err);
       }

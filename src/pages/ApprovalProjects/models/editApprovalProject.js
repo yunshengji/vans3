@@ -76,15 +76,6 @@ export default {
         console.log(err);
       }
     },
-    * eUpdateOriginStatus({ id, payload }, { select, call, put }) {
-      try {
-        const { msg, data } = yield call(UpdateOriginTable, id, payload);
-        message.success(msg);
-        yield put({ type: 'originList/eLoadOriginList', id, payload: {} });
-      } catch (err) {
-        console.log(err);
-      }
-    },
     * eUpdateOriginTable({ id, payload }, { select, call, put }) {
       try {
         const { msg, data } = yield call(UpdateOriginTable, id, payload);

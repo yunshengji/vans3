@@ -1,11 +1,23 @@
 import React from 'react';
 import { connect } from 'dva';
-import { List, Tooltip, Modal, Comment, Avatar, Button, Form, Input, Col, Row, Pagination, message } from 'antd';
+import {
+  List,
+  Tooltip,
+  Modal,
+  Comment,
+  Avatar,
+  Button,
+  Input,
+  Col,
+  Form,
+  Row,
+  Popconfirm,
+  Pagination,
+  message,
+} from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 import { getFileURL } from '@/utils/transfer';
-
-const { TextArea } = Input;
 
 const CommentList = ({ comments }) => (
   <List
@@ -15,7 +27,9 @@ const CommentList = ({ comments }) => (
     renderItem={item =>
       <Comment
         avatar={
-          item.creator.avatar ? getFileURL(item.creator.avatar) : <Avatar size="large" shape="square" icon="user"/>
+          item.creator.avatar ?
+            <Avatar src={getFileURL(item.creator.avatar)}/> :
+            <Avatar icon="robot"/>
         }
         author={item.creator.name} content={item.content}
         datetime={
@@ -31,11 +45,7 @@ const CommentList = ({ comments }) => (
 
 class GossipWritings extends React.Component {
   componentDidMount() {
-    const { dispatch, current, pageSize } = this.props;
-    dispatch({
-      type: 'gossipList/eGetGossipWritings',
-      payload: { page: current, page_size: pageSize },
-    });
+    this.props.dispatch({ type: 'gossipList/eLoadGossipWritings' });
   }
 
   showImageDetail = (imageId) => {
@@ -51,7 +61,7 @@ class GossipWritings extends React.Component {
     });
   };
   publishComment = (id, isPrivate) => {
-    const resetFields = this.props.form.resetFields;
+    const { form } = this.props;
     const comment = this.props.form.getFieldValue(id);
     if (!comment || !comment.trim()) {
       message.warning('请输入评论');
@@ -59,20 +69,25 @@ class GossipWritings extends React.Component {
     }
     this.props.dispatch({
       type: 'gossipList/ePublishComment',
-      resetFields,
+      form,
       payload: { gossip_id: id, content: comment, private: isPrivate },
     });
   };
+  deleteGossip = (id) => {
+    this.props.dispatch({ type: 'gossipList/eDeleteGossip', id });
+  };
   gossipWritingsPaginationChange = (page, pageSize) => {
     this.props.dispatch({
-      type: 'gossipList/eGetGossipWritings',
+      type: 'gossipList/eLoadGossipWritings',
       payload: { page, page_size: pageSize },
     });
   };
 
   render() {
-    const { form, fetchingGossipWritings, writingsPictureDetailModalVisible, writingsPictureDetailImage, total, current, pageSize, gossipWritingsList } = this.props;
-    const { getFieldDecorator } = form;
+    const {
+      form: { getFieldDecorator }, fetchingGossipWritings, mine, writingsPictureDetailModalVisible,
+      writingsPictureDetailImage, total, current, pageSize, gossipWritingsList,
+    } = this.props;
     return (
       <React.Fragment>
         <div className="gossipWritingsWrapper">
@@ -80,9 +95,13 @@ class GossipWritings extends React.Component {
                 renderItem={item => (
                   <List.Item
                     key={item.id}
-                    // actions={[
-                    //   mine.id === item.creator.id &&
-                    //   <Button type="link" icon="delete" className="redButton">删帖</Button>]}
+                    actions={[
+                      mine.id === item.creator.id &&
+                      <Popconfirm title="确认删除这篇吐槽贴？" okText="是" cancelText="否"
+                                  onConfirm={() => this.deleteGossip(item.id)}>
+                        <Button type="link" className="redButton">删除</Button>
+                      </Popconfirm>,
+                    ]}
                   >
                     <List.Item.Meta
                       avatar={item.creator.avatar ?
@@ -112,13 +131,13 @@ class GossipWritings extends React.Component {
                       }
                     </div>
 
-                    <Comment content={
+                    <Comment className="commentOuter" content={
                       <React.Fragment>
                         {item.comments.length > 0 && <CommentList comments={item.comments}/>}
                         <Row gutter={[10]}>
                           <Col span={16}>
                             {getFieldDecorator(`${item.id}`, {})(
-                              <TextArea autoSize={{ minRows: 1, maxRows: 4 }} placeholder="写下你的评论 ... "/>,
+                              <Input.TextArea autoSize={{ minRows: 1, maxRows: 4 }} placeholder="写下你的评论 ... "/>,
                             )}
                           </Col>
                           <Col span={8}>
@@ -159,9 +178,10 @@ class GossipWritings extends React.Component {
 
 const WrappedForm = Form.create({ name: 'GossipWritings' })(GossipWritings);
 
-export default connect(({ loading, gossipList }) => ({
-  fetchingGossipWritings: loading.effects['gossipList/eGetGossipWritings'],
+export default connect(({ loading, common, gossipList }) => ({
+  fetchingGossipWritings: loading.effects['gossipList/eLoadGossipWritings'],
   writingsPictureDetailModalVisible: gossipList.writingsPictureDetailModalVisible,
+  mine: common.mine,
   writingsPictureDetailImage: gossipList.writingsPictureDetailImage,
   total: gossipList.gossipWritings.total,
   current: gossipList.gossipWritings.current,
