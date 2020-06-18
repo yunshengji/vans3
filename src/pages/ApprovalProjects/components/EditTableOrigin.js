@@ -1,10 +1,10 @@
 import React from 'react';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
-import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button, List, Tag } from 'antd';
+import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button, Icon } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
-import { getFileURL, limitDecimals } from '@/utils/transfer';
+import { limitDecimals } from '@/utils/transfer';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../../config/constant';
 import styles from './EditTableOrigin.less';
 
@@ -192,7 +192,7 @@ class EditTableOrigin extends React.Component {
           <Spin spinning={Boolean(loadingUsers)}>
             <h3 style={{ marginTop: '5em' }}>股东确认</h3>
             <Row gutter={[80]}>
-              <Col xl={7} md={12} sm={24}>
+              <Col xl={6} md={12} sm={24}>
                 <Form.Item>
                   {getFieldDecorator('confirm_list', {
                     initialValue: editOrigin['confirm_list'] && _.map(_.map(editOrigin['confirm_list'], 'confirm_user'), 'id'),
@@ -216,9 +216,11 @@ class EditTableOrigin extends React.Component {
                     <Col xl={8} md={12} sm={24}>
                       <div className={styles.confirmBox} key={item.id}>
                         <span>{item['confirm_user']['name']}</span>
-                        <span>
-                          {item['confirmed'] === true ? '已确认' : '未确认'}
-                        </span>
+                        {
+                          item['confirmed'] ?
+                            <span className={styles.hasConfirm}>已确认</span> :
+                            <span className={styles.hasNotConfirm}>未确认</span>
+                        }
                       </div>
                     </Col>
                   ))

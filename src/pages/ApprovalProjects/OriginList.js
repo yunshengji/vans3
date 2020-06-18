@@ -1,7 +1,22 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Breadcrumb, Form, Row, Col, Input, Select, Table, Pagination, Modal, Tag } from 'antd';
+import {
+  Button,
+  Breadcrumb,
+  Form,
+  Row,
+  Col,
+  Input,
+  Select,
+  Table,
+  Pagination,
+  Modal,
+  Tag,
+  Dropdown,
+  Menu,
+  Icon,
+} from 'antd';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
 
 
@@ -33,15 +48,16 @@ class OriginList extends React.Component {
     this.props.dispatch({ type: 'originList/eLoadOriginList' });
     e.preventDefault();
   };
-  deleteOrigin = ({ id, name }) => {
+  changeStatus = ({ id, status }, updatedStatus) => {
     const { dispatch } = this.props;
     Modal.confirm({
-      title: '确定删除此立项表', content: <p>请仔细检查立项表 <b>{name}</b>，删除后不可恢复</p>,
-      okText: '删除',
-      okType: 'danger',
+      title: '确定修改', content: <p>确定将项目状态修改为 <b>{updatedStatus}</b></p>,
+      okText: '确认',
       cancelText: '取消',
       onOk() {
-        dispatch({ type: 'originList/eDeleteOriginTable', id });
+        if (updatedStatus !== status) {
+          dispatch({ type: 'editApprovalProject/eUpdateOriginStatus', id, payload: { status: updatedStatus } });
+        }
       },
     });
   };
@@ -136,12 +152,18 @@ class OriginList extends React.Component {
               );
             }}/>
             <Table.Column title="项目类别" dataIndex="category" width={200}/>
-            <Table.Column title="立项状态" dataIndex="status" width={100} render={status => (
-              <React.Fragment>
-                {status === '执行中' && <Tag color="blue">{status}</Tag>}
-                {status === '已废弃' && <Tag color="orange">{status}</Tag>}
-                {status === '已完结' && <Tag color="green">{status}</Tag>}
-              </React.Fragment>
+            <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
+              <Dropdown trigger={['click']} overlay={
+                <Menu>
+                  <Menu.Item onClick={() => this.changeStatus(record, '执行中')}>执行中</Menu.Item>
+                  <Menu.Item onClick={() => this.changeStatus(record, '已完结')}>已完结</Menu.Item>
+                  <Menu.Item onClick={() => this.changeStatus(record, '已废弃')}>已废弃</Menu.Item>
+                </Menu>
+              }>
+                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                  {status} <Icon type="down"/>
+                </a>
+              </Dropdown>
             )}
             />
             <Table.Column title="执行流程" dataIndex="process" width={100} render={status => (
