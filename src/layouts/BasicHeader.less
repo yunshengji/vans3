@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  background: #001529;
+  background: #0070cc;
   box-shadow: 2px 0 4px rgba(0, 20, 40, 0.08);
   z-index: 10;
 
@@ -11,11 +11,23 @@
     display: flex;
     align-items: center;
 
+    .welcome {
+      color: #FFF;
+      font-size: 15px;
+      @media (max-width: 978px) {
+        display: none;
+      }
+    }
+
     .controlDrawerMenu {
       display: none;
-      font-size: 20px;
       @media (max-width: 768px) {
         display: block;
+      }
+
+      svg {
+        width: 18px;
+        height: 18px;
       }
     }
   }
@@ -24,16 +36,37 @@
     display: flex;
     align-items: center;
 
-    &:hover {
-      cursor: pointer;
+    .departments {
+      color: #bdbdbd;
+      @media (max-width: 768px) {
+        display: none;
+      }
+
+      span {
+        margin-right: 2em;
+        transition: color, font-size .3s;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .highlight {
+        color: #FFF;
+        font-size: 14px;
+      }
     }
 
     .dropdown {
       margin-left: 2em;
 
+      &:hover {
+        cursor: pointer;
+      }
+
       .icon {
         margin-left: .5em;
-        color: #606D85;
+        color: #FFF;
         font-size: 12px;
       }
     }

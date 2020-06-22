@@ -1,11 +1,12 @@
 .basicSide {
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   height: 100vh;
   position: fixed;
   left: 0;
   top: 0;
   z-index: 20;
-  box-shadow: 2px 4px 4px rgba(69, 60, 60, 0.4);
+  box-shadow: 2px 2px 5px rgba(172, 160, 160, 0.4);
 
   @media (max-width: 768px) {
     display: none;
@@ -16,7 +17,7 @@
     display: flex;
     align-items: center;
     padding-left: 22px;
-    background-color: #001122;
+    background-color: #0070cc;
 
     img {
       width: 74%;

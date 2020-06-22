@@ -141,7 +141,6 @@ class ProjectsList extends React.Component {
         <h3>评审列表</h3>
         <Table tableLayout="fixed" size="middle" pagination={false} dataSource={projects} rowKey={record => record.id}
                expandedRowRender={this.expandedRowRender}
-               rowClassName="zebraHighlight"
                loading={fetchingProjectsList || editingProject || deletingProject || removingExpertFromProject}>
           <Table.Column title="记录表名称" dataIndex="name"/>
           <Table.Column title="项目编号" dataIndex="project_num"/>

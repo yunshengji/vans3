@@ -7,7 +7,7 @@ class BasicSide extends React.Component {
 
   render() {
     return (
-      <Layout.Sider width="200" theme="dark" className={styles.basicSide}>
+      <Layout.Sider width="200" theme="light" className={styles.basicSide}>
         <a className={styles.systemName} href="http://www.cdwmzx.cn/" target="_blank">
           <img src="/system-name.svg" alt="万铭"/>
         </a>

@@ -1,9 +1,10 @@
+import aliyunTheme from '@ant-design/aliyun-theme';
+
 export default {
   treeShaking: true,
   hash: true,
-  targets: {
-    ie: 11,
-  },
+  targets: { ie: 11 },
+  theme: aliyunTheme,
   routes: [
     { path: '/login', component: './User/Login' },
     {

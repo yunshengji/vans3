@@ -1,15 +1,17 @@
 import React from 'react';
 import { Link, router } from 'umi';
 import { connect } from 'dva';
-import { Avatar, Dropdown, Menu, Icon, Spin, Layout, Badge } from 'antd';
+import { Avatar, Dropdown, Menu, Icon, Spin, Layout } from 'antd';
 import Cookies from 'js-cookie';
 import { getFileURL } from '@/utils/transfer';
 import styles from './BasicHeader.less';
-import MessageGray from '../../public/menu/MessageGray.svg';
 
 class BasicHeader extends React.Component {
   controlDrawerMenuVisible = (drawerMenuVisible) => {
     this.props.dispatch({ type: 'common/rUpdateState', payload: { drawerMenuVisible } });
+  };
+  chooseDepartment = (department) => {
+    this.props.dispatch({ type: 'common/rUpdateState', payload: { chooseDepartment: department } });
   };
   logout = () => {
     Cookies.remove('token');
@@ -21,7 +23,8 @@ class BasicHeader extends React.Component {
   };
 
   render() {
-    const { drawerMenuVisible, avatar } = this.props;
+    const { mine: { department }, chooseDepartment, drawerMenuVisible, avatar } = this.props;
+    const computedDepartment = chooseDepartment ? chooseDepartment : department['name'];
     const menu = (
       <Menu>
         <Menu.Item>
@@ -42,6 +45,7 @@ class BasicHeader extends React.Component {
     return (
       <Layout.Header className={styles.header}>
         <div className={styles.leftWrapper}>
+          <span className={styles.welcome}>欢迎登录万铭星系统</span>
           <span className={styles.controlDrawerMenu}>
               {drawerMenuVisible ?
                 <Icon type="menu-fold" style={{ color: '#FFF' }}
@@ -53,20 +57,41 @@ class BasicHeader extends React.Component {
             </span>
         </div>
         <div className={styles.rightWrapper}>
-          <Badge dot>
-            <Icon component={MessageGray} style={{ fontSize: '18px' }}/>
-          </Badge>
-          {
-            (avatar) ?
-              <Dropdown overlay={menu}>
-                <div className={styles.dropdown}>
-                  <Avatar src={getFileURL(avatar)}/>
-                  <Icon type="caret-down" className={styles.icon}/>
-                </div>
-              </Dropdown>
-              :
-              <Spin/>
-          }
+          <div className={styles.departments}>
+            <span className={computedDepartment === '总裁部' ? styles.highlight : ''}
+                  onClick={() => this.chooseDepartment('总裁部')}>
+              总裁部
+            </span>
+            <span className={computedDepartment === '运营部' ? styles.highlight : ''}
+                  onClick={() => this.chooseDepartment('运营部')}>
+              运营部
+            </span>
+            <span className={computedDepartment === '营销部' ? styles.highlight : ''}
+                  onClick={() => this.chooseDepartment('营销部')}>
+              营销部
+            </span>
+            <span className={computedDepartment === '招投标部' ? styles.highlight : ''}
+                  onClick={() => this.chooseDepartment('招投标部')}>
+              招投标部
+            </span>
+            <span className={computedDepartment === '产品技术部' ? styles.highlight : ''}
+                  onClick={() => this.chooseDepartment('产品技术部')}>
+              产品技术部
+            </span>
+          </div>
+          <div>
+            {
+              (avatar) ?
+                <Dropdown overlay={menu}>
+                  <div className={styles.dropdown}>
+                    <Avatar src={getFileURL(avatar)}/>
+                    <Icon type="caret-down" className={styles.icon}/>
+                  </div>
+                </Dropdown>
+                :
+                <Spin/>
+            }
+          </div>
         </div>
       </Layout.Header>
     );
@@ -74,6 +99,8 @@ class BasicHeader extends React.Component {
 }
 
 export default connect(({ common }) => ({
+  mine: common.mine,
+  chooseDepartment: common.chooseDepartment,
   drawerMenuVisible: common.drawerMenuVisible,
   avatar: common.mine.avatar,
 }))(BasicHeader);

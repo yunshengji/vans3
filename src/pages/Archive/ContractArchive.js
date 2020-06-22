@@ -185,18 +185,18 @@ class ContractArchive extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="编号" dataIndex="number" width={50}/>
-            <Table.Column title="合同名称" dataIndex="name" width={400}/>
-            <Table.Column title="关联项目" dataIndex="origin"
+            <Table.Column title="编号" dataIndex="number" width={100}/>
+            <Table.Column title="合同名称" dataIndex="name" width={300}/>
+            <Table.Column title="关联项目" dataIndex="origin" width={300}
                           render={(origin) => (
                             origin &&
                             <a target="_blank" href={`/approvalProject/profile/${origin.id}`}>{origin.name}</a>
                           )}/>
-            <Table.Column title="档案类型" dataIndex="category" width={100}/>
-            <Table.Column title="结算情况" dataIndex="settlement" width={100}/>
+            <Table.Column title="档案类型" dataIndex="category" width={80}/>
+            <Table.Column title="结算情况" dataIndex="settlement" width={80}/>
             <Table.Column title="合同金额（元）" dataIndex="cash" width={120}/>
             <Table.Column title="差旅费（元）" dataIndex="travel_cash" width={100}/>
-            <Table.Column title="合同年份" dataIndex="time" width={100}
+            <Table.Column title="合同年份" dataIndex="time" width={80}
                           render={(text) => (<span>{moment(1000 * text).format('YYYY')}</span>)}/>/>
             <Table.Column title="操作" dataIndex="action" width={150}
                           render={(text, record) => (
