@@ -9,6 +9,17 @@ import EditTableExecute from '@/pages/ApprovalProjects/components/EditTableExecu
 import ChooseProcess from '@/pages/ApprovalProjects/components/ChooseProcess';
 
 class EditApprovalProject extends React.Component {
+  componentDidMount() {
+    this.props.dispatch({ type: 'editApprovalProject/eGetUsers', payload: {} });
+    this.props.dispatch({ type: 'editApprovalProject/eGetContracts', payload: {} });
+    const { path, params } = this.props.match;
+    const isEditing = path === '/approvalProject/edit/:id';
+    if (isEditing) {
+      const { id } = params;
+      this.props.dispatch({ type: 'editApprovalProject/eGetOriginTable', id });
+    }
+  }
+
   changeTab = (activeKey) => {
     this.props.dispatch({
       type: 'editApprovalProject/rUpdateState',
@@ -17,9 +28,12 @@ class EditApprovalProject extends React.Component {
   };
 
   render() {
-    const { match, activeKey, routesCreating, routesEditing } = this.props;
-    const isEditing = match.path === '/approvalProject/edit/:id';
-    const routes = isEditing ? routesEditing : routesCreating;
+    const { match: { path }, activeKey } = this.props;
+    const isEditing = path === '/approvalProject/edit/:id';
+    const routes = isEditing ?
+      [{ breadcrumbName: '项目立项', path: '/originList' }, { breadcrumbName: '修改项目' }]
+      :
+      [{ breadcrumbName: '项目立项', path: '/originList' }, { breadcrumbName: '创建新项目' }];
     return (
       <React.Fragment>
         <div className="headerWrapper">
@@ -76,6 +90,4 @@ class EditApprovalProject extends React.Component {
 
 export default connect(({ loading, common, editApprovalProject }) => ({
   activeKey: editApprovalProject.activeKey,
-  routesCreating: editApprovalProject.routesCreating,
-  routesEditing: editApprovalProject.routesEditing,
 }))(EditApprovalProject);

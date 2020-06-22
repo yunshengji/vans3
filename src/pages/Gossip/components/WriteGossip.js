@@ -19,31 +19,32 @@ class GossipList extends React.Component {
     });
   };
   handleSubmit = () => {
-    const { form } = this.props;
+    const { dispatch, form } = this.props;
     form.validateFields((err, values) => {
       if (!err) {
-        this.props.dispatch({
-          type: 'gossipList/eWriteGossip',
-          payload: { ...values, form },
-        });
+        dispatch({ type: 'gossipList/eWriteGossip', payload: { ...values, form } });
       }
     });
   };
 
   render() {
-    const { dispatch, form, submittingGossip, gossipPicturesPreviewFileList, gossipPicturesFileList, uploadPicturePreviewModalVisible, uploadPicturePreviewImage } = this.props;
+    const { dispatch, form, submittingGossip, gossipPicturesFileList, uploadPicturePreviewModalVisible, uploadPicturePreviewImage } = this.props;
     const { getFieldDecorator } = form;
     const uploadConfig = {
       listType: 'picture-card',
       multiple: true,
       showUploadList: true,
-      fileList: gossipPicturesPreviewFileList,
-      beforeUpload: () => false,
+      fileList: gossipPicturesFileList,
+      beforeUpload: file => {
+        if (!file.type.startsWith('image')) {
+          message.warn('图片只能是 PNG JPG JPEG SVG GIF 格式!');
+        }
+        return false;
+      },
       onChange: ({ file, fileList }) => {
-        gossipPicturesFileList.push(file);
         dispatch({
           type: 'gossipList/rUpdateState',
-          payload: { gossipPicturesPreviewFileList: fileList, gossipPicturesFileList },
+          payload: { gossipPicturesFileList: fileList },
         });
       },
       onPreview: async file => {
@@ -102,7 +103,6 @@ const WrappedForm = Form.create({ name: 'GossipList' })(GossipList);
 
 export default connect(({ loading, common, gossipList }) => ({
   submittingGossip: loading.effects['gossipList/eWriteGossip'],
-  gossipPicturesPreviewFileList: gossipList.gossipPicturesPreviewFileList,
   gossipPicturesFileList: gossipList.gossipPicturesFileList,
   uploadPicturePreviewModalVisible: gossipList.uploadPicturePreviewModalVisible,
   uploadPicturePreviewImage: gossipList.uploadPicturePreviewImage,

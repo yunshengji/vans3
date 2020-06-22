@@ -90,7 +90,7 @@ class EditContractArchive extends React.Component {
             {form.getFieldDecorator('origin', {
               initialValue: editContractArchive['origin'] && editContractArchive['origin']['id'],
             })(
-              <Select showSearch onSearch={this.handleSearch} placeholder="请选择">
+              <Select showSearch onSearch={this.handleSearch} placeholder="请选择" allowClear>
                 {options.map((item, index) => {
                   return (
                     <Select.Option key={index} value={item.id}>{item.name}</Select.Option>

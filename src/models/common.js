@@ -5,9 +5,10 @@ export default {
   namespace: 'common',
 
   state: {
+    mine: { department: {} },
+    chooseDepartment: '',
     drawerMenuVisible: false,
     isLogOuting: false,
-    mine: { department: {} },
   },
 
   subscriptions: {

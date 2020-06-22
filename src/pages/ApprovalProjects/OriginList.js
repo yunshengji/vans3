@@ -1,9 +1,23 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Breadcrumb, Form, Row, Col, Input, Select, Table, Pagination, Modal, Tag } from 'antd';
+import {
+  Button,
+  Breadcrumb,
+  Form,
+  Row,
+  Col,
+  Input,
+  Select,
+  Table,
+  Pagination,
+  Modal,
+  Tag,
+  Dropdown,
+  Menu,
+  Icon,
+} from 'antd';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
-
 
 class OriginList extends React.Component {
   componentDidMount() {
@@ -33,15 +47,16 @@ class OriginList extends React.Component {
     this.props.dispatch({ type: 'originList/eLoadOriginList' });
     e.preventDefault();
   };
-  deleteOrigin = ({ id, name }) => {
+  changeStatus = ({ id, status }, updatedStatus) => {
     const { dispatch } = this.props;
     Modal.confirm({
-      title: '确定删除此立项表', content: <p>请仔细检查立项表 <b>{name}</b>，删除后不可恢复</p>,
-      okText: '删除',
-      okType: 'danger',
+      title: '确定修改', content: <p>确定将项目状态修改为 <b>{updatedStatus}</b></p>,
+      okText: '确认',
       cancelText: '取消',
       onOk() {
-        dispatch({ type: 'originList/eDeleteOriginTable', id });
+        if (updatedStatus !== status) {
+          dispatch({ type: 'originList/eUpdateOriginStatus', id, payload: { status: updatedStatus } });
+        }
       },
     });
   };
@@ -53,7 +68,10 @@ class OriginList extends React.Component {
   };
 
   render() {
-    const { form: { getFieldDecorator }, fetchingOriginTable, routes, mine, searchParams, total, current, pageSize, originTableList } = this.props;
+    const {
+      form: { getFieldDecorator }, fetchingOriginTable, updatingOriginStatus,
+      routes, mine, searchParams, total, current, pageSize, originTableList,
+    } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -75,12 +93,11 @@ class OriginList extends React.Component {
               }
             })}
           </Breadcrumb>
-          <a href="/approvalProject/edit" target="_blank">
-            <Button icon="plus-circle">新建立项表
-            </Button>
+          <a target="_blank" href="/approvalProject/edit">
+            <Button icon="plus-circle">新建立项表</Button>
           </a>
-
         </div>
+
         <div className="contentWrapper">
           <h3>立项表搜索</h3>
           <Form layout="horizontal" className="searchWrapper">
@@ -120,13 +137,14 @@ class OriginList extends React.Component {
           </Form>
           <h3 style={{ marginBottom: '2em' }}>立项表</h3>
           <Table size="middle" tableLayout="fixed" pagination={false} dataSource={originTableList}
-                 loading={fetchingOriginTable} rowKey={record => record.id}
+                 loading={fetchingOriginTable || updatingOriginStatus} rowKey={record => record.id}
                  rowClassName={(record, index) => {
                    if (index % 2 === 1) {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="项目名称" dataIndex="name" width={400} render={(name, record) => {
+            <Table.Column title="编号" dataIndex="num" width={100}/>
+            <Table.Column title="项目名称" dataIndex="name" width={550} render={(name, record) => {
               return (
                 (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
                   <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>
@@ -134,16 +152,29 @@ class OriginList extends React.Component {
                   <span>{name}</span>
               );
             }}/>
-            <Table.Column title="项目类别" dataIndex="category"/>
-            <Table.Column title="立项状态" dataIndex="status" render={status => (
-              <React.Fragment>
-                {status === '执行中' && <Tag color="blue">{status}</Tag>}
-                {status === '已废弃' && <Tag color="orange">{status}</Tag>}
-                {status === '已完结' && <Tag color="green">{status}</Tag>}
-              </React.Fragment>
+            <Table.Column title="项目类别" dataIndex="category" width={200}/>
+            <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
+              (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
+                <Dropdown trigger={['click']} overlay={
+                  <Menu>
+                    <Menu.Item onClick={() => this.changeStatus(record, '执行中')}>执行中</Menu.Item>
+                    <Menu.Item onClick={() => this.changeStatus(record, '已完结')}>已完结</Menu.Item>
+                    <Menu.Item onClick={() => this.changeStatus(record, '已废弃')}>已废弃</Menu.Item>
+                  </Menu>
+                }>
+                  <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                    {status} <Icon type="down"/>
+                  </a>
+                </Dropdown>
+                :
+                <React.Fragment>
+                  {status === '执行中' && <Tag color="blue">{status}</Tag>}
+                  {status === '已废弃' && <Tag color="orange">{status}</Tag>}
+                  {status === '已完结' && <Tag color="green">{status}</Tag>}
+                </React.Fragment>
             )}
             />
-            <Table.Column title="流程" dataIndex="process" render={status => (
+            <Table.Column title="执行流程" dataIndex="process" width={100} render={status => (
               <React.Fragment>
                 {
                   status === '流程未定' ? <Tag color="orange">{status}</Tag> : <Tag color="blue">{status}</Tag>}
@@ -151,16 +182,14 @@ class OriginList extends React.Component {
             )}/>
             {
               (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) &&
-              <Table.Column title="操作" dataIndex="action"
+              <Table.Column title="操作" dataIndex="action" width={100}
                             render={(text, record) => {
                               return (
-                                <div className="actionGroup">
-                                  <Button type="link" icon="edit" onClick={() => {
-                                    window.location.href = `/approvalProject/edit/${record.id}`;
-                                  }}>
+                                <a target="_blank" href={`/approvalProject/edit/${record.id}`}>
+                                  <Button type="link" icon="edit">
                                     修改
                                   </Button>
-                                </div>
+                                </a>
                               );
                             }}/>
             }
@@ -179,6 +208,7 @@ class OriginList extends React.Component {
 const WrappedForm = Form.create({ name: 'OriginList' })(OriginList);
 
 export default connect(({ loading, common, originList }) => ({
+  updatingOriginStatus: loading.effects['originList/eUpdateOriginStatus'],
   fetchingOriginTable: loading.effects['originList/eLoadOriginList'],
   routes: originList.routes,
   mine: common.mine,

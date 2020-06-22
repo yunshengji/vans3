@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Switch } from 'antd';
 
 class EditExpert extends React.Component {
   hideEditExpert = () => {
@@ -44,7 +44,7 @@ class EditExpert extends React.Component {
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
-          <Form.Item label="法改证号">
+          <Form.Item label="发改证号">
             {getFieldDecorator('law_num', {
               initialValue: editExpert['law_num'],
             })(
@@ -63,6 +63,15 @@ class EditExpert extends React.Component {
               initialValue: editExpert['phone_outer'],
             })(
               <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
+          <Form.Item label="状态">
+            {getFieldDecorator('alive', {
+              valuePropName: 'checked',
+              initialValue: editExpert['alive'],
+              rules: [{ required: true }],
+            })(
+              <Switch checkedChildren="正常" unCheckedChildren="不可用"/>,
             )}
           </Form.Item>
         </Form>

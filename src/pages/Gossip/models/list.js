@@ -1,7 +1,7 @@
 import { message } from 'antd';
 import _ from 'lodash';
-import { WriteGossip, publishComment, GetGossipWritings } from '@/services/gossip';
 import { UploadFile } from '@/services/files';
+import { WriteGossip, deleteGossip, publishComment, GetGossipWritings } from '@/services/gossip';
 
 export default {
 
@@ -10,7 +10,6 @@ export default {
   state: {
     routes: [{ breadcrumbName: '吐槽角' }],
 
-    gossipPicturesPreviewFileList: [],
     gossipPicturesFileList: [],
     uploadPicturePreviewImage: null,
     uploadPicturePreviewModalVisible: false,
@@ -36,50 +35,58 @@ export default {
       try {
         let attachments = [];
         const { content, isPrivate, form } = payload;
-        const { gossipPicturesFileList, gossipWritings: { current, pageSize } } = yield select(state => state['gossipList']);
-        // 上传文件
-        if (gossipPicturesFileList.length > 0) {
+        const { gossipPicturesFileList } = yield select(state => state['gossipList']);
+
+        if (!_.isEmpty(gossipPicturesFileList)) {
           const formData = new FormData();
           formData.append('folder_path', 'gossip');
           _.forEach(gossipPicturesFileList, item => {
-            formData.append('file', item);
+            if (item.type.startsWith('image')) {
+              formData.append('file', item.originFileObj);
+            }
           });
           const { data } = yield call(UploadFile, formData);
           attachments = _.map(data, 'id');
         }
-        // 提交图片和内容
-        const { msg } = yield call(WriteGossip, { content, private: isPrivate, attachments });
 
+        const { msg } = yield call(WriteGossip, { content, private: isPrivate, attachments });
+        message.success(msg);
+        form.resetFields();
         yield put({
           type: 'rUpdateState',
-          payload: {
-            gossipPicturesPreviewFileList: [],
-            gossipPicturesFileList: [],
-            uploadPicturePreviewImage: null,
-          },
+          payload: { gossipPicturesFileList: [], uploadPicturePreviewImage: null },
         });
-        form.resetFields();
-        message.success(msg);
-        yield put({ type: 'eGetGossipWritings', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadGossipWritings' });
       } catch (err) {
         console.log(err);
       }
     },
-    * ePublishComment({ resetFields, payload }, { select, call, put }) {
+    * eDeleteGossip({ id, payload }, { select, call, put }) {
       try {
-        const { msg } = yield call(publishComment, payload);
-        resetFields();
+        const { msg } = yield call(deleteGossip, id, payload);
         message.success(msg);
-        const { gossipWritings: { current, pageSize } } = yield select(state => state['gossipList']);
-        yield put({ type: 'eGetGossipWritings', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadGossipWritings' });
       } catch (err) {
         console.log(err);
       }
     },
 
-    * eGetGossipWritings({ payload }, { select, call, put }) {
+    * ePublishComment({ form, payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetGossipWritings, payload);
+        const { msg } = yield call(publishComment, payload);
+        message.success(msg);
+        form.resetFields();
+        yield put({ type: 'eLoadGossipWritings' });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    * eLoadGossipWritings({ payload }, { select, call, put }) {
+      try {
+        const { gossipWritings: { current, pageSize } } = yield select(state => state['gossipList']);
+        const queries = _.assign({ page: current, page_size: pageSize }, payload);
+        const { data } = yield call(GetGossipWritings, { ...queries });
         yield put({ type: 'rUpdateState', payload: { gossipWritings: data } });
       } catch (err) {
         console.log(err);

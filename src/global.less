@@ -1,8 +1,8 @@
 @import "./layouts/BasicSideDrawer";
 @import "./pages/Gossip/components/GossipWritings";
 
-body {
-  font-family: -apple-system, SF UI Text, Arial, PingFang SC, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+* {
+  font-size: 13px;
 }
 
 *::-webkit-scrollbar {
@@ -27,6 +27,15 @@ body {
   background: #ededed;
 }
 
+li.ant-menu-item-selected {
+  color: #FFF !important;
+  background-color: #0070cc !important;
+
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+  border: none !important;
+}
 
 .ant-upload.ant-upload-drag .ant-upload {
   padding: 0 !important;
@@ -44,10 +53,14 @@ body {
   background-color: #F8F9FB !important;
 }
 
+.commentOuter > .ant-comment-inner > .ant-comment-avatar {
+  display: none;
+}
+
 .headerWrapper {
   display: flex;
   justify-content: flex-start;
-  padding: 22px 40px;
+  padding: 20px;
   background-color: #FFF;
 }
 
@@ -55,7 +68,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22px 40px;
+  padding: 20px;
   background-color: #FFF;
 }
 
@@ -182,7 +195,7 @@ body {
 
 // 页面样式
 .noPaddingList {
-  .ant-list-item:first-of-type{
+  .ant-list-item:first-of-type {
     padding-top: 2px;
   }
 }

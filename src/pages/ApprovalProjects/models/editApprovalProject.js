@@ -21,8 +21,6 @@ export default {
 
   state: {
     activeKey: 'EditTableOrigin',
-    routesCreating: [{ breadcrumbName: '项目立项', path: '/originList' }, { breadcrumbName: '创建新项目' }],
-    routesEditing: [{ breadcrumbName: '项目立项', path: '/originList' }, { breadcrumbName: '编辑项目详情' }],
 
     usersList: [],
     managersList: [],

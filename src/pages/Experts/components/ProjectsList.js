@@ -38,7 +38,7 @@ class ProjectsList extends React.Component {
       <Table size="middle" dataSource={expertList} pagination={false} rowKey={record => record.id}>
         <Table.Column title="专家姓名" dataIndex="name"/>
         <Table.Column title="采购证号" dataIndex="procurement_num"/>
-        <Table.Column title="法改证号" dataIndex="law_num"/>
+        <Table.Column title="发改证号" dataIndex="law_num"/>
         <Table.Column title="电话号码" dataIndex="phone" render={(text, record) => (
           <React.Fragment>
             {record['phone_inner'] && <div>库内：{record['phone_inner']}</div>}
@@ -59,10 +59,9 @@ class ProjectsList extends React.Component {
     const project = projects[index];
     const { expert_list: expertsList, id } = project;
     Modal.confirm({
-      title: '确定移除此评审专家',
-      content: <p>确认移除此项目的评审专家 : <b>{record.name}</b> ?</p>,
-      okText: '删除',
-      okType: 'danger',
+      title: '确定更换此评审专家',
+      content: <p>确认更换此项目的评审专家 : <b>{record.name}</b> ?</p>,
+      okText: '更换',
       cancelText: '取消',
       onOk() {
         dispatch({
@@ -142,7 +141,6 @@ class ProjectsList extends React.Component {
         <h3>评审列表</h3>
         <Table tableLayout="fixed" size="middle" pagination={false} dataSource={projects} rowKey={record => record.id}
                expandedRowRender={this.expandedRowRender}
-               rowClassName="zebraHighlight"
                loading={fetchingProjectsList || editingProject || deletingProject || removingExpertFromProject}>
           <Table.Column title="记录表名称" dataIndex="name"/>
           <Table.Column title="项目编号" dataIndex="project_num"/>
