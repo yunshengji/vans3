@@ -13,10 +13,12 @@ class ChooseExpertsNumber extends React.Component {
   };
 
   submitChooseExpertsNum = () => {
+    const { chooseExpertsNumProjectId: id } = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.props.dispatch({
           type: 'experts/eCreateProjectExpertsList',
+          id,
           payload: { ...values, action: 'roll' },
         });
       }
@@ -49,4 +51,5 @@ const WrappedForm = Form.create({ name: 'ChooseExpertsNumber' })(ChooseExpertsNu
 export default connect(({ loading, experts }) => ({
   submittingProject: loading.effects['experts/eCreateProject'],
   chooseExpertsNumVisible: experts.chooseExpertsNumVisible,
+  chooseExpertsNumProjectId: experts.chooseExpertsNumProjectId,
 }))(WrappedForm);

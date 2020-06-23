@@ -104,9 +104,9 @@ export default {
         console.log(err);
       }
     },
-    * eCreateProjectExpertsList({ payload }, { select, call, put }) {
+    * eCreateProjectExpertsList({ id, payload }, { select, call, put }) {
       try {
-        const { data: expertList } = yield call(GetProjectsList, payload);
+        const { data: expertList } = yield call(GetNewExpertFromProject, id, payload);
         const { chooseExpertsNumProjectId } = yield select(state => state['experts']);
         yield put({ type: 'rUpdateState', payload: { chooseExpertsNumVisible: false } });
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
 
 class EditProject extends React.Component {
   hideEditProject = () => {
@@ -52,6 +52,17 @@ class EditProject extends React.Component {
               rules: [{ required: true, message: '项目名称不能为空' }],
             })(
               <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
+          <Form.Item label="专家类型">
+            {getFieldDecorator('roll_type', {
+              initialValue: editProject['roll_type'],
+              rules: [{ required: true, message: '专家类型不能为空' }],
+            })(
+              <Select placeholder="请选择" disabled>
+                <Select.Option key="发改专家摇号" value="发改专家摇号">发改专家摇号</Select.Option>
+                <Select.Option key="采购专家摇号" value="采购专家摇号">采购专家摇号</Select.Option>
+              </Select>,
             )}
           </Form.Item>
         </Form>

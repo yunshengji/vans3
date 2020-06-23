@@ -158,7 +158,7 @@ class ContractArchive extends React.Component {
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
-                <Form.Item label="合同年限">
+                <Form.Item label="合同年份">
                   {form.getFieldDecorator('time', {
                     initialValue: searchParams['time'],
                   })(
@@ -196,8 +196,6 @@ class ContractArchive extends React.Component {
             <Table.Column title="结算情况" dataIndex="settlement" width={80}/>
             <Table.Column title="合同金额（元）" dataIndex="cash" width={120}/>
             <Table.Column title="差旅费（元）" dataIndex="travel_cash" width={100}/>
-            <Table.Column title="合同年份" dataIndex="time" width={80}
-                          render={(text) => (<span>{moment(1000 * text).format('YYYY')}</span>)}/>/>
             <Table.Column title="操作" dataIndex="action" width={150}
                           render={(text, record) => (
                             <div className="actionGroup">
