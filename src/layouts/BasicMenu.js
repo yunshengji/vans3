@@ -56,133 +56,103 @@ class BasicMenu extends React.Component {
   };
 
   render() {
-    const { mine } = this.props;
+    const { mine: { level, department }, chooseDepartment } = this.props;
+    const computedDepartment = chooseDepartment ? chooseDepartment : department['name'];
     const selectKeys = this.props.history.location.pathname.split('/')[1];
+
     return (
       <Menu mode="inline" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
-        <Menu.SubMenu
-          key="project"
-          title={
-            <span>
-                <Icon component={ProjectBlue}/>
-                <span>项目管理</span>
-              </span>
-          }
-        >
-          <Menu.Item key="specialDebt">
-            <span>专项债</span>
-          </Menu.Item>
-          {/*<Menu.Item key="ppp">*/}
-          {/*  <span>PPP</span>*/}
-          {/*</Menu.Item>*/}
-        </Menu.SubMenu>
-        <Menu.SubMenu
-          key="approvalProject"
-          title={
-            <span>
-                <Icon component={ApprovalBlue}/>
-                <span>项目立项</span>
-              </span>
-          }
-        >
-          <Menu.Item key="originList">
-            <span>立项表</span>
-          </Menu.Item>
-          {
-            (mine.department.name === '营销部' || mine.level > 2) &&
-            <Menu.Item key="recordList">
-              <span>备案表</span>
+
+        <Menu.SubMenu key="common" title={<span>公共区域</span>}>
+          <Menu.SubMenu key="brochure"
+                        title={<span><Icon component={BrochureBlue}/><span>公司宣传</span></span>}>
+            <Menu.Item key="pamphlet">
+              <span>宣传册</span>
             </Menu.Item>
-          }
-          {
-            (mine.department.name === '营销部' || mine.level > 2) &&
-            <Menu.Item key="executeList">
-              <span>营销实施情况表</span>
+            <Menu.Item key="performance">
+              <span>业绩表</span>
             </Menu.Item>
-          }
-          {
-            (mine.department.name === '营销部' || mine.level > 2) &&
-            <Menu.Item key="serviceList">
-              <span>跟踪服务表</span>
+            <Menu.Item key="aptitude">
+              <span>资质库</span>
             </Menu.Item>
-          }
-        </Menu.SubMenu>
-        <Menu.SubMenu
-          key="brochure"
-          title={
-            <span>
-                <Icon component={BrochureBlue}/>
-                <span>公司宣传</span>
-              </span>
-          }
-        >
-          <Menu.Item key="pamphlet">
-            <span>宣传册</span>
+          </Menu.SubMenu>
+          <Menu.Item key="laws">
+            <Icon component={selectKeys === 'laws' ? LawWhite : LawBlue}/>
+            <span>法律法规</span>
           </Menu.Item>
-          <Menu.Item key="performance">
-            <span>业绩表</span>
+          <Menu.Item key="contacts">
+            <Icon component={selectKeys === 'contacts' ? ContactWhite : ContactBlue}/><span>联系人</span>
           </Menu.Item>
-          <Menu.Item key="aptitude">
-            <span>资质库</span>
+          <Menu.Item key="workDiaries">
+            <Icon component={selectKeys === 'workDiaries' ? WorkDiaryWhite : WorkDiaryBlue}/><span>工作日志</span>
+          </Menu.Item>
+          <Menu.Item key="gossip">
+            <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipBlue}/><span>吐槽角</span>
+          </Menu.Item>
+          <Menu.Item key="users">
+            <Icon component={selectKeys === 'users' ? UserWhite : UserBlue}/>
+            <span>系统用户</span>
           </Menu.Item>
         </Menu.SubMenu>
-        {
-          (mine.level > 1 || mine.department.name === '产品技术部' || mine.department.name === '营销部') &&
-          <Menu.SubMenu
-            key="archive"
-            title={
-              <span>
-                <Icon component={ArchiveBlue}/>
-                <span>档案管理</span>
-              </span>
-            }
-          >
+
+        <Menu.SubMenu key="department" title={<span>{computedDepartment}</span>}>
+          <Menu.SubMenu key="project" title={<span><Icon component={ProjectBlue}/><span>项目管理</span></span>}>
+            <Menu.Item key="specialDebt">
+              <span>专项债</span>
+            </Menu.Item>
+          </Menu.SubMenu>
+          <Menu.SubMenu key="approvalProject" title={<span><Icon component={ApprovalBlue}/><span>项目立项</span></span>}>
+            <Menu.Item key="originList">
+              <span>立项表</span>
+            </Menu.Item>
             {
-              (mine.level > 1) &&
-              <Menu.Item key="projectArchive">
-                <span>项目档案</span>
+              (computedDepartment === '营销部' || computedDepartment === '总裁部') &&
+              <Menu.Item key="recordList" disabled={department.name !== '营销部' && level < 9}>
+                <span>备案表</span>
               </Menu.Item>
             }
             {
-              (mine.level > 1 || mine.department.name === '产品技术部' || mine.department.name === '营销部') &&
-              <Menu.Item key="contractArchive">
-                <span>合同档案</span>
+              (computedDepartment === '营销部' || computedDepartment === '总裁部') &&
+              <Menu.Item key="executeList" disabled={department.name !== '营销部' && level < 9}>
+                <span>营销实施情况表</span>
+              </Menu.Item>
+            }
+            {
+              (computedDepartment === '营销部' || computedDepartment === '总裁部') &&
+              <Menu.Item key="serviceList" disabled={department.name !== '营销部' && level < 9}>
+                <span>跟踪服务表</span>
               </Menu.Item>
             }
           </Menu.SubMenu>
-        }
-        <Menu.Item key="laws">
-          <Icon component={selectKeys === 'laws' ? LawWhite : LawBlue}/>
-          <span>法律法规</span>
-        </Menu.Item>
-        {
-          (mine.department.name === '招投标部' || mine.level > 2) &&
-          <Menu.Item key="experts">
-            <Icon component={selectKeys === 'experts' ? ExpertWhite : ExpertBlue}/>
-            <span>专家组</span>
-          </Menu.Item>
-        }
-        <Menu.Item key="contacts">
-          <Icon component={selectKeys === 'contacts' ? ContactWhite : ContactBlue}/><span>联系人</span>
-        </Menu.Item>
-        <Menu.Item key="workDiaries">
-          <Icon component={selectKeys === 'workDiaries' ? WorkDiaryWhite : WorkDiaryBlue}/><span>工作日志</span>
-        </Menu.Item>
-        <Menu.Item key="gossip">
-          <Icon component={selectKeys === 'gossip' ? GossipWhite : GossipBlue}/><span>吐槽角</span>
-        </Menu.Item>
-        {
-          ((mine.level > 1 && mine.department.name === '运营部') || mine.level > 2)
-          &&
-          <Menu.Item key='staff'>
-            <Icon component={selectKeys === 'staff' ? HRWhite : HRBlue}/>
-            <span>员工管理</span>
-          </Menu.Item>
-        }
-        <Menu.Item key="users">
-          <Icon component={selectKeys === 'users' ? UserWhite : UserBlue}/>
-          <span>系统用户</span>
-        </Menu.Item>
+          {
+            (computedDepartment === '产品技术部' || computedDepartment === '营销部' || computedDepartment === '运营部' || computedDepartment === '总裁部') &&
+            <Menu.SubMenu key="archive" title={<span><Icon component={ArchiveBlue}/><span>档案管理</span></span>}>
+              <Menu.Item key="projectArchive" disabled={level < 2}>
+                <span>项目档案</span>
+              </Menu.Item>
+              <Menu.Item key="contractArchive"
+                         disabled={level < 2 && !(department.name === '产品技术部' || department.name === '营销部')}>
+                <span>合同档案</span>
+              </Menu.Item>
+            </Menu.SubMenu>
+          }
+          {
+            (computedDepartment === '招投标部' || computedDepartment === '总裁部') &&
+            <Menu.Item key="experts" disabled={!(department.name === '招投标部' || department.name === '总裁部')}>
+              <Icon component={selectKeys === 'experts' ? ExpertWhite : ExpertBlue}/>
+              <span>专家组</span>
+            </Menu.Item>
+          }
+          {
+            (computedDepartment === '运营部' || computedDepartment === '总裁部')
+            &&
+            <Menu.Item key='staff' disabled={level < 2 || !(department.name === '运营部' || department.name === '总裁部')}>
+              <Icon component={selectKeys === 'staff' ? HRWhite : HRBlue}/>
+              <span>员工管理</span>
+            </Menu.Item>
+          }
+        </Menu.SubMenu>
+
       </Menu>
     );
   }
@@ -190,4 +160,5 @@ class BasicMenu extends React.Component {
 
 export default withRouter(connect(({ common }) => ({
   mine: common.mine,
+  chooseDepartment: common.chooseDepartment,
 }))(BasicMenu));

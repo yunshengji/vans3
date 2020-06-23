@@ -29,6 +29,9 @@ class Login extends React.Component {
     const { getFieldDecorator } = form;
     return (
       <div className={styles.root}>
+        {/*<video autoPlay="autoplay" muted preload="auto" className={styles.video}>*/}
+        {/*  <source src="https://wanmingcrm.oss-cn-shanghai.aliyuncs.com/%E6%B5%8B%E8%AF%95/video319.mp4?Expires=1592900349&OSSAccessKeyId=TMP.3KenUqYpgbn7dTH6tRPFHiAGNgV1XxV9i8zcC73Dz1gDBi6x2ByLcjeg2doDaTm5wzXaMYMbgPLdigKQUfjuhCEkNgzU7S&Signature=FJbtlms3Qj08gHRBgTYo7dnUnTc%3D" type="video/mp4"/>*/}
+        {/*</video>*/}
         <div className={styles.background}/>
         <img src="/system-name.svg" alt="万铭星系统"/>
         <Form className={styles.formWrap} onSubmit={this.handleSubmit}>
