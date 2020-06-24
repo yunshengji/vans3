@@ -96,11 +96,6 @@ class BasicMenu extends React.Component {
         </Menu.SubMenu>
 
         <Menu.SubMenu key="department" title={<span>{computedDepartment}</span>}>
-          <Menu.SubMenu key="project" title={<span><Icon component={ProjectBlue}/><span>项目管理</span></span>}>
-            <Menu.Item key="specialDebt">
-              <span>专项债</span>
-            </Menu.Item>
-          </Menu.SubMenu>
           <Menu.SubMenu key="approvalProject" title={<span><Icon component={ApprovalBlue}/><span>项目立项</span></span>}>
             <Menu.Item key="originList">
               <span>立项表</span>
@@ -123,6 +118,11 @@ class BasicMenu extends React.Component {
                 <span>跟踪服务表</span>
               </Menu.Item>
             }
+          </Menu.SubMenu>
+          <Menu.SubMenu key="project" title={<span><Icon component={ProjectBlue}/><span>项目管理</span></span>}>
+            <Menu.Item key="specialDebt">
+              <span>专项债</span>
+            </Menu.Item>
           </Menu.SubMenu>
           {
             (computedDepartment === '产品技术部' || computedDepartment === '营销部' || computedDepartment === '运营部' || computedDepartment === '总裁部') &&

@@ -144,7 +144,7 @@ class OriginList extends React.Component {
                    }
                  }}>
             <Table.Column title="编号" dataIndex="num" width={100}/>
-            <Table.Column title="项目名称" dataIndex="name" width={550} render={(name, record) => {
+            <Table.Column title="项目名称" dataIndex="name" render={(name, record) => {
               return (
                 (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
                   <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>

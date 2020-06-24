@@ -33,7 +33,7 @@ export default {
       try {
         const { msg } = yield call(UpdateOriginTable, id, payload);
         message.success(msg);
-        yield put({ type: 'originList/eLoadOriginList', id, payload: {} });
+        yield put({ type: 'eLoadOriginList', id, payload: {} });
       } catch (err) {
         console.log(err);
       }

@@ -4,7 +4,10 @@ export default {
   treeShaking: true,
   hash: true,
   targets: { ie: 11 },
-  theme: aliyunTheme,
+  theme: {
+    aliyunTheme,
+    'primary-color': '#3f78ff',
+  },
   routes: [
     { path: '/login', component: './User/Login' },
     {
