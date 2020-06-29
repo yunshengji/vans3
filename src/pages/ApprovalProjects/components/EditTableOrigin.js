@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
-import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button, Icon } from 'antd';
+import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 import { limitDecimals } from '@/utils/transfer';
@@ -212,8 +212,8 @@ class EditTableOrigin extends React.Component {
               <Col xl={18} md={12} sm={24}>
                 {
                   editOrigin['confirm_list'] &&
-                  _.map(editOrigin['confirm_list'], item => (
-                    <Col xl={8} md={12} sm={24}>
+                  _.map(editOrigin['confirm_list'], (item, index) => (
+                    <Col xl={8} md={12} sm={24} key={index}>
                       <div className={styles.confirmBox} key={item.id}>
                         <span>{item['confirm_user']['name']}</span>
                         {

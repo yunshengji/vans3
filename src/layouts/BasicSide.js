@@ -9,7 +9,7 @@ class BasicSide extends React.Component {
     return (
       <Layout.Sider width="200" theme="light" className={styles.basicSide}>
         <a className={styles.systemName} href="http://www.cdwmzx.cn/" target="_blank">
-          <img src="/system-name.svg" alt="万铭"/>
+          <img src="/system-name.png" alt="万铭"/>
         </a>
         <div style={{ marginTop: '2em' }}>
           <BasicMenu/>

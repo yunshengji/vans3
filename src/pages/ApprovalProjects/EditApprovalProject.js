@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Button, Tabs } from 'antd';
+import { Breadcrumb, Tabs } from 'antd';
 import { Link } from 'umi';
 import EditTableOrigin from '@/pages/ApprovalProjects/components/EditTableOrigin';
+import EditContract from '@/pages/ApprovalProjects/components/EditContract';
 import EditTableRecord from '@/pages/ApprovalProjects/components/EditTableRecord';
 import EditTableService from '@/pages/ApprovalProjects/components/EditTableService';
 import EditTableExecute from '@/pages/ApprovalProjects/components/EditTableExecute';
@@ -28,7 +29,7 @@ class EditApprovalProject extends React.Component {
   };
 
   render() {
-    const { match: { path }, activeKey } = this.props;
+    const { match: { path }, mine: { level, department }, activeKey } = this.props;
     const isEditing = path === '/approvalProject/edit/:id';
     const routes = isEditing ?
       [{ breadcrumbName: '项目立项', path: '/originList' }, { breadcrumbName: '修改项目' }]
@@ -62,6 +63,10 @@ class EditApprovalProject extends React.Component {
               <Tabs.TabPane tab="立项表" key="EditTableOrigin">
                 <EditTableOrigin/>
               </Tabs.TabPane>
+              <Tabs.TabPane tab="项目合同" key="EditContract"
+                            disabled={level < 2 && !(department.name === '产品技术部' || department.name === '营销部')}>
+                <EditContract/>
+              </Tabs.TabPane>
               <Tabs.TabPane tab="备案表" key="EditTableRecord">
                 <EditTableRecord/>
               </Tabs.TabPane>
@@ -77,7 +82,7 @@ class EditApprovalProject extends React.Component {
             </Tabs>
             :
             <Tabs activeKey={activeKey}>
-              <Tabs.TabPane tab="立项表" key="EditTableOrigin">
+              <Tabs.TabPane tab="立项表" key="UploadTableOrigin">
                 <EditTableOrigin/>
               </Tabs.TabPane>
             </Tabs>
@@ -89,5 +94,6 @@ class EditApprovalProject extends React.Component {
 
 
 export default connect(({ loading, common, editApprovalProject }) => ({
+  mine: common.mine,
   activeKey: editApprovalProject.activeKey,
 }))(EditApprovalProject);

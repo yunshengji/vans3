@@ -18,6 +18,7 @@ import {
   Icon,
 } from 'antd';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
+import moment from 'moment';
 
 class OriginList extends React.Component {
   componentDidMount() {
@@ -143,7 +144,16 @@ class OriginList extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="编号" dataIndex="num" width={100}/>
+            <Table.Column title="编号" dataIndex="num" width={100} render={(text, record) => (
+              <span>
+                {
+                  text ?
+                    record.sign_date ? moment(record.sign_date * 1000).get('year') + '-' + text : text
+                    :
+                    record.sign_date ? moment(record.sign_date * 1000).get('year') + '-' : ''
+                }
+              </span>
+            )}/>
             <Table.Column title="项目名称" dataIndex="name" render={(name, record) => {
               return (
                 (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?

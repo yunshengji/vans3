@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Form, Modal, Select, Upload, Icon, Button, Input } from 'antd';
+import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../../config/constant';
 
 class UploadProjectArchive extends React.Component {
   hideUploadProjectArchivesModal = () => {
@@ -60,9 +61,10 @@ class UploadProjectArchive extends React.Component {
             {form.getFieldDecorator('category', {
               rules: [{ required: true, message: '请选择' }],
             })(
-              <Select placeholder="请选择">
-                <Select.Option key="上游档案" value="上游档案">上游档案</Select.Option>
-                <Select.Option key="下游档案" value="下游档案">下游档案</Select.Option>
+              <Select placeholder="请选择" allowClear>
+                {TABLE_FOR_MAKING_PROJECT_CATEGORIES.map(item =>
+                  <Select.Option key={item} value={item}>{item}</Select.Option>,
+                )}
               </Select>,
             )}
           </Form.Item>

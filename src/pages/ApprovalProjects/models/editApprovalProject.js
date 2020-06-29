@@ -1,10 +1,16 @@
 import { router } from 'umi';
 import { message } from 'antd';
 import _ from 'lodash';
+import moment from 'moment';
 import { getIdsFromWholeList, getIdsFromManagerList } from '@/utils/transfer';
 import { GetUsersList } from '@/services/user';
 import { UploadFile } from '@/services/files';
-import { GetContractArchiveList } from '@/services/archive';
+import {
+  DeleteContractArchive,
+  GetContractArchiveList,
+  UpdateContractArchive,
+  UploadContractArchive,
+} from '@/services/archive';
 
 import {
   CreateOriginTable, UpdateOriginTable, GetOriginTable, ConfirmOrigin,
@@ -27,6 +33,7 @@ export default {
     contracts: [],
 
     editOrigin: {},
+    editContract: {},
     editRecord: {},
     editService: {},
     editExecute: {},
@@ -60,7 +67,6 @@ export default {
     * eGetContracts({ payload }, { select, call, put }) {
       try {
         const { data: { list: contracts } } = yield call(GetContractArchiveList, { page_size: 10000 });
-        console.log(contracts);
         yield put({ type: 'rUpdateState', payload: { contracts } });
       } catch (err) {
         console.log(err);
@@ -107,7 +113,64 @@ export default {
         console.log(err);
       }
     },
+    * eUploadContract({ form, payload }, { select, call, put }) {
+      try {
+        const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
+        let attachment = [];
 
+        if (!_.isEmpty(fileList)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_contract');
+          _.forEach(fileList, (item => formData.append('file', item.originFileObj)));
+          const { data } = yield call(UploadFile, formData);
+          attachment = _.map(data, 'id');
+        }
+
+        const { msg } = yield call(UploadContractArchive, {
+          number, name, category, cash, travel_cash, settlement,
+          time: moment(time, 'YYYY').valueOf() / 1000,
+          attachment, origin,
+        });
+        form.resetFields();
+        message.success(msg);
+        yield put({ type: 'eGetOriginContract', payload: { origin, page_size: 10000 } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eUpdateContract({ form, payload }, { select, call, put }) {
+      try {
+        const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
+        const { editContract } = yield select(state => state['editApprovalProject']);
+        let attachment = _.map(editContract['attachment'], 'id');
+
+        if (!_.isEmpty(fileList)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_contract');
+          _.forEach(fileList, (item => formData.append('file', item.originFileObj)));
+          const { data } = yield call(UploadFile, formData);
+          attachment = _.concat(attachment, _.map(data, 'id'));
+        }
+
+        const { msg } = yield call(UpdateContractArchive, editContract['id'], {
+          number, name, category, cash, travel_cash, settlement,
+          time: moment(time, 'YYYY').valueOf() / 1000, attachment,
+        });
+        form.resetFields();
+        message.success(msg);
+        yield put({ type: 'eGetOriginContract', payload: { origin, page_size: 10000 } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eGetOriginContract({ payload }, { select, call, put }) {
+      try {
+        const { data: { list } } = yield call(GetContractArchiveList, { ...payload });
+        yield put({ type: 'rUpdateState', payload: { editContract: _.head(list) || {} } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
     * eCreateRecordTable({ payload }, { select, call, put }) {
       try {
         const { msg, data } = yield call(CreateRecordTable, payload);
@@ -419,6 +482,12 @@ export default {
   reducers: {
     rUpdateState(state, { payload }) {
       return { ...state, ...payload };
+    },
+    rUpdateContractFiles(state, { payload }) {
+      return {
+        ...state,
+        editContract: { ...state['editContract'], attachment: payload },
+      };
     },
     rUpdateUploadedEasyFile(state, { payload }) {
       return {

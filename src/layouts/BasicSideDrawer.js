@@ -11,11 +11,11 @@ class BasicSideDrawer extends React.Component {
   render() {
     const { drawerMenuVisible } = this.props;
     return (
-      <Drawer placement="left" closable={false} width="12rem" visible={drawerMenuVisible} onClose={this.onClose}
+      <Drawer placement="left" closable={false} width="50vw" visible={drawerMenuVisible} onClose={this.onClose}
               className="basicSideDrawer">
         <div className="basicSideDrawerWrapper">
           <a target="_blank" href="http://www.cdwmzx.cn/">
-            <img src="/system-name.svg" alt="万铭"/>
+            <img src="/system-name.png" alt="万铭"/>
           </a>
           <BasicMenu/>
         </div>
