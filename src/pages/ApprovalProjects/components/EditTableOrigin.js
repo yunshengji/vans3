@@ -1,15 +1,34 @@
 import React from 'react';
 import { withRouter } from 'umi';
 import { connect } from 'dva';
-import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button } from 'antd';
+import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button, Icon } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 import { limitDecimals } from '@/utils/transfer';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../../config/constant';
 import styles from './EditTableOrigin.less';
 
+let companyOuterId = 0;
+
 class EditTableOrigin extends React.Component {
 
+  addCompanyOuterFormItem = () => {
+    const keys = this.props.form.getFieldValue('keys');
+    const nextKeys = keys.concat(companyOuterId++);
+    this.props.form.setFieldsValue({
+      keys: nextKeys,
+    });
+  };
+  removeCompanyOuterFormItem = k => {
+    const keys = this.props.form.getFieldValue('keys');
+    if (keys.length === 0) {
+      return;
+    }
+
+    this.props.form.setFieldsValue({
+      keys: keys.filter(key => key !== k),
+    });
+  };
   submit = () => {
     const { path, params } = this.props.match;
     const isEditing = path === '/approvalProject/edit/:id';
@@ -20,6 +39,23 @@ class EditTableOrigin extends React.Component {
           if (values['sign_date']) {
             values['sign_date'] = moment(values['sign_date']).valueOf() / 1000;
           }
+          const { keys } = values;
+          const origin_outer = [];
+          if (keys.length > 0) {
+            const { company_name, price, contact } = values;
+            keys.forEach(item => {
+              origin_outer.push({
+                company_name: company_name[item],
+                price: price[item],
+                contact: contact[item],
+              });
+            });
+            values.origin_outer = origin_outer;
+          }
+          delete values['keys']
+          delete values['company_name']
+          delete values['price']
+          delete values['contact']
           this.props.dispatch({ type: 'editApprovalProject/eUpdateOriginTable', id, payload: { ...values } });
         }
       });
@@ -29,6 +65,23 @@ class EditTableOrigin extends React.Component {
           if (values['sign_date']) {
             values['sign_date'] = moment(values['sign_date']).valueOf() / 1000;
           }
+          const { keys } = values;
+          const origin_outer = [];
+          if (keys.length > 0) {
+            const { company_name, price, contact } = values;
+            keys.forEach(item => {
+              origin_outer.push({
+                company_name: company_name[item],
+                price: price[item],
+                contact: contact[item],
+              });
+            });
+            values.origin_outer = origin_outer;
+          }
+          delete values['keys']
+          delete values['company_name']
+          delete values['price']
+          delete values['contact']
           this.props.dispatch({ type: 'editApprovalProject/eCreateOriginTable', payload: { ...values } });
         }
       });
@@ -41,8 +94,61 @@ class EditTableOrigin extends React.Component {
   };
 
   render() {
-    const { form: { getFieldDecorator }, submittingCreatedOrigin, submittingEditedOrigin, loadingOrigin, loadingUsers, usersList, managersList, editOrigin, match: { path } } = this.props;
+    const { form: { getFieldDecorator, getFieldValue }, submittingCreatedOrigin, submittingEditedOrigin, loadingOrigin, loadingUsers, usersList, managersList, editOrigin, match: { path } } = this.props;
     const isEditing = path === '/approvalProject/edit/:id';
+
+    let initialValue = [];
+    if (Object.keys(editOrigin).length > 0) {
+      for (let i = 0; i < editOrigin['origin_outer'].length; i++) {
+        initialValue.push(i);
+        companyOuterId++;
+      }
+    }
+    getFieldDecorator('keys', { initialValue });
+
+    const keys = getFieldValue('keys');
+    const companyOuterFormItems = keys.map((key) => (
+      <Row gutter={[150]} type="flex" align="middle" key={`origin_outer${key}`}>
+        <Col xl={6} md={10} sm={24}>
+          <Form.Item label="外包公司名称">
+            {getFieldDecorator(`company_name[${key}]`, {
+              initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].company_name,
+              rules: [{ required: true, message: '请填写' }],
+            })(
+              <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
+        </Col>
+        <Col xl={6} md={10} sm={24}>
+          <Form.Item label="价格（万元）">
+            {getFieldDecorator(`price[${key}]`, {
+              initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].price,
+              rules: [{ required: true, message: '请填写' }],
+            })(
+              <InputNumber min={0} style={{ width: '100%' }}/>,
+            )}
+          </Form.Item>
+        </Col>
+        <Col xl={6} md={10} sm={24}>
+          <Form.Item label="联系人">
+            {getFieldDecorator(`contact[${key}]`, {
+              initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].contact,
+            })(
+              <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
+        </Col>
+        <Col xl={6} md={4} sm={24}>
+          {
+            keys.length > 0 ?
+              <Icon type="minus-circle-o" style={{ marginTop: '14px', fontSize: '1.5rem' }}
+                    onClick={() => this.removeCompanyOuterFormItem(key)}/>
+              :
+              null
+          }
+        </Col>
+      </Row>
+    ));
     return (
       <Spin spinning={Boolean(submittingCreatedOrigin) || Boolean(submittingEditedOrigin) || Boolean(loadingOrigin)}>
         <Form layout="horizontal">
@@ -186,8 +292,17 @@ class EditTableOrigin extends React.Component {
               </Form.Item>
             </Col>
           </Row>
+          <h3>外包公司</h3>
+          {companyOuterFormItems}
+          <Row gutter={[150]}>
+            <Col xl={12} md={12} sm={24}>
+              <Button type="dashed" block onClick={this.addCompanyOuterFormItem}>
+                <Icon type="plus"/> 增加
+              </Button>
+            </Col>
+          </Row>
           <Row>
-            <Button type="primary" onClick={this.submit}>提交</Button>
+            <Button type="primary" style={{ marginTop: '2rem' }} onClick={this.submit}>提交</Button>
           </Row>
           <Spin spinning={Boolean(loadingUsers)}>
             <h3 style={{ marginTop: '5em' }}>股东确认</h3>
