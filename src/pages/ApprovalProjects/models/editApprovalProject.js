@@ -38,6 +38,8 @@ export default {
     editService: {},
     editExecute: {},
 
+    contractVisible: false,
+
     process: '',
 
     editEasyProcess: {},
