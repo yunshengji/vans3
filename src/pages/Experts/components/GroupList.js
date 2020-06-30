@@ -3,11 +3,12 @@ import { connect } from 'dva';
 import { Button, Table, Pagination, Tag, Row, Col, Form, Input, Modal, Icon, Tooltip } from 'antd';
 import Cookies from 'js-cookie';
 import { prefix } from '../../../../config/api';
-import CreateProject from '@/pages/Experts/components/CreateProject';
-import EditProject from '@/pages/Experts/components/EditProject';
-import ChooseExpertsNumber from '@/pages/Experts/components/ChooseExpertsNumber';
+import CreateProject from '@/pages/Experts/components/CreateGroup';
+import EditProject from '@/pages/Experts/components/EditGroup';
+import ChooseGroupProperty from '@/pages/Experts/components/ChooseGroupProperty';
+import ChooseGroupExpertProperty from '@/pages/Experts/components/ChooseGroupExpertProperty';
 
-class ProjectList extends React.Component {
+class GroupList extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: 'experts/eLoadProjects' });
@@ -32,11 +33,22 @@ class ProjectList extends React.Component {
     this.props.dispatch({ type: 'experts/eLoadProjects' });
     e.preventDefault();
   };
+  showExpertProfile = (record) => {
+    this.props.dispatch({
+      type: 'experts/rUpdateState',
+      payload: {
+        expertProfileVisible: true,
+        expertProfile: { ...record },
+      },
+    });
+  };
   expandedRowRender = (record, index) => {
     const expertList = record['expert_list'];
     return (
       <Table size="middle" dataSource={expertList} pagination={false} rowKey={record => record.id}>
-        <Table.Column title="专家姓名" dataIndex="name"/>
+        <Table.Column title="专家姓名" dataIndex="name" render={(text, record) => (
+          <a onClick={() => this.showExpertProfile(record)}>{text}</a>
+        )}/>
         <Table.Column title="采购证号" dataIndex="procurement_num"/>
         <Table.Column title="发改证号" dataIndex="law_num"/>
         <Table.Column title="电话号码" dataIndex="phone" render={(text, record) => (
@@ -45,7 +57,7 @@ class ProjectList extends React.Component {
           </div>
         )}/>
         <Table.Column title="操作" dataIndex="operation" render={(text, record) => (
-          <Button type="link" onClick={() => this.removeRandomExpert(record, index)}>
+          <Button type="link" onClick={() => this.showChooseRandomExpert(record, index)}>
             更换
           </Button>
         )}/>
@@ -53,20 +65,17 @@ class ProjectList extends React.Component {
       </Table>
     );
   };
-  removeRandomExpert = (record, index) => {
+  showChooseRandomExpert = (record, index) => {
     const { dispatch, projects } = this.props;
-    const project = projects[index];
-    const { expert_list: expertsList, id } = project;
-    Modal.confirm({
-      title: '确定更换此评审专家',
-      content: <p>确认更换此项目的评审专家 : <b>{record.name}</b> ?</p>,
-      okText: '更换',
-      cancelText: '取消',
-      onOk() {
-        dispatch({
-          type: 'experts/eRemoveExpertFromProject',
-          payload: { id, expertsList, record },
-        });
+    const { expert_list, id, roll_type } = projects[index];
+    dispatch({
+      type: 'experts/rUpdateState',
+      payload: {
+        chooseNewExpertVisible: true,
+        chooseNewExpertProjectId: id,
+        chooseNewExpertProjectType: roll_type,
+        exitsExpertList: expert_list,
+        chooseNewExpertDetail: record,
       },
     });
   };
@@ -92,7 +101,7 @@ class ProjectList extends React.Component {
       },
     });
   };
-  showChooseExpertsNum = ({ id,roll_type }) => {
+  showChooseExpertsNum = ({ id, roll_type }) => {
     this.props.dispatch({
       type: 'experts/rUpdateState',
       payload: {
@@ -119,7 +128,8 @@ class ProjectList extends React.Component {
       <React.Fragment>
         <CreateProject/>
         <EditProject/>
-        <ChooseExpertsNumber/>
+        <ChooseGroupProperty/>
+        <ChooseGroupExpertProperty/>
         <h3>评审搜索</h3>
         <Form layout="horizontal" className="searchWrapper">
           <Row gutter={[80]}>
@@ -153,11 +163,11 @@ class ProjectList extends React.Component {
           <Table.Column title="操作" dataIndex="action"
                         render={(text, record) => (
                           <div className="actionGroup">
-                            <Button type="link"
+                            <Button type="link" icon="edit"
                                     onClick={() => this.showEditProject(record)}>
                               修改
                             </Button>
-                            <Button type="link" className="redButton"
+                            <Button type="link" icon="delete" className="redButton"
                                     onClick={() => this.deleteProject(record)}>
                               删除
                             </Button>
@@ -187,7 +197,7 @@ class ProjectList extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'ProjectsList' })(ProjectList);
+const WrappedForm = Form.create({ name: 'ProjectsList' })(GroupList);
 
 export default connect(({ loading, common, experts }) => ({
   fetchingProjectsList: loading.effects['experts/eLoadProjects'],

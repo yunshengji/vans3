@@ -53,6 +53,12 @@ export default {
     chooseExpertsNumVisible: false,
     chooseExpertsNumProjectId: '',
     chooseExpertsNumProjectCategory: '',
+
+    chooseNewExpertVisible: false,
+    chooseNewExpertProjectId: '',
+    chooseNewExpertProjectType: '',
+    exitsExpertList: [],
+    chooseNewExpertDetail: {},
   },
 
   subscriptions: {
@@ -114,11 +120,9 @@ export default {
     * eCreateProjectExpertsList({ id, payload }, { select, call, put }) {
       try {
         const { data: expertList } = yield call(GetNewExpertFromProject, id, payload);
-        const { chooseExpertsNumProjectId } = yield select(state => state['experts']);
         yield put({ type: 'rUpdateState', payload: { chooseExpertsNumVisible: false } });
-
         const expertIds = _.map(expertList, 'id');
-        const { msg } = yield call(EditProject, chooseExpertsNumProjectId, { expert_list: expertIds });
+        const { msg } = yield call(EditProject, id, { expert_list: expertIds });
         message.success(msg);
         yield put({ type: 'eLoadProjects' });
       } catch (err) {
@@ -137,9 +141,10 @@ export default {
     * eRemoveExpertFromProject({ payload }, { select, call, put }) {
       try {
         const { id, expertsList, record } = payload;
-        const { data } = yield call(GetNewExpertFromProject, id, { action: 'reroll' });
+        const { data } = yield call(GetNewExpertFromProject, id, { action: 'reroll', ...payload['values'] });
         expertsList.splice(expertsList.indexOf(record), 1, data);
         const expertIds = _.map(expertsList, 'id');
+        yield put({ type: 'rUpdateState', payload: { chooseNewExpertVisible: false } });
         const { msg } = yield call(EditProject, id, { expert_list: expertIds });
         message.success(msg);
         yield put({ type: 'eLoadProjects' });

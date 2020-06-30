@@ -154,9 +154,7 @@ class ExpertList extends React.Component {
                               修改
                             </Button>
                             <Button type="link" icon="delete" className="redButton"
-                                    onClick={() => {
-                                      this.deleteExpert(record);
-                                    }}>
+                                    onClick={() => this.deleteExpert(record)}>
                               删除
                             </Button>
                           </div>

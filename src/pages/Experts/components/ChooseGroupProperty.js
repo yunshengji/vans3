@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Modal, Form, Input, InputNumber } from 'antd';
 import { limitDecimals } from '@/utils/transfer';
 
-class ChooseExpertsNumber extends React.Component {
+class ChooseGroupProperty extends React.Component {
 
   hideChooseExpertsNum = () => {
     this.props.dispatch({
@@ -63,7 +63,7 @@ class ChooseExpertsNumber extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'ChooseExpertsNumber' })(ChooseExpertsNumber);
+const WrappedForm = Form.create({ name: 'ChooseExpertsNumber' })(ChooseGroupProperty);
 
 export default connect(({ loading, experts }) => ({
   submittingProject: loading.effects['experts/eCreateProject'],

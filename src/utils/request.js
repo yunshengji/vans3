@@ -45,7 +45,7 @@ const errorHandler = error => {
     });
   }
 
-  return response;
+  throw error;
 };
 
 const request = extend({
