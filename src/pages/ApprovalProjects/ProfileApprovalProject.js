@@ -1,27 +1,35 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Breadcrumb, Col, Row, Tag, Icon, Spin, Button } from 'antd';
+import { Breadcrumb, Col, Row, Tag, Icon, Spin, Button, Form, InputNumber, Select, List } from 'antd';
 import { Link } from 'umi';
 import moment from 'moment';
 import _ from 'lodash';
 import styles from './ProfileApprovalProject.less';
+import Cookies from 'js-cookie';
+import { prefix } from '../../../config/api';
+import { getFileURL } from '@/utils/transfer';
 
 class ProfileApprovalProject extends React.Component {
   componentDidMount() {
     const { params: { id } } = this.props.match;
     this.props.dispatch({ type: 'profileApprovalProject/eGetOriginTable', id });
+    this.props.dispatch({ type: 'profileApprovalProject/eGetOriginContract', payload: { origin: id } });
     this.props.dispatch({ type: 'profileApprovalProject/eGetRecordTable', payload: { origin_id: id } });
     this.props.dispatch({ type: 'profileApprovalProject/eGetExecuteTable', payload: { origin_id: id } });
     this.props.dispatch({ type: 'profileApprovalProject/eGetServiceTable', payload: { origin_id: id } });
   }
 
+  exportResult = (id) => {
+    const token = Cookies.get('token');
+    window.open(`${prefix}/origin/export/${id}?token=${token}`, '_blank');
+  };
   confirmSign = () => {
     const { params: { id } } = this.props.match;
     this.props.dispatch({ type: 'profileApprovalProject/eConfirmOrigin', id, payload: {} });
   };
 
   render() {
-    const { routes, profileOrigin, profileRecord, profileExecute, profileService, loadingOrigin, loadingRecord, loadingExecute, loadingService } = this.props;
+    const { routes, profileOrigin, profileContract, profileRecord, profileExecute, profileService, loadingOrigin, loadingRecord, loadingExecute, loadingService } = this.props;
     const { params: { id } } = this.props.match;
     return (
       <React.Fragment>
@@ -53,18 +61,23 @@ class ProfileApprovalProject extends React.Component {
         <Spin
           spinning={Boolean(loadingOrigin) || Boolean(loadingRecord) || Boolean(loadingExecute) || Boolean(loadingService)}>
           <div className="contentWrapper">
+            <Row type="flex" justify="end">
+              <Button type="link" icon="cloud-download" onClick={() => this.exportResult(id)}>
+                导出立项审批 Excel 表格
+              </Button>
+            </Row>
             <h3>基础信息</h3>
             <Row gutter={[80]}>
               <Col xl={8} md={12} sm={24}>
                 <div className={styles.itemContainer}>
-                  <p>项目名称：</p>
-                  <p>{profileOrigin['name']}</p>
+                  <p>项目序号：</p>
+                  <p>{profileOrigin['num']}</p>
                 </div>
               </Col>
               <Col xl={8} md={12} sm={24}>
                 <div className={styles.itemContainer}>
-                  <p>项目序号：</p>
-                  <p>{profileOrigin['num']}</p>
+                  <p>项目名称：</p>
+                  <p>{profileOrigin['name']}</p>
                 </div>
               </Col>
               <Col xl={8} md={12} sm={24}>
@@ -142,10 +155,22 @@ class ProfileApprovalProject extends React.Component {
               </Col>
               <Col xl={8} md={12} sm={24}>
                 <div className={styles.itemContainer}>
+                  <p>外包公司：</p>
+                  <div>
+                    {_.map(profileOrigin['origin_outer'], item => (
+                      <p>{item.company_name} {item.price}万元 {item.contact}</p>
+                    ))}
+                  </div>
+                </div>
+              </Col>
+              <Col xl={8} md={12} sm={24}>
+                <div className={styles.itemContainer}>
                   <p>备注：</p>
                   <p>{profileOrigin['memo']}</p>
                 </div>
               </Col>
+            </Row>
+            <Row gutter={[80]}>
               <Col xl={8} md={12} sm={24}>
                 <div className={styles.itemContainer}>
                   <p>股东确认：</p>
@@ -173,6 +198,41 @@ class ProfileApprovalProject extends React.Component {
                       </Button>
                     </Col>
                   }
+                </div>
+              </Col>
+            </Row>
+            <h3>合同</h3>
+            <Row gutter={[80]}>
+              <Col xl={8} md={12} sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>合同金额：</p>
+                  <p>{profileContract['cash']} 元</p>
+                </div>
+              </Col>
+              <Col xl={8} md={12} sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>差旅费：</p>
+                  <p>{profileContract['travel_cash']} 元</p>
+                </div>
+              </Col>
+              <Col xl={8} md={12} sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>结算情况：</p>
+                  <p>{profileContract['settlement']}</p>
+                </div>
+              </Col>
+            </Row>
+            <Row gutter={[80]}>
+              <Col xl={8} md={12} sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>合同文件：</p>
+                  <List itemLayout="horizontal" className="noPaddingList" size="small"
+                        dataSource={profileContract['attachment']}
+                        renderItem={(item, index) => (
+                          <List.Item key={item.id}>
+                            <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+                          </List.Item>
+                        )}/>
                 </div>
               </Col>
             </Row>
@@ -347,7 +407,6 @@ class ProfileApprovalProject extends React.Component {
               </Col>
             </Row>
 
-
             <h3>跟踪服务表</h3>
             <Row gutter={[80]}>
               <Col xl={8} md={12} sm={24}>
@@ -453,6 +512,7 @@ export default connect(({ loading, common, profileApprovalProject }) => ({
   loadingExecute: loading.effects['profileApprovalProject/eGetExecuteTable'],
   routes: profileApprovalProject.routes,
   profileOrigin: profileApprovalProject.profileOrigin,
+  profileContract: profileApprovalProject.profileContract,
   profileRecord: profileApprovalProject.profileRecord,
   profileExecute: profileApprovalProject.profileExecute,
   profileService: profileApprovalProject.profileService,
