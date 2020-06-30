@@ -61,7 +61,8 @@ class BasicMenu extends React.Component {
     const selectKeys = this.props.history.location.pathname.split('/')[1];
 
     return (
-      <Menu mode="inline" selectedKeys={[selectKeys]} onSelect={this.onSelect}>
+      <Menu mode="inline" selectedKeys={[selectKeys]} onSelect={this.onSelect}
+            defaultOpenKeys={['common', 'department']}>
 
         <Menu.SubMenu key="common" title={<span>公共区域</span>}>
           <Menu.SubMenu key="brochure"

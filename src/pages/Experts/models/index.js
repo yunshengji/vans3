@@ -16,10 +16,16 @@ export default {
       expertsLibrary: [{ breadcrumbName: '专家组', path: '/experts' }, { breadcrumbName: '专家库' }],
     },
 
+    // 专家信息弹窗：评审组、专家库通用
+    expertProfileVisible: false,
+    expertProfile: {},
+
     searchExpertParams: {
       name: undefined,
       procurement_num: undefined,
+      procurement_category: undefined,
       law_num: undefined,
+      law_category: undefined,
     },
     createExpertVisible: false,
     editExpertVisible: false,
@@ -46,6 +52,7 @@ export default {
 
     chooseExpertsNumVisible: false,
     chooseExpertsNumProjectId: '',
+    chooseExpertsNumProjectCategory: '',
   },
 
   subscriptions: {
@@ -57,8 +64,8 @@ export default {
     * eCreateExpert({ payload }, { select, call, put }) {
       try {
         const { msg } = yield call(CreateExpert, payload);
-        yield put({ type: 'rUpdateState', payload: { createExpertVisible: false } });
         message.success(msg);
+        yield put({ type: 'rUpdateState', payload: { createExpertVisible: false } });
         yield put({ type: 'eLoadExperts' });
       } catch (err) {
         console.log(err);

@@ -7,7 +7,7 @@ import CreateProject from '@/pages/Experts/components/CreateProject';
 import EditProject from '@/pages/Experts/components/EditProject';
 import ChooseExpertsNumber from '@/pages/Experts/components/ChooseExpertsNumber';
 
-class ProjectsList extends React.Component {
+class ProjectList extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: 'experts/eLoadProjects' });
@@ -40,10 +40,9 @@ class ProjectsList extends React.Component {
         <Table.Column title="采购证号" dataIndex="procurement_num"/>
         <Table.Column title="发改证号" dataIndex="law_num"/>
         <Table.Column title="电话号码" dataIndex="phone" render={(text, record) => (
-          <React.Fragment>
-            {record['phone_inner'] && <div>库内：{record['phone_inner']}</div>}
-            {record['phone_outer'] && <div>库外：{record['phone_outer']}</div>}
-          </React.Fragment>
+          <div style={{ whiteSpace: 'pre' }}>
+            {record['phone_inner'] && <div>{record['phone_inner']}</div>}
+          </div>
         )}/>
         <Table.Column title="操作" dataIndex="operation" render={(text, record) => (
           <Button type="link" onClick={() => this.removeRandomExpert(record, index)}>
@@ -93,12 +92,13 @@ class ProjectsList extends React.Component {
       },
     });
   };
-  showChooseExpertsNum = ({ id }) => {
+  showChooseExpertsNum = ({ id,roll_type }) => {
     this.props.dispatch({
       type: 'experts/rUpdateState',
       payload: {
         chooseExpertsNumVisible: true,
         chooseExpertsNumProjectId: id,
+        chooseExpertsNumProjectCategory: roll_type,
       },
     });
   };
@@ -187,7 +187,7 @@ class ProjectsList extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'ProjectsList' })(ProjectsList);
+const WrappedForm = Form.create({ name: 'ProjectsList' })(ProjectList);
 
 export default connect(({ loading, common, experts }) => ({
   fetchingProjectsList: loading.effects['experts/eLoadProjects'],

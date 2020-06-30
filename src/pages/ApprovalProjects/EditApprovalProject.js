@@ -82,7 +82,7 @@ class EditApprovalProject extends React.Component {
             </Tabs>
             :
             <Tabs activeKey={activeKey}>
-              <Tabs.TabPane tab="立项表" key="UploadTableOrigin">
+              <Tabs.TabPane tab="立项表" key="EditTableOrigin">
                 <EditTableOrigin/>
               </Tabs.TabPane>
             </Tabs>

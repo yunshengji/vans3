@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
 import { Breadcrumb, Button, Tabs } from 'antd';
-import ExpertsList from '@/pages/Experts/components/ExpertsList';
-import ProjectsList from '@/pages/Experts/components/ProjectsList';
+import ExpertsList from '@/pages/Experts/components/ExpertList';
+import ProjectsList from '@/pages/Experts/components/ProjectList';
+import ExpertProfile from '@/pages/Experts/components/ExpertProfile';
 
 class Experts extends React.Component {
   changeTab = (activeKey) => {
@@ -26,13 +27,12 @@ class Experts extends React.Component {
   };
 
   render() {
-    let { activeKey, routes } = this.props;
-    routes = routes[activeKey];
+    const { activeKey, routes } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
           <Breadcrumb>
-            {routes.map((item, index) => {
+            {routes[activeKey].map((item, index) => {
               const { path, breadcrumbName } = item;
               if (path) {
                 return (
@@ -61,6 +61,7 @@ class Experts extends React.Component {
           }
         </div>
         <div className="contentWrapper">
+          <ExpertProfile/>
           <Tabs activeKey={activeKey} onChange={this.changeTab}>
             <Tabs.TabPane tab="评审组" key="resultsLibrary">
               <ProjectsList/>
