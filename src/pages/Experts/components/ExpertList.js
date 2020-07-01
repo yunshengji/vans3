@@ -4,7 +4,7 @@ import { Button, Table, Pagination, Tag, Row, Col, Form, Input, Modal, Select } 
 import CreateExpert from '@/pages/Experts/components/CreateExpert';
 import EditExpert from '@/pages/Experts/components/EditExpert';
 
-class ExpertsList extends React.Component {
+class ExpertList extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: 'experts/eLoadExperts' });
@@ -23,7 +23,9 @@ class ExpertsList extends React.Component {
     this.props.form.setFieldsValue({
       name: undefined,
       procurement_num: undefined,
+      procurement_category: undefined,
       law_num: undefined,
+      law_category: undefined,
     });
     const values = this.props.form.getFieldsValue();
     this.props.dispatch({
@@ -32,6 +34,15 @@ class ExpertsList extends React.Component {
     });
     this.props.dispatch({ type: 'experts/eLoadExperts' });
     e.preventDefault();
+  };
+  showExpertProfile = (record) => {
+    this.props.dispatch({
+      type: 'experts/rUpdateState',
+      payload: {
+        expertProfileVisible: true,
+        expertProfile: { ...record },
+      },
+    });
   };
   showEditExpert = (record) => {
     this.props.dispatch({
@@ -79,15 +90,29 @@ class ExpertsList extends React.Component {
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="采购证号">
+              <Form.Item label="政府采购专家证号">
                 {getFieldDecorator('procurement_num', { initialValue: searchExpertParams['procurement_num'] })(
                   <Input placeholder="请输入"/>,
                 )}
               </Form.Item>
             </Col>
             <Col xl={6} md={12} sm={24}>
-              <Form.Item label="发改证号">
+              <Form.Item label="政府采购评审专业类别">
+                {getFieldDecorator('procurement_category', { initialValue: searchExpertParams['procurement_category'] })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
+            </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="四川省评标专家证号">
                 {getFieldDecorator('law_num', { initialValue: searchExpertParams['law_num'] })(
+                  <Input placeholder="请输入"/>,
+                )}
+              </Form.Item>
+            </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="四川省评标专家评审类别">
+                {getFieldDecorator('law_category', { initialValue: searchExpertParams['law_category'] })(
                   <Input placeholder="请输入"/>,
                 )}
               </Form.Item>
@@ -108,14 +133,13 @@ class ExpertsList extends React.Component {
                  }
                }}
                loading={fetchingExpertsList || editingExpert || deletingExpert} rowKey={record => record.id}>
-          <Table.Column title="姓名" dataIndex="name"/>
-          <Table.Column title="采购证号" dataIndex="procurement_num"/>
-          <Table.Column title="发改证号" dataIndex="law_num"/>
-          <Table.Column title="电话号码" render={(text, record) => (
-            <React.Fragment>
-              {record['phone_inner'] && <div>库内：{record['phone_inner']}</div>}
-              {record['phone_outer'] && <div>库外：{record['phone_outer']}</div>}
-            </React.Fragment>
+          <Table.Column title="姓名" dataIndex="name" render={(text, record) => (
+            <a onClick={() => this.showExpertProfile(record)}>{text}</a>
+          )}/>
+          <Table.Column title="政府采购专家证号" dataIndex="procurement_num"/>
+          <Table.Column title="四川省评标专家证号" dataIndex="law_num"/>
+          <Table.Column title="电话号码" dataIndex="phone_inner" render={(text, record) => (
+            <div style={{ whiteSpace: 'pre' }}>{record['phone_inner']}</div>
           )}/>
           <Table.Column title="状态" dataIndex="alive" render={(text, record) => (
             <React.Fragment>
@@ -126,15 +150,11 @@ class ExpertsList extends React.Component {
                         render={(text, record) => (
                           <div className="actionGroup">
                             <Button type="link" icon="edit"
-                                    onClick={() => {
-                                      this.showEditExpert(record);
-                                    }}>
+                                    onClick={() => this.showEditExpert(record)}>
                               修改
                             </Button>
                             <Button type="link" icon="delete" className="redButton"
-                                    onClick={() => {
-                                      this.deleteExpert(record);
-                                    }}>
+                                    onClick={() => this.deleteExpert(record)}>
                               删除
                             </Button>
                           </div>
@@ -150,7 +170,7 @@ class ExpertsList extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'ExpertsList' })(ExpertsList);
+const WrappedForm = Form.create({ name: 'ExpertsList' })(ExpertList);
 
 export default connect(({ loading, common, experts }) => ({
   fetchingExpertsList: loading.effects['experts/eLoadExperts'],

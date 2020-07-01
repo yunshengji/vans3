@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
 import { Breadcrumb, Button, Tabs } from 'antd';
-import ExpertsList from '@/pages/Experts/components/ExpertsList';
-import ProjectsList from '@/pages/Experts/components/ProjectsList';
+import GroupList from '@/pages/Experts/components/GroupList';
+import ExpertList from '@/pages/Experts/components/ExpertList';
+import ExpertProfile from '@/pages/Experts/components/ExpertProfile';
 
 class Experts extends React.Component {
   changeTab = (activeKey) => {
@@ -26,13 +27,12 @@ class Experts extends React.Component {
   };
 
   render() {
-    let { activeKey, routes } = this.props;
-    routes = routes[activeKey];
+    const { activeKey, routes } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
           <Breadcrumb>
-            {routes.map((item, index) => {
+            {routes[activeKey].map((item, index) => {
               const { path, breadcrumbName } = item;
               if (path) {
                 return (
@@ -49,24 +49,27 @@ class Experts extends React.Component {
               }
             })}
           </Breadcrumb>
-          {activeKey === 'resultsLibrary' &&
-          <Button icon="plus-circle" onClick={this.showCreateProject}>
-            新建评审
-          </Button>
+          {
+            activeKey === 'resultsLibrary' &&
+            <Button icon="plus-circle" onClick={this.showCreateProject}>
+              新建评审
+            </Button>
           }
-          {activeKey === 'expertsLibrary' &&
-          <Button icon="plus-circle" onClick={this.showCreateExpert}>
-            新建专家
-          </Button>
+          {
+            activeKey === 'expertsLibrary' &&
+            <Button icon="plus-circle" onClick={this.showCreateExpert}>
+              新建专家
+            </Button>
           }
         </div>
         <div className="contentWrapper">
+          <ExpertProfile/>
           <Tabs activeKey={activeKey} onChange={this.changeTab}>
             <Tabs.TabPane tab="评审组" key="resultsLibrary">
-              <ProjectsList/>
+              <GroupList/>
             </Tabs.TabPane>
             <Tabs.TabPane tab="专家库" key="expertsLibrary">
-              <ExpertsList/>
+              <ExpertList/>
             </Tabs.TabPane>
           </Tabs>
         </div>

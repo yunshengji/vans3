@@ -14,6 +14,13 @@ export async function DeleteProjectArchive(id, data) {
   });
 }
 
+export async function UpdateProjectArchive(id, data) {
+  return request(`/project/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
 export async function GetProjectArchiveList(params) {
   return request('/project', {
     method: 'GET',

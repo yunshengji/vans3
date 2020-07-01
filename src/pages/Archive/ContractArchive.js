@@ -6,6 +6,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import { getFileURL, selectYearList } from '@/utils/transfer';
 import UploadContractArchive from '@/pages/Archive/components/EditContractArchive';
+import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
 
 class ContractArchive extends React.Component {
   componentDidMount() {
@@ -139,8 +140,9 @@ class ContractArchive extends React.Component {
                     initialValue: searchParams['category'],
                   })(
                     <Select placeholder="请选择" allowClear>
-                      <Select.Option key="上游档案" value="上游档案">上游档案</Select.Option>
-                      <Select.Option key="下游档案" value="下游档案">下游档案</Select.Option>
+                      {TABLE_FOR_MAKING_PROJECT_CATEGORIES.map(item =>
+                        <Select.Option key={item} value={item}>{item}</Select.Option>,
+                      )}
                     </Select>,
                   )}
                 </Form.Item>
@@ -158,7 +160,7 @@ class ContractArchive extends React.Component {
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
-                <Form.Item label="合同年限">
+                <Form.Item label="合同年份">
                   {form.getFieldDecorator('time', {
                     initialValue: searchParams['time'],
                   })(
@@ -185,20 +187,27 @@ class ContractArchive extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="编号" dataIndex="number" width={100}/>
+            <Table.Column title="编号" dataIndex="number" width={100} render={(text, record) => (
+              <span>
+                {
+                  text ?
+                    record.time ? moment(record.time * 1000).get('year') + '-' + text : text
+                    :
+                    ''
+                }
+              </span>
+            )}/>
             <Table.Column title="合同名称" dataIndex="name" width={300}/>
             <Table.Column title="关联项目" dataIndex="origin" width={300}
                           render={(origin) => (
                             origin &&
                             <a target="_blank" href={`/approvalProject/profile/${origin.id}`}>{origin.name}</a>
                           )}/>
-            <Table.Column title="档案类型" dataIndex="category" width={80}/>
+            <Table.Column title="档案类型" dataIndex="category" width={150}/>
             <Table.Column title="结算情况" dataIndex="settlement" width={80}/>
-            <Table.Column title="合同金额（元）" dataIndex="cash" width={120}/>
+            <Table.Column title="合同金额（元）" dataIndex="cash" width={110}/>
             <Table.Column title="差旅费（元）" dataIndex="travel_cash" width={100}/>
-            <Table.Column title="合同年份" dataIndex="time" width={80}
-                          render={(text) => (<span>{moment(1000 * text).format('YYYY')}</span>)}/>/>
-            <Table.Column title="操作" dataIndex="action" width={150}
+            <Table.Column title="操作" dataIndex="action" width={120}
                           render={(text, record) => (
                             <div className="actionGroup">
                               <Button type="link" icon="edit" onClick={() => this.showEditContractArchive(record)}>

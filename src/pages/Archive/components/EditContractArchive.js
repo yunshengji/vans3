@@ -4,6 +4,7 @@ import { Form, Modal, Select, Upload, Icon, Button, InputNumber, Input, List } f
 import _ from 'lodash';
 import moment from 'moment';
 import { getFileURL, limitDecimals, selectYearList } from '../../../utils/transfer';
+import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../../config/constant';
 
 class EditContractArchive extends React.Component {
   hideUploadContractArchiveModal = () => {
@@ -40,7 +41,7 @@ class EditContractArchive extends React.Component {
       payload: { editContractArchive: {} },
     });
   };
-  submitCreatedContractArchive = () => {
+  submitContractArchive = () => {
     const { dispatch, form, isEditing } = this.props;
     form.validateFields((err, values) => {
       if (!err) {
@@ -68,7 +69,7 @@ class EditContractArchive extends React.Component {
     return (
       <Modal title="合同档案" visible={editContractArchiveVisible} confirmLoading={uploadingContractArchive || updatingContractArchive} width={600}
              afterClose={this.close}
-             onOk={this.submitCreatedContractArchive}
+             onOk={this.submitContractArchive}
              onCancel={this.hideUploadContractArchiveModal}>
         <Form layout="horizontal" labelCol={{ xs: 5 }} wrapperCol={{ xs: 18 }}>
           <Form.Item label="合同编号">
@@ -104,9 +105,10 @@ class EditContractArchive extends React.Component {
               rules: [{ required: true, message: '请选择' }],
               initialValue: editContractArchive['category'],
             })(
-              <Select placeholder="请选择">
-                <Select.Option key="上游档案" value="上游档案">上游档案</Select.Option>
-                <Select.Option key="下游档案" value="下游档案">下游档案</Select.Option>
+              <Select placeholder="请选择" allowClear>
+                {TABLE_FOR_MAKING_PROJECT_CATEGORIES.map(item =>
+                  <Select.Option key={item} value={item}>{item}</Select.Option>,
+                )}
               </Select>,
             )}
           </Form.Item>

@@ -4,17 +4,31 @@ import { connect } from 'dva';
 import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Select, Modal, Input } from 'antd';
 import _ from 'lodash';
 import { getFileURL } from '@/utils/transfer';
-import UploadProjectArchive from '@/pages/Archive/components/UploadProjectArchive';
+import EditProjectArchive from '@/pages/Archive/components/EditProjectArchive';
+import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
 
 class ProjectArchive extends React.Component {
   componentDidMount() {
     this.props.dispatch({ type: 'projectArchiveList/eLoadProjectArchive' });
   }
 
-  showUploadProjectArchivesModal = () => {
+  showUploadProjectArchive = () => {
     this.props.dispatch({
       type: 'projectArchiveList/rUpdateState',
-      payload: { uploadProjectArchivesModalVisible: true },
+      payload: {
+        isEditing: false,
+        editProjectArchiveVisible: true,
+      },
+    });
+  };
+  showEditProjectArchive = record => {
+    this.props.dispatch({
+      type: 'projectArchiveList/rUpdateState',
+      payload: {
+        isEditing: true,
+        editProjectArchiveVisible: true,
+        editProjectArchive: record,
+      },
     });
   };
   searchProjectList = e => {
@@ -40,11 +54,11 @@ class ProjectArchive extends React.Component {
     this.props.dispatch({ type: 'projectArchiveList/eLoadProjectArchive' });
     e.preventDefault();
   };
-  showDeleteConfirm = ({ id, attachment: { file_name_local } }) => {
+  showDeleteConfirm = ({ id, name }) => {
     const { dispatch } = this.props;
     Modal.confirm({
       title: '确定删除此档案',
-      content: <p>文件 <b>《{file_name_local}》</b> 删除后将无法恢复</p>,
+      content: <p>档案 <b>《{name}》</b> 删除后将无法恢复</p>,
       okText: '删除',
       okType: 'danger',
       cancelText: '取消',
@@ -61,7 +75,7 @@ class ProjectArchive extends React.Component {
   };
 
   render() {
-    const { form, fetchingProjectArchives, deletingProjectArchive, routes, searchParams, total, current, pageSize, projectArchiveList } = this.props;
+    const { form, mine, fetchingProjectArchives, deletingProjectArchive, routes, searchParams, total, current, pageSize, projectArchiveList } = this.props;
     return (
       <React.Fragment>
         <div className="headerWrapperWithCreate">
@@ -83,9 +97,13 @@ class ProjectArchive extends React.Component {
               }
             })}
           </Breadcrumb>
-          <Button icon="plus-circle" onClick={this.showUploadProjectArchivesModal}>上传</Button>
+          {
+            mine.department.name !== '营销部' &&
+            <Button icon="plus-circle" onClick={this.showUploadProjectArchive}>上传</Button>
+          }
+
         </div>
-        <UploadProjectArchive/>
+        <EditProjectArchive/>
         <div className="contentWrapper">
           <h3>档案筛选</h3>
           <Form layout="horizontal" className="searchWrapper">
@@ -105,8 +123,9 @@ class ProjectArchive extends React.Component {
                     initialValue: searchParams['category'],
                   })(
                     <Select placeholder="请选择" allowClear>
-                      <Select.Option key="上游档案" value="上游档案">上游档案</Select.Option>
-                      <Select.Option key="下游档案" value="下游档案">下游档案</Select.Option>
+                      {TABLE_FOR_MAKING_PROJECT_CATEGORIES.map(item =>
+                        <Select.Option key={item} value={item}>{item}</Select.Option>,
+                      )}
                     </Select>,
                   )}
                 </Form.Item>
@@ -142,35 +161,59 @@ class ProjectArchive extends React.Component {
             <Table.Column title="档案名称" dataIndex="name"/>
             <Table.Column title="档案类型" dataIndex="category"/>
             <Table.Column title="是否结算" dataIndex="settlement"/>
-            <Table.Column title="相关文件" dataIndex="attachment" render={(attachment) => {
-              return (
-                _.map(attachment, (value, key) => {
-                  return (
-                    <p key={key}>
-                      <a href={getFileURL(value.id)} target="_blank">{value['file_name_local']}</a>
-                    </p>
-                  );
-                })
-              );
-            }}/>
-            <Table.Column title="明细文件" dataIndex="detail" render={(detail) => {
-              return (
-                _.map(detail, (value, key) => {
-                  return (
-                    <p key={key}>
-                      <a href={getFileURL(value.id)} target="_blank">{value['file_name_local']}</a>
-                    </p>
-                  );
-                })
-              );
-            }}/>
+            {
+              (mine.department.name === '运营部' || mine.department.name === '总裁部') &&
+              <Table.Column title="相关文件" dataIndex="attachment" render={(attachment) => {
+                return (
+                  _.map(attachment, (value, key) => {
+                    return (
+                      <p key={key}>
+                        <a href={getFileURL(value.id)} target="_blank">{value['file_name_local']}</a>
+                      </p>
+                    );
+                  })
+                );
+              }}/>
+            }
+            {
+              (mine.department.name === '营销部' || mine.department.name === '运营部' || mine.department.name === '总裁部') &&
+              <Table.Column title="明细文件" dataIndex="detail" render={(detail) => {
+                return (
+                  _.map(detail, (value, key) => {
+                    return (
+                      <p key={key}>
+                        <a href={getFileURL(value.id)} target="_blank">{value['file_name_local']}</a>
+                      </p>
+                    );
+                  })
+                );
+              }}/>
+            }
+            {
+              (mine.department.name === '产品技术部' || mine.department.name === '运营部' || mine.department.name === '总裁部') &&
+              <Table.Column title="成果文件" dataIndex="result" render={(result) => {
+                return (
+                  _.map(result, (value, key) => {
+                    return (
+                      <p key={key}>
+                        <a href={getFileURL(value.id)} target="_blank">{value['file_name_local']}</a>
+                      </p>
+                    );
+                  })
+                );
+              }}/>
+            }
             <Table.Column title="操作" dataIndex="action"
                           render={(text, record) => (
                             <div className="actionGroup">
+                              {
+                                mine.department.name !== '营销部' &&
+                                <Button type="link" icon="edit" onClick={() => this.showEditProjectArchive(record)}>
+                                  修改
+                                </Button>
+                              }
                               <Button type="link" icon="delete" className="redButton"
-                                      onClick={() => {
-                                        this.showDeleteConfirm(record);
-                                      }}>
+                                      onClick={() => this.showDeleteConfirm(record)}>
                                 删除
                               </Button>
                             </div>
@@ -192,7 +235,7 @@ const WrappedForm = Form.create({ name: 'ProjectArchive' })(ProjectArchive);
 export default connect(({ loading, common, projectArchiveList }) => ({
   fetchingProjectArchives: loading.effects['projectArchiveList/eLoadProjectArchive'],
   deletingProjectArchive: loading.effects['projectArchiveList/eDeleteProjectArchive'],
-  level: common.mine.level,
+  mine: common.mine,
   routes: projectArchiveList.routes,
   searchParams: projectArchiveList.searchParams,
   total: projectArchiveList.projectArchives.total,

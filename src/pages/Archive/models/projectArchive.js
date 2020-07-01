@@ -1,7 +1,12 @@
-import { UploadProjectArchive, DeleteProjectArchive, GetProjectArchiveList } from '@/services/archive';
 import { message } from 'antd';
-import { UploadFile } from '@/services/files';
 import _ from 'lodash';
+import { UploadFile } from '@/services/files';
+import {
+  UploadProjectArchive,
+  DeleteProjectArchive,
+  UpdateProjectArchive,
+  GetProjectArchiveList,
+} from '@/services/archive';
 
 export default {
 
@@ -10,7 +15,9 @@ export default {
   state: {
     routes: [{ breadcrumbName: '项目档案' }],
 
-    uploadProjectArchivesModalVisible: false,
+    isEditing: false,
+    editProjectArchiveVisible: false,
+    editProjectArchive: {},
 
     searchParams: {
       name: undefined,
@@ -32,14 +39,13 @@ export default {
   },
 
   effects: {
-    * eUploadProjectArchives({ payload }, { select, call, put }) {
+    * eUploadProjectArchive({ payload }, { select, call, put }) {
       try {
-        const { name, category, settlement, fileListOrdinary, fileListDetail } = payload;
-        let attachment, detail;
-        const { projectArchives: { current, pageSize } } = yield select(state => state['projectArchiveList']);
+        const { name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
+        let attachment, detail, result;
 
         // 上传文件
-        if (fileListOrdinary) {
+        if (!_.isEmpty(fileListOrdinary)) {
           const formData = new FormData();
           formData.append('folder_path', 'archive_project');
           _.forEach(fileListOrdinary, (value, key) => {
@@ -48,7 +54,7 @@ export default {
           const { data } = yield call(UploadFile, formData);
           attachment = _.map(data, 'id');
         }
-        if (fileListDetail) {
+        if (!_.isEmpty(fileListDetail)) {
           const formData = new FormData();
           formData.append('folder_path', 'archive_project');
           _.forEach(fileListDetail, (value, key) => {
@@ -57,14 +63,21 @@ export default {
           const { data } = yield call(UploadFile, formData);
           detail = _.map(data, 'id');
         }
+        if (!_.isEmpty(fileListResult)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_project');
+          _.forEach(fileListResult, (value, key) => {
+            formData.append('file', fileListResult[key]['originFileObj']);
+          });
+          const { data } = yield call(UploadFile, formData);
+          result = _.map(data, 'id');
+        }
 
-        // 提交文件和分类信息
-        const { msg } = yield call(UploadProjectArchive, { name, category, settlement, attachment, detail });
-        yield put({ type: 'rUpdateState', payload: { uploadProjectArchivesModalVisible: false } });
+        const { msg } = yield call(UploadProjectArchive, { name, category, settlement, attachment, detail, result });
+        yield put({ type: 'rUpdateState', payload: { editProjectArchiveVisible: false } });
         message.success(msg);
 
-        // 更新列表数据
-        yield put({ type: 'eLoadProjectArchive', payload: { page: current, page_size: pageSize } });
+        yield put({ type: 'eLoadProjectArchive' });
       } catch (err) {
         console.log(err);
       }
@@ -75,6 +88,55 @@ export default {
         message.success(msg);
         const { projectArchives: { current, pageSize } } = yield select(state => state['projectArchiveList']);
         yield put({ type: 'eLoadProjectArchive', payload: { page: current, page_size: pageSize } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eUpdateProjectArchive({ payload }, { select, call, put }) {
+      try {
+        const { name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
+        const { editProjectArchive } = yield select(state => state['projectArchiveList']);
+        let attachment = _.map(editProjectArchive['attachment'], 'id');
+        let detail = _.map(editProjectArchive['detail'], 'id');
+        let result = _.map(editProjectArchive['result'], 'id');
+
+        // 上传文件
+        if (!_.isEmpty(fileListOrdinary)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_project');
+          _.forEach(fileListOrdinary, (value, key) => {
+            formData.append('file', fileListOrdinary[key]['originFileObj']);
+          });
+          const { data } = yield call(UploadFile, formData);
+          attachment = _.concat(attachment, _.map(data, 'id'));
+        }
+        if (!_.isEmpty(fileListDetail)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_project');
+          _.forEach(fileListDetail, (value, key) => {
+            formData.append('file', fileListDetail[key]['originFileObj']);
+          });
+          const { data } = yield call(UploadFile, formData);
+          detail = _.concat(detail, _.map(data, 'id'));
+        }
+        if (!_.isEmpty(fileListResult)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_project');
+          _.forEach(fileListResult, (value, key) => {
+            formData.append('file', fileListResult[key]['originFileObj']);
+          });
+          const { data } = yield call(UploadFile, formData);
+          result = _.concat(result, _.map(data, 'id'));
+        }
+        const { msg } = yield call(
+          UpdateProjectArchive,
+          editProjectArchive['id'],
+          { name, category, settlement, attachment, detail, result },
+        );
+        yield put({ type: 'rUpdateState', payload: { editProjectArchiveVisible: false } });
+        message.success(msg);
+
+        yield put({ type: 'eLoadProjectArchive' });
       } catch (err) {
         console.log(err);
       }
@@ -94,6 +156,24 @@ export default {
   reducers: {
     rUpdateState(state, { payload }) {
       return { ...state, ...payload };
+    },
+    rUpdateAttachmentFiles(state, { payload }) {
+      return {
+        ...state,
+        editProjectArchive: { ...state['editProjectArchive'], attachment: payload },
+      };
+    },
+    rUpdateDetailFiles(state, { payload }) {
+      return {
+        ...state,
+        editProjectArchive: { ...state['editProjectArchive'], detail: payload },
+      };
+    },
+    rUpdateResultFiles(state, { payload }) {
+      return {
+        ...state,
+        editProjectArchive: { ...state['editProjectArchive'], result: payload },
+      };
     },
   },
 

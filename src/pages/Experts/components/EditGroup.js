@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
 
-class EditProject extends React.Component {
+class EditGroup extends React.Component {
   hideEditProject = () => {
     this.props.dispatch({
       type: 'experts/rUpdateState',
@@ -54,13 +54,24 @@ class EditProject extends React.Component {
               <Input placeholder="请输入"/>,
             )}
           </Form.Item>
+          <Form.Item label="专家类型">
+            {getFieldDecorator('roll_type', {
+              initialValue: editProject['roll_type'],
+              rules: [{ required: true, message: '专家类型不能为空' }],
+            })(
+              <Select placeholder="请选择" disabled>
+                <Select.Option key="发改专家摇号" value="发改专家摇号">发改专家</Select.Option>
+                <Select.Option key="采购专家摇号" value="采购专家摇号">采购专家</Select.Option>
+              </Select>,
+            )}
+          </Form.Item>
         </Form>
       </Modal>
     );
   }
 }
 
-const WrappedForm = Form.create({ name: 'editProject' })(EditProject);
+const WrappedForm = Form.create({ name: 'editProject' })(EditGroup);
 
 export default connect(({ loading, experts }) => ({
   submittingEditedProject: loading.effects['experts/eEditProject'],

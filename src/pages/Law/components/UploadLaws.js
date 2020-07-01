@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Modal, Select, Upload, Icon, Button } from 'antd';
+import { Form, Modal, Cascader, Upload, Icon, Button } from 'antd';
+import _ from 'lodash';
 import { LAWS_LABELS } from '../../../../config/constant';
 
 class UploadLaws extends React.Component {
@@ -10,6 +11,13 @@ class UploadLaws extends React.Component {
   submitCreatedLaws = () => {
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        const { belong_to } = values;
+        if (belong_to.length > 1) {
+          values['belong_to'] = _.head(belong_to);
+          values['belong_to_2'] = _.last(belong_to);
+        } else {
+          values['belong_to'] = _.head(belong_to);
+        }
         this.props.dispatch({ type: 'lawsList/eUploadLaws', payload: { ...values } });
       }
     });
@@ -18,6 +26,7 @@ class UploadLaws extends React.Component {
   render() {
     const { form: { getFieldDecorator, getFieldValue, setFieldsValue }, uploadingLaws, uploadLawsModalVisible } = this.props;
     const uploadConfig = {
+      multiple: true,
       showUploadList: true,
       beforeUpload: () => false,
       onRemove: file => {
@@ -36,21 +45,17 @@ class UploadLaws extends React.Component {
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
           <Form.Item label="类别">
             {getFieldDecorator('belong_to', {
-              initialValue: '其他',
+              initialValue: ['其他'],
               rules: [{ required: true, message: '请选择类别' }],
             })(
-              <Select placeholder="请选择">
-                {LAWS_LABELS.map((item) =>
-                  <Select.Option key={item} value={item}>{item}</Select.Option>,
-                )}
-              </Select>,
+              <Cascader options={LAWS_LABELS} expandTrigger="hover" placeholder="请选择"/>,
             )}
           </Form.Item>
           <Form.Item label="文件资料">
             {getFieldDecorator('fileList', {
               rules: [{ required: true, message: '请选择文件' }],
               valuePropName: 'fileList',
-              getValueFromEvent: ({ file }) => [file],
+              getValueFromEvent: ({ file, fileList }) => fileList,
             })(
               <Upload {...uploadConfig}>
                 <Button>

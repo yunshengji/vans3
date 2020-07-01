@@ -27,6 +27,7 @@ export default {
     contracts: [],
 
     profileOrigin: {},
+    profileContract: {},
     profileRecord: {},
     profileService: {},
     profileExecute: {},
@@ -61,16 +62,14 @@ export default {
         console.log(err);
       }
     },
-    * eGetContracts({ payload }, { select, call, put }) {
+    * eGetOriginContract({ payload }, { select, call, put }) {
       try {
-        const { data: { list: contracts } } = yield call(GetContractArchiveList, { page_size: 10000 });
-        console.log(contracts);
-        yield put({ type: 'rUpdateState', payload: { contracts } });
+        const { data: { list } } = yield call(GetContractArchiveList, { ...payload });
+        yield put({ type: 'rUpdateState', payload: { profileContract: _.head(list) || {} } });
       } catch (err) {
         console.log(err);
       }
     },
-
     * eCreateOriginTable({ payload }, { select, call, put }) {
       try {
         const { msg, data: { id } } = yield call(CreateOriginTable, payload);

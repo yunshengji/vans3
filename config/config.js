@@ -4,7 +4,10 @@ export default {
   treeShaking: true,
   hash: true,
   targets: { ie: 11 },
-  theme: aliyunTheme,
+  theme: {
+    aliyunTheme,
+    'primary-color': '#3f78ff',
+  },
   routes: [
     { path: '/login', component: './User/Login' },
     {
@@ -12,7 +15,7 @@ export default {
       component: '../layouts/BasicLayout',
       Routes: ['src/components/AuthToken'],
       routes: [
-        { path: '/', redirect: '/users' },
+        { path: '/', redirect: '/gossip' },
         { path: '/403', component: './Exception/403' },
         { path: '/404', component: './Exception/404' },
         { path: '/500', component: './Exception/500' },

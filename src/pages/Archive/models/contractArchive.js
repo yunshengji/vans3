@@ -87,7 +87,7 @@ export default {
         console.log(err);
       }
     },
-    * eUpdateContractArchive({ id, payload }, { select, call, put }) {
+    * eUpdateContractArchive({ payload }, { select, call, put }) {
       try {
         const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
         const { editContractArchive } = yield select(state => state['contractArchiveList']);
