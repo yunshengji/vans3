@@ -13,7 +13,7 @@ export default {
     uploadLawsModalVisible: false,
 
     searchParams: {
-      belong_to: undefined,
+      belong_to: [],
       name: undefined,
     },
 
@@ -33,17 +33,17 @@ export default {
   effects: {
     * eUploadLaws({ payload }, { select, call, put }) {
       try {
-        const { belong_to, fileList } = payload;
-        const { laws: { current, pageSize } } = yield select(state => state['lawsList']);
+        const { belong_to, belong_to_2, fileList } = payload;
 
         // 上传文件
         const formData = new FormData();
         formData.append('folder_path', 'law');
-        formData.append('file', _.head(fileList));
+        _.forEach(fileList, (item => formData.append('file', item.originFileObj)));
         const { data } = yield call(UploadFile, formData);
+        const attachment = _.map(data, 'id');
 
         // 提交
-        const { msg } = yield call(UploadLaws, { belong_to, attachment: _.head(data).id });
+        const { msg } = yield call(UploadLaws, { belong_to, belong_to_2, attachment });
         yield put({ type: 'rUpdateState', payload: { uploadLawsModalVisible: false } });
         message.success(msg);
 
@@ -65,6 +65,12 @@ export default {
     * eLoadLaws({ payload }, { select, call, put }) {
       try {
         const { searchParams, laws: { current, pageSize } } = yield select(state => state['lawsList']);
+        if (searchParams['belong_to'].length === 1) {
+          searchParams['belong_to'] = _.head(searchParams['belong_to']);
+        } else if (searchParams['belong_to'].length > 1) {
+          searchParams['belong_to'] = _.head(searchParams['belong_to']);
+          searchParams['belong_to_2'] = _.last(searchParams['belong_to']);
+        }
         const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
         const { data } = yield call(GetLawsList, { ...queries });
         yield put({ type: 'rUpdateState', payload: { laws: data } });

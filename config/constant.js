@@ -5,7 +5,42 @@ module.exports = {
     { name: '管理员', code: 9 },
   ],
 
-  LAWS_LABELS: ['PPP', '专项债', '十四五规划', '招投标', '平台公司转型重组', '乡村振兴规划', '水功能区划分和纳污能力核定', '政府采购', '财政支出绩效评价', '行政事业单位内部控制规范建设', '其他'],
+  LAWS_LABELS: [
+    { label: '专项债', value: '专项债' },
+    {
+      label: 'PPP项目', value: 'PPP项目',
+      children: [
+        { label: 'PPP项目法律法规', value: 'PPP项目法律法规' },
+        { label: '两评价一方案相关', value: '两评价一方案相关' },
+        { label: '中期评价', value: '中期评价' },
+      ],
+    },
+    { label: '平台公司转型', value: '平台公司转型' },
+    {
+      label: '可研编制相关', value: '可研编制相关',
+      children: [
+        { label: '可研报告法律法规', value: '可研报告法律法规' },
+        { label: '相关建设规范', value: '相关建设规范' },
+      ],
+    },
+    { label: '财政支出绩效评价', value: '财政支出绩效评价' },
+    { label: '行政事业单位内部控制规范建设', value: '行政事业单位内部控制规范建设' },
+    { label: '相关收费标准', value: '相关收费标准' },
+    {
+      label: '招投标和政府采购', value: '招投标和政府采购',
+      children: [
+        { label: '住建', value: '住建' },
+        { label: '发改', value: '发改' },
+        { label: '财政', value: '财政' },
+        { label: '交通', value: '交通' },
+        { label: '水利', value: '水利' },
+        { label: '国务院', value: '国务院' },
+        { label: '四川省人民政府', value: '四川省人民政府' },
+        { label: '其他', value: '其他' },
+      ],
+    },
+    { label: '其他', value: '其他' },
+  ],
 
   TABLE_FOR_MAKING_PROJECT_CATEGORIES: ['PPP项目咨询服务', '平台公司资产重组、转型发展咨询', '五年规划编制咨询服务', '企业十四五规划编制服务', '专项债券咨询服务', '乡村振兴规划编制咨询', '政府采购、招标代理服务', '可研报告', '其他'],
 

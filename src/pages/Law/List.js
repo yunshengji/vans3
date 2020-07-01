@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Input, Select, Modal } from 'antd';
+import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Input, Cascader, Modal } from 'antd';
 import moment from 'moment';
 import UploadLaws from '@/pages/Law/components/UploadLaws';
 import { getFileURL } from '@/utils/transfer';
@@ -24,7 +24,7 @@ class LawsList extends React.Component {
   resetSearch = e => {
     this.props.form.setFieldsValue({
       name: undefined,
-      belong_to: undefined,
+      belong_to: [],
     });
     const values = this.props.form.getFieldsValue();
     this.props.dispatch({
@@ -100,11 +100,7 @@ class LawsList extends React.Component {
               <Col xl={6} md={12} sm={24}>
                 <Form.Item label="法律法规类型">
                   {getFieldDecorator('belong_to', { initialValue: searchParams['belong_to'] })(
-                    <Select placeholder="请选择" allowClear>
-                      {LAWS_LABELS.map(item =>
-                        <Select.Option key={item} value={item}>{item}</Select.Option>,
-                      )}
-                    </Select>,
+                    <Cascader options={LAWS_LABELS} expandTrigger="hover" placeholder="请选择"/>,
                   )}
                 </Form.Item>
               </Col>
@@ -124,19 +120,28 @@ class LawsList extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="文件名" width={600} dataIndex="attachment" render={(text, record) => (
-              <a href={getFileURL(record['attachment']['id'])}
-                 target="_blank">{record['attachment']['file_name_local']}</a>
-            )}/>
-            <Table.Column title="类别" dataIndex="belong_to" render={text => (<b>{text}</b>)}/>
-            <Table.Column title="上传者" dataIndex="creator"
+            <Table.Column title="文件名" width={300} dataIndex="attachment"
+                          render={(text, record) => (
+                            <a href={getFileURL(record['attachment']['id'])} target="_blank">
+                              {record['attachment']['file_name_local']}
+                            </a>
+                          )}/>
+            <Table.Column title="类别" dataIndex="belong_to" width={150}
+                          render={(belong_to, { belong_to_2 }) => (
+                            belong_to_2 ?
+                              <b>{belong_to + '-' + belong_to_2}</b>
+                              :
+                              <b>{belong_to}</b>
+                          )}/>
+            <Table.Column title="上传者" dataIndex="creator" width={80}
                           render={text => (<React.Fragment>{text['name']}</React.Fragment>)}/>
-            <Table.Column title="上传时间" dataIndex="created_at"
+            <Table.Column title="上传时间" dataIndex="created_at" width={120}
                           render={text => (
-                            <React.Fragment>{moment(text * 1000).format('YYYY-MM-DD')}</React.Fragment>)}/>
+                            <React.Fragment>{moment(text * 1000).format('YYYY-MM-DD')}</React.Fragment>
+                          )}/>
             {
               level > 1 &&
-              <Table.Column title="操作" dataIndex="action"
+              <Table.Column title="操作" dataIndex="action" width={80}
                             render={(text, record) => (
                               <div className="actionGroup">
                                 <Button type="link" icon="delete" className="redButton"
