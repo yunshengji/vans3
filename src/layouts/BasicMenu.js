@@ -128,7 +128,9 @@ class BasicMenu extends React.Component {
           {
             (computedDepartment === '产品技术部' || computedDepartment === '营销部' || computedDepartment === '运营部' || computedDepartment === '总裁部') &&
             <Menu.SubMenu key="archive" title={<span><Icon component={ArchiveBlue}/><span>档案管理</span></span>}>
-              <Menu.Item key="projectArchive" disabled={level < 2}>
+              <Menu.Item
+                key="projectArchive"
+                disabled={!(department.name === '产品技术部' || department.name === '营销部' || department.name === '运营部' || department.name === '总裁部')}>
                 <span>项目档案</span>
               </Menu.Item>
               <Menu.Item key="contractArchive"

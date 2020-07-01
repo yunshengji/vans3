@@ -41,7 +41,7 @@ class EditContractArchive extends React.Component {
       payload: { editContractArchive: {} },
     });
   };
-  submitCreatedContractArchive = () => {
+  submitContractArchive = () => {
     const { dispatch, form, isEditing } = this.props;
     form.validateFields((err, values) => {
       if (!err) {
@@ -69,7 +69,7 @@ class EditContractArchive extends React.Component {
     return (
       <Modal title="合同档案" visible={editContractArchiveVisible} confirmLoading={uploadingContractArchive || updatingContractArchive} width={600}
              afterClose={this.close}
-             onOk={this.submitCreatedContractArchive}
+             onOk={this.submitContractArchive}
              onCancel={this.hideUploadContractArchiveModal}>
         <Form layout="horizontal" labelCol={{ xs: 5 }} wrapperCol={{ xs: 18 }}>
           <Form.Item label="合同编号">
