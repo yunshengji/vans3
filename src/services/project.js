@@ -7,13 +7,6 @@ export async function UploadSpecialDebt(data) {
   });
 }
 
-export async function DeleteSpecialDebt(id, data) {
-  return request(`/specialDebt/${id}`, {
-    method: 'DELETE',
-    data,
-  });
-}
-
 export async function UpdateSpecialDebt(id, data) {
   return request(`/specialDebt/${id}`, {
     method: 'PUT',

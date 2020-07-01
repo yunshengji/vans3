@@ -1,5 +1,6 @@
-import { DeleteSpecialDebt, GetSpecialDebtList } from '@/services/project';
 import { message } from 'antd';
+import _ from 'lodash';
+import { UpdateSpecialDebt, GetSpecialDebtList } from '@/services/project';
 
 export default {
 
@@ -8,7 +9,10 @@ export default {
   state: {
     routes: [{ breadcrumbName: '专项债' }],
 
-    searchParams: {},
+    searchParams: {
+      name: undefined,
+      location: undefined,
+    },
 
     specialDebtList: {
       total: 0,
@@ -24,19 +28,20 @@ export default {
   },
 
   effects: {
-    // * eDeleteSpecialDebt({ id, payload }, { select, call, put }) {
-    //   try {
-    //     const { msg } = yield call(DeleteSpecialDebt, id, payload);
-    //     message.success(msg);
-    //     const { specialDebtList: { current, pageSize } } = yield select(state => state['originList']);
-    //     yield put({ type: 'GetSpecialDebtList', payload: { page: current, page_size: pageSize } });
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // },
-    * eGetSpecialDebtList({ payload }, { select, call, put }) {
+    * eUpdateSpecialDebtStatus({ id, payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetSpecialDebtList, payload);
+        const { msg } = yield call(UpdateSpecialDebt, id, payload);
+        message.success(msg);
+        yield put({ type: 'eLoadSpecialDebtList', id, payload: {} });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eLoadSpecialDebtList({ payload }, { select, call, put }) {
+      try {
+        const { searchParams, specialDebtList: { current, pageSize } } = yield select(state => state['specialDebtList']);
+        const queries = _.assign({ page: current, page_size: pageSize }, searchParams, payload);
+        const { data } = yield call(GetSpecialDebtList, { ...queries });
         yield put({ type: 'rUpdateState', payload: { specialDebtList: data } });
       } catch (err) {
         console.log(err);

@@ -182,8 +182,7 @@ class OriginList extends React.Component {
                   {status === '已废弃' && <Tag color="orange">{status}</Tag>}
                   {status === '已完结' && <Tag color="green">{status}</Tag>}
                 </React.Fragment>
-            )}
-            />
+            )}/>
             <Table.Column title="执行流程" dataIndex="process" width={100} render={status => (
               <React.Fragment>
                 {
