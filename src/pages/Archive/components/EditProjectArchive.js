@@ -86,6 +86,11 @@ class EditProjectArchive extends React.Component {
              onOk={this.submitProjectArchive}
              onCancel={this.hideUploadProjectArchiveModal}>
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
+          <Form.Item label="编号">
+            {form.getFieldDecorator('num', { initialValue: editProjectArchive['num'] })(
+              <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
           <Form.Item label="档案名称">
             {form.getFieldDecorator('name', {
               initialValue: editProjectArchive['name'],
