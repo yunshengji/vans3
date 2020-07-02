@@ -18,6 +18,7 @@ class ProjectArchive extends React.Component {
       payload: {
         isEditing: false,
         editProjectArchiveVisible: true,
+        editProjectArchive: {},
       },
     });
   };
@@ -158,6 +159,7 @@ class ProjectArchive extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
+            <Table.Column title="编号" dataIndex="num"/>
             <Table.Column title="档案名称" dataIndex="name"/>
             <Table.Column title="档案类型" dataIndex="category"/>
             <Table.Column title="是否结算" dataIndex="settlement"/>

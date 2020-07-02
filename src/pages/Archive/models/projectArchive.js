@@ -41,7 +41,7 @@ export default {
   effects: {
     * eUploadProjectArchive({ payload }, { select, call, put }) {
       try {
-        const { name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
+        const { num, name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
         let attachment, detail, result;
 
         // 上传文件
@@ -73,7 +73,15 @@ export default {
           result = _.map(data, 'id');
         }
 
-        const { msg } = yield call(UploadProjectArchive, { name, category, settlement, attachment, detail, result });
+        const { msg } = yield call(UploadProjectArchive, {
+          num,
+          name,
+          category,
+          settlement,
+          attachment,
+          detail,
+          result,
+        });
         yield put({ type: 'rUpdateState', payload: { editProjectArchiveVisible: false } });
         message.success(msg);
 
@@ -94,7 +102,7 @@ export default {
     },
     * eUpdateProjectArchive({ payload }, { select, call, put }) {
       try {
-        const { name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
+        const { num, name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
         const { editProjectArchive } = yield select(state => state['projectArchiveList']);
         let attachment = _.map(editProjectArchive['attachment'], 'id');
         let detail = _.map(editProjectArchive['detail'], 'id');
@@ -131,7 +139,7 @@ export default {
         const { msg } = yield call(
           UpdateProjectArchive,
           editProjectArchive['id'],
-          { name, category, settlement, attachment, detail, result },
+          { num, name, category, settlement, attachment, detail, result },
         );
         yield put({ type: 'rUpdateState', payload: { editProjectArchiveVisible: false } });
         message.success(msg);
