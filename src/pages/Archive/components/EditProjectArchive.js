@@ -87,8 +87,14 @@ class EditProjectArchive extends React.Component {
              onCancel={this.hideUploadProjectArchiveModal}>
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
           <Form.Item label="编号">
-            {form.getFieldDecorator('num', { initialValue: editProjectArchive['num'] })(
-              <Input placeholder="请输入"/>,
+            {form.getFieldDecorator('num', {
+              initialValue: editProjectArchive['num'],
+              rules: [{
+                message: '请输入 "年份-序号" 格式的编号，如"2020-68"',
+                pattern:/^[0-9]+-[0-9]+$/,
+              }],
+            })(
+              <Input placeholder="年份-序号格式 如：2020-68"/>,
             )}
           </Form.Item>
           <Form.Item label="档案名称">

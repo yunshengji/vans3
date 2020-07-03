@@ -41,8 +41,12 @@ export default {
   effects: {
     * eUploadProjectArchive({ payload }, { select, call, put }) {
       try {
-        const { num, name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
+        let { num, name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
         let attachment, detail, result;
+
+        while (_.last(num.split('-')).length < 3) {
+          num = _.head(num.split('-')) + '-' + '0' + _.last(num.split('-'));
+        }
 
         // 上传文件
         if (!_.isEmpty(fileListOrdinary)) {
@@ -102,8 +106,12 @@ export default {
     },
     * eUpdateProjectArchive({ payload }, { select, call, put }) {
       try {
-        const { num, name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
+        let { num, name, category, settlement, fileListOrdinary, fileListDetail, fileListResult } = payload;
         const { editProjectArchive } = yield select(state => state['projectArchiveList']);
+
+        while (_.last(num.split('-')).length < 3) {
+          num = _.head(num.split('-')) + '-' + '0' + _.last(num.split('-'));
+        }
         let attachment = _.map(editProjectArchive['attachment'], 'id');
         let detail = _.map(editProjectArchive['detail'], 'id');
         let result = _.map(editProjectArchive['result'], 'id');
