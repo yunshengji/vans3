@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Modal, Cascader, Upload, Icon, Button } from 'antd';
+import { Form, Modal, Cascader, Upload, Icon, Button, Input } from 'antd';
 import _ from 'lodash';
 import { LAWS_LABELS } from '../../../../config/constant';
 
@@ -36,7 +36,7 @@ class UploadLaws extends React.Component {
       },
     };
     return (
-      <Modal title="上传法律法规文件" visible={uploadLawsModalVisible} confirmLoading={uploadingLaws}
+      <Modal title="法律法规文件" visible={uploadLawsModalVisible} confirmLoading={uploadingLaws}
              afterClose={() => {
                this.props.form.resetFields();
              }}
@@ -45,10 +45,14 @@ class UploadLaws extends React.Component {
         <Form layout="horizontal" labelCol={{ xs: 6 }} wrapperCol={{ xs: 15 }}>
           <Form.Item label="类别">
             {getFieldDecorator('belong_to', {
-              initialValue: ['其他'],
               rules: [{ required: true, message: '请选择类别' }],
             })(
               <Cascader options={LAWS_LABELS} expandTrigger="hover" placeholder="请选择"/>,
+            )}
+          </Form.Item>
+          <Form.Item label="备注">
+            {getFieldDecorator('label', {})(
+              <Input placeholder="请输入"/>,
             )}
           </Form.Item>
           <Form.Item label="文件资料">

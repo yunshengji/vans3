@@ -156,7 +156,7 @@ class OriginList extends React.Component {
             )}/>
             <Table.Column title="项目名称" dataIndex="name" render={(name, record) => {
               return (
-                (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
+                (mine.department.name === '营销部' || mine.department.name === '运营部' || mine.level > 2) ?
                   <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>
                   :
                   <span>{name}</span>
@@ -190,7 +190,7 @@ class OriginList extends React.Component {
               </React.Fragment>
             )}/>
             {
-              (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) &&
+              (mine.department.name === '营销部' || mine.department.name === '运营部' || mine.level > 2) &&
               <Table.Column title="操作" dataIndex="action" width={100}
                             render={(text, record) => {
                               return (
