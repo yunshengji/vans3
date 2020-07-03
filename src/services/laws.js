@@ -14,6 +14,13 @@ export async function DeleteLaw(id, data) {
   });
 }
 
+export async function UpdateLaw(id, data) {
+  return request(`/law/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+
 export async function GetLawsList(params) {
   return request('/law', {
     method: 'GET',

@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Button, Table, Pagination, Breadcrumb, Row, Form, Col, Input, Cascader, Modal } from 'antd';
 import moment from 'moment';
 import UploadLaws from '@/pages/Law/components/UploadLaws';
+import EditLaw from '@/pages/Law/components/EditLaw';
 import { getFileURL } from '@/utils/transfer';
 import { LAWS_LABELS } from '../../../config/constant';
 
@@ -40,6 +41,15 @@ class LawsList extends React.Component {
       payload: { uploadLawsModalVisible: true },
     });
   };
+  showEditLaw = record => {
+    this.props.dispatch({
+      type: 'lawsList/rUpdateState',
+      payload: {
+        editLawModalVisible: true,
+        editLaw: record,
+      },
+    });
+  };
   showDeleteConfirm = ({ id, creator: { name }, attachment: { file_name_local } }) => {
     const { dispatch } = this.props;
     Modal.confirm({
@@ -65,6 +75,7 @@ class LawsList extends React.Component {
     return (
       <React.Fragment>
         <UploadLaws/>
+        <EditLaw/>
         <div className="headerWrapperWithCreate">
           <Breadcrumb>
             {routes.map((item, index) => {
@@ -126,13 +137,14 @@ class LawsList extends React.Component {
                               {record['attachment']['file_name_local']}
                             </a>
                           )}/>
-            <Table.Column title="类别" dataIndex="belong_to" width={150}
+            <Table.Column title="类别" dataIndex="belong_to" width={200}
                           render={(belong_to, { belong_to_2 }) => (
                             belong_to_2 ?
                               <b>{belong_to + '-' + belong_to_2}</b>
                               :
                               <b>{belong_to}</b>
                           )}/>
+            <Table.Column title="备注" dataIndex="label" width={80}/>
             <Table.Column title="上传者" dataIndex="creator" width={80}
                           render={text => (<React.Fragment>{text['name']}</React.Fragment>)}/>
             <Table.Column title="上传时间" dataIndex="created_at" width={120}
@@ -144,6 +156,9 @@ class LawsList extends React.Component {
               <Table.Column title="操作" dataIndex="action" width={80}
                             render={(text, record) => (
                               <div className="actionGroup">
+                                <Button type="link" icon="edit" onClick={() => this.showEditLaw(record)}>
+                                  修改
+                                </Button>
                                 <Button type="link" icon="delete" className="redButton"
                                         onClick={() => this.showDeleteConfirm(record)}>
                                   删除
