@@ -28,6 +28,13 @@ class EditContract extends React.Component {
       payload: _.filter(attachment, value => value['id'] !== deletedFile['id']),
     });
   };
+  deleteUploadedTemplateFile = (deletedFile) => {
+    const { editContract: { template } } = this.props;
+    this.props.dispatch({
+      type: 'editApprovalProject/rUpdateTemplateFiles',
+      payload: _.filter(template, value => value['id'] !== deletedFile['id']),
+    });
+  };
   submitContract = () => {
     const { dispatch, form, editOrigin: { id: origin }, editContract } = this.props;
     const isEditing = _.keys(editContract).length > 0;
@@ -56,6 +63,16 @@ class EditContract extends React.Component {
         const fileList = getFieldValue('fileList');
         fileList.splice(fileList.indexOf(file), 1);
         setFieldsValue({ fileList });
+      },
+    };
+    const uploadTemplateConfig = {
+      multiple: true,
+      showUploadList: true,
+      beforeUpload: () => false,
+      onRemove: file => {
+        const templateList = getFieldValue('templateList');
+        templateList.splice(templateList.indexOf(file), 1);
+        setFieldsValue({ templateList });
       },
     };
     return (
@@ -95,15 +112,6 @@ class EditContract extends React.Component {
                   <Form.Item label="合同金额（元）">
                     {getFieldDecorator('cash', {
                       initialValue: editContract['cash'],
-                    })(
-                      <InputNumber min={0} style={{ width: '100%' }}/>,
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col xl={6} md={12} sm={24}>
-                  <Form.Item label="差旅费（元）">
-                    {getFieldDecorator('travel_cash', {
-                      initialValue: editContract['travel_cash'],
                     })(
                       <InputNumber min={0} style={{ width: '100%' }}/>,
                     )}
@@ -192,6 +200,51 @@ class EditContract extends React.Component {
                                     key={item.id}
                                     actions={[<Button type="link" className="redButton" onClick={() => {
                                       this.deleteUploadedFile(item);
+                                    }}>删除</Button>]}
+                                  >
+                                    <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+                                  </List.Item>
+                                )}
+                          />
+                        </Form.Item>
+                      }
+                    </Col>
+                  </Row>
+                </React.Fragment>
+              }
+              <h3>模板文件</h3>
+              <Row gutter={[80]}>
+                <Col xl={6} md={12} sm={24}>
+                  <Form.Item label="合同模板">
+                    {getFieldDecorator('templateList', {
+                      valuePropName: 'fileList',
+                      getValueFromEvent: ({ file, fileList }) => fileList,
+                    })(
+                      <Upload {...uploadTemplateConfig}>
+                        <Button>
+                          选择文件 <Icon type="cloud-upload"/>
+                        </Button>
+                      </Upload>,
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              {
+                isEditing &&
+                <React.Fragment>
+                  <h4>已上传的模板文件</h4>
+                  <Row gutter={[80]}>
+                    <Col xl={12} md={12} sm={24}>
+                      {
+                        isEditing &&
+                        <Form.Item>
+                          <List itemLayout="horizontal" className="noPaddingList" size="small"
+                                dataSource={editContract['template']}
+                                renderItem={(item, index) => (
+                                  <List.Item
+                                    key={item.id}
+                                    actions={[<Button type="link" className="redButton" onClick={() => {
+                                      this.deleteUploadedTemplateFile(item);
                                     }}>删除</Button>]}
                                   >
                                     <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>

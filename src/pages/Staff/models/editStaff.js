@@ -23,6 +23,7 @@ export default {
     uploadDiplomaFile: null,
     uploadDiplomaPreview: null,
 
+    uploadedCertificateFiles: [],
     uploadedContractFiles: [],
   },
 
@@ -43,7 +44,7 @@ export default {
     * eCreateStaff({ payload }, { select, call, put }) {
       try {
         const { uploadIDCardFrontFile, uploadIDCardBackFile, uploadDiplomaFile } = yield select(state => state['editStaff']);
-        const { recruit, status, entry_time, contract } = payload;
+        const { recruit, status, entry_time, certificate_other, contract } = payload;
 
         // 基本参数转换
         if (recruit === '自招') {
@@ -82,6 +83,15 @@ export default {
           const { data: ids } = yield call(UploadFile, formData);
           payload['diploma'] = _.head(ids)['id'];
         }
+        if (certificate_other) {
+          const formData = new FormData();
+          formData.append('folder_path', 'staff_certificate');
+          certificate_other.forEach(item => {
+            formData.append('file', item.originFileObj);
+          });
+          const { data } = yield call(UploadFile, formData);
+          payload['certificate_other'] = _.map(data, 'id');
+        }
         if (contract) {
           const formData = new FormData();
           formData.append('folder_path', 'staff_contract');
@@ -101,8 +111,8 @@ export default {
     },
     * eUpdateStaff({ id, form, payload }, { select, call, put }) {
       try {
-        const { uploadIDCardFrontFile, uploadIDCardBackFile, uploadDiplomaFile, uploadedContractFiles } = yield select(state => state['editStaff']);
-        const { recruit, status, entry_time, contract } = payload;
+        const { uploadIDCardFrontFile, uploadIDCardBackFile, uploadDiplomaFile, uploadedContractFiles, uploadedCertificateFiles } = yield select(state => state['editStaff']);
+        const { recruit, status, entry_time, certificate_other, contract } = payload;
 
         // 基本参数转换
         if (recruit === '自招') {
@@ -119,7 +129,18 @@ export default {
           payload['entry_time'] = moment(payload['entry_time']).valueOf() / 1000;
         }
 
-        // 选择的新合同与已有合同合并
+        if (certificate_other) {
+          const formData = new FormData();
+          formData.append('folder_path', 'staff_certificate');
+          certificate_other.forEach(item => {
+            formData.append('file', item.originFileObj);
+          });
+          const { data } = yield call(UploadFile, formData);
+          payload['certificate_other'] = _.concat(_.map(data, 'id') || [], _.map(uploadedCertificateFiles, 'id'));
+        } else {
+          payload['certificate_other'] = _.map(uploadedCertificateFiles, 'id');
+        }
+
         if (contract) {
           const formData = new FormData();
           formData.append('folder_path', 'staff_contract');
@@ -127,9 +148,10 @@ export default {
             formData.append('file', item.originFileObj);
           });
           const { data } = yield call(UploadFile, formData);
-          payload['contract'] = _.map(data, 'id');
+          payload['contract'] = _.concat(_.map(data, 'id') || [], _.map(uploadedContractFiles, 'id'));
+        } else {
+          payload['contract'] = _.map(uploadedContractFiles, 'id');
         }
-        payload['contract'] = _.concat(payload['contract'] || [], _.map(uploadedContractFiles, 'id'));
 
         if (uploadIDCardFrontFile) {
           const formData = new FormData();
@@ -182,6 +204,7 @@ export default {
         yield put({
           type: 'rUpdateState',
           payload: {
+            uploadedCertificateFiles: data['certificate_other'],
             uploadedContractFiles: data['contract'],
             staff: data,
           },

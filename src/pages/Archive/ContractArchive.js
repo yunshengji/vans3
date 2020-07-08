@@ -18,18 +18,34 @@ class ContractArchive extends React.Component {
   }
 
   expandedRowRender = (record) => {
-    const attachments = record['attachment'];
+    const { attachment, template } = record;
     return (
-      attachments.length > 0 ?
-        <List dataSource={attachments} renderItem={item => (
-          <List.Item key={item.id}>
-            <p>
-              <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
-            </p>
-          </List.Item>
-        )}
-        />
-        : null
+      <React.Fragment>
+        {
+          attachment.length > 0 ?
+            <List dataSource={attachment} header={<h5>合同文件</h5>} renderItem={item => (
+              <List.Item key={item.id}>
+                <p>
+                  <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+                </p>
+              </List.Item>
+            )}
+            />
+            : null
+        }
+        {
+          template.length > 0 ?
+            <List dataSource={template} header={<h5>合同模板</h5>} renderItem={item => (
+              <List.Item key={item.id}>
+                <p>
+                  <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+                </p>
+              </List.Item>
+            )}
+            />
+            : null
+        }
+      </React.Fragment>
     );
   };
   searchContractList = e => {

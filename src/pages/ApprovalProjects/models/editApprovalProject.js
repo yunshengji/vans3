@@ -117,8 +117,9 @@ export default {
     },
     * eUploadContract({ form, payload }, { select, call, put }) {
       try {
-        const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
+        const { number, name, category, cash, settlement, time, fileList, templateList, origin } = payload;
         let attachment = [];
+        let template = [];
 
         if (!_.isEmpty(fileList)) {
           const formData = new FormData();
@@ -127,11 +128,18 @@ export default {
           const { data } = yield call(UploadFile, formData);
           attachment = _.map(data, 'id');
         }
+        if (!_.isEmpty(templateList)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_contract');
+          _.forEach(templateList, (item => formData.append('file', item.originFileObj)));
+          const { data } = yield call(UploadFile, formData);
+          template = _.map(data, 'id');
+        }
 
         const { msg } = yield call(UploadContractArchive, {
-          number, name, category, cash, travel_cash, settlement,
+          number, name, category, cash, settlement,
           time: moment(time, 'YYYY').valueOf() / 1000,
-          attachment, origin,
+          attachment, template, origin,
         });
         form.resetFields();
         message.success(msg);
@@ -142,9 +150,10 @@ export default {
     },
     * eUpdateContract({ form, payload }, { select, call, put }) {
       try {
-        const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
+        const { number, name, category, cash, settlement, time, fileList, templateList, origin } = payload;
         const { editContract } = yield select(state => state['editApprovalProject']);
         let attachment = _.map(editContract['attachment'], 'id');
+        let template = _.map(editContract['template'], 'id');
 
         if (!_.isEmpty(fileList)) {
           const formData = new FormData();
@@ -153,10 +162,17 @@ export default {
           const { data } = yield call(UploadFile, formData);
           attachment = _.concat(attachment, _.map(data, 'id'));
         }
+        if (!_.isEmpty(templateList)) {
+          const formData = new FormData();
+          formData.append('folder_path', 'archive_contract');
+          _.forEach(templateList, (item => formData.append('file', item.originFileObj)));
+          const { data } = yield call(UploadFile, formData);
+          template = _.concat(template, _.map(data, 'id'));
+        }
 
         const { msg } = yield call(UpdateContractArchive, editContract['id'], {
-          number, name, category, cash, travel_cash, settlement,
-          time: moment(time, 'YYYY').valueOf() / 1000, attachment,
+          number, name, category, cash, settlement,
+          time: moment(time, 'YYYY').valueOf() / 1000, attachment, template, origin,
         });
         form.resetFields();
         message.success(msg);
@@ -489,6 +505,12 @@ export default {
       return {
         ...state,
         editContract: { ...state['editContract'], attachment: payload },
+      };
+    },
+    rUpdateTemplateFiles(state, { payload }) {
+      return {
+        ...state,
+        editContract: { ...state['editContract'], template: payload },
       };
     },
     rUpdateUploadedEasyFile(state, { payload }) {
