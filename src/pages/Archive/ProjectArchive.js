@@ -159,10 +159,10 @@ class ProjectArchive extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="编号" dataIndex="num"/>
+            <Table.Column title="编号" dataIndex="num" width={100}/>
             <Table.Column title="档案名称" dataIndex="name"/>
-            <Table.Column title="档案类型" dataIndex="category"/>
-            <Table.Column title="是否结算" dataIndex="settlement"/>
+            <Table.Column title="档案类型" dataIndex="category" width={240}/>
+            <Table.Column title="是否结算" dataIndex="settlement" width={100}/>
             {
               (mine.department.name === '运营部' || mine.department.name === '总裁部') &&
               <Table.Column title="相关文件" dataIndex="attachment" render={(attachment) => {
@@ -205,7 +205,7 @@ class ProjectArchive extends React.Component {
                 );
               }}/>
             }
-            <Table.Column title="操作" dataIndex="action"
+            <Table.Column title="操作" dataIndex="action" width={140}
                           render={(text, record) => (
                             <div className="actionGroup">
                               {
