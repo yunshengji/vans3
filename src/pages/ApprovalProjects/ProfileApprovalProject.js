@@ -52,11 +52,14 @@ class ProfileApprovalProject extends React.Component {
               }
             })}
           </Breadcrumb>
-          <a href={`/approvalProject/edit/${id}`}>
-            <Button icon="edit">
-              编辑
-            </Button>
-          </a>
+          {
+            (mine.department.name === '营销部' || mine.department.name === '运营部' || mine.level > 2) &&
+            <a href={`/approvalProject/edit/${id}`}>
+              <Button icon="edit">
+                编辑
+              </Button>
+            </a>
+          }
         </div>
         <Spin
           spinning={Boolean(loadingOrigin) || Boolean(loadingRecord) || Boolean(loadingExecute) || Boolean(loadingService)}>
