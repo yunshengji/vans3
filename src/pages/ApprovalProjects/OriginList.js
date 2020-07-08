@@ -155,12 +155,7 @@ class OriginList extends React.Component {
               </span>
             )}/>
             <Table.Column title="项目名称" dataIndex="name" render={(name, record) => {
-              return (
-                (mine.department.name === '营销部' || mine.department.name === '运营部' || mine.level > 2) ?
-                  <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>
-                  :
-                  <span>{name}</span>
-              );
+              return <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>;
             }}/>
             <Table.Column title="项目类别" dataIndex="category" width={200}/>
             <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (

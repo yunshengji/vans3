@@ -133,8 +133,7 @@ class BasicMenu extends React.Component {
                 disabled={!(department.name === '产品技术部' || department.name === '营销部' || department.name === '运营部' || department.name === '总裁部')}>
                 <span>项目档案</span>
               </Menu.Item>
-              <Menu.Item key="contractArchive"
-                         disabled={level < 2 && !(department.name === '产品技术部' || department.name === '营销部')}>
+              <Menu.Item key="contractArchive">
                 <span>合同档案</span>
               </Menu.Item>
             </Menu.SubMenu>

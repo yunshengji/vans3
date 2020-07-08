@@ -55,7 +55,7 @@ export default {
     },
     * eUploadContractArchive({ payload }, { select, call, put }) {
       try {
-        const { number, name, category, cash, travel_cash, settlement, time, fileList, origin } = payload;
+        const { number, name, category, cash, travel_cash, settlement, time, fileList } = payload;
         let attachment = [];
 
         if (!_.isEmpty(fileList)) {
@@ -69,7 +69,7 @@ export default {
         const { msg } = yield call(UploadContractArchive, {
           number, name, category, cash, travel_cash, settlement,
           time: moment(time, 'YYYY').valueOf() / 1000,
-          attachment, origin,
+          attachment
         });
         yield put({ type: 'rUpdateState', payload: { editContractArchiveVisible: false } });
         message.success(msg);
