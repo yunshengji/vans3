@@ -34,6 +34,7 @@ class EditStaff extends React.Component {
         uploadDiplomaFile: null,
         uploadDiplomaPreview: null,
         uploadedContractFiles: [],
+        uploadedCertificateFiles:[]
       },
     });
   }
@@ -44,6 +45,15 @@ class EditStaff extends React.Component {
       type: 'editStaff/rUpdateState',
       payload: {
         uploadedContractFiles: _.filter(uploadedContractFiles, (value) => value.id !== item.id),
+      },
+    });
+  };
+  deleteUploadedCertificateFile = (item) => {
+    const { uploadedCertificateFiles } = this.props;
+    this.props.dispatch({
+      type: 'editStaff/rUpdateState',
+      payload: {
+        uploadedCertificateFiles: _.filter(uploadedCertificateFiles, (value) => value.id !== item.id),
       },
     });
   };
@@ -66,7 +76,7 @@ class EditStaff extends React.Component {
     const {
       form: { getFieldDecorator, getFieldValue, setFieldsValue }, match: { path }, dispatch, routes,
       loadingDepartments, loadingStaff, submittingCreatedStaff, submittingUpdatedStaff,
-      departments, staff, uploadIDCardFrontPreview, uploadIDCardBackPreview, uploadDiplomaPreview, uploadedContractFiles,
+      departments, staff, uploadIDCardFrontPreview, uploadIDCardBackPreview, uploadDiplomaPreview, uploadedContractFiles,uploadedCertificateFiles
     } = this.props;
 
     const generateUploadConfig = (fileName, filePreviewName) => {
@@ -316,6 +326,47 @@ class EditStaff extends React.Component {
                   </Form.Item>
                 </Col>
               </Row>
+              <h3>资质证书</h3>
+              <Row gutter={[150]}>
+                <Col xl={12} md={12} sm={24}>
+                  <Form.Item>
+                    {getFieldDecorator('certificate_other', {
+                      valuePropName: 'fileList',
+                      getValueFromEvent: ({ file, fileList }) => fileList,
+                    })(
+                      <Upload {...uploadContracts}>
+                        <Button block>
+                          选择文件 <Icon type="cloud-upload"/>
+                        </Button>
+                      </Upload>,
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              {
+                path === '/staff/edit/:id' &&
+                <React.Fragment>
+                  <h4>已上传的资质证书</h4>
+                  <Row gutter={[150]}>
+                    <Col xl={12} md={12} sm={24}>
+                      <List itemLayout="horizontal" dataSource={uploadedCertificateFiles}
+                            renderItem={(item, index) => (
+                              <List.Item
+                                key={item.id}
+                                actions={[
+                                  <Button type="link" icon="delete" className="redButton"
+                                          onClick={() => this.deleteUploadedCertificateFile(item)}>
+                                    删除
+                                  </Button>]}
+                              >
+                                <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+                              </List.Item>
+                            )}
+                      />
+                    </Col>
+                  </Row>
+                </React.Fragment>
+              }
               <h3>劳动合同</h3>
               <Row gutter={[150]}>
                 <Col xl={12} md={12} sm={24}>
@@ -334,8 +385,7 @@ class EditStaff extends React.Component {
                 </Col>
               </Row>
               {
-                path === '/staff/edit/:id'
-                &&
+                path === '/staff/edit/:id' &&
                 <React.Fragment>
                   <h4>已上传的劳动合同</h4>
                   <Row gutter={[150]}>
@@ -384,5 +434,6 @@ export default withRouter(connect(({ loading, common, editStaff }) => ({
   uploadIDCardFrontPreview: editStaff.uploadIDCardFrontPreview,
   uploadIDCardBackPreview: editStaff.uploadIDCardBackPreview,
   uploadDiplomaPreview: editStaff.uploadDiplomaPreview,
+  uploadedCertificateFiles: editStaff.uploadedCertificateFiles,
   uploadedContractFiles: editStaff.uploadedContractFiles,
 }))(WrappedForm));

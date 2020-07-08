@@ -71,19 +71,19 @@ class EditApprovalProject extends React.Component {
                   </Tabs.TabPane>
                 }
                 {
-                  department.name === '营销部' &&
+                  (department.name === '营销部' || level > 2) &&
                   <Tabs.TabPane tab="备案表" key="EditTableRecord">
                     <EditTableRecord/>
                   </Tabs.TabPane>
                 }
                 {
-                  department.name === '营销部' &&
+                  (department.name === '营销部' || level > 2) &&
                   <Tabs.TabPane tab="营销实施情况表" key="EditTableExecute">
                     <EditTableExecute/>
                   </Tabs.TabPane>
                 }
                 {
-                  department.name === '营销部' &&
+                  (department.name === '营销部' || level > 2) &&
                   <Tabs.TabPane tab="跟踪服务表" key="EditTableService">
                     <EditTableService/>
                   </Tabs.TabPane>

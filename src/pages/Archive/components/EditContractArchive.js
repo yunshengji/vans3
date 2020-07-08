@@ -20,6 +20,13 @@ class EditContractArchive extends React.Component {
       payload: _.filter(attachment, value => value['id'] !== deletedFile['id']),
     });
   };
+  deleteUploadedTemplateFile = (deletedFile) => {
+    const { editContractArchive: { template } } = this.props;
+    this.props.dispatch({
+      type: 'contractArchiveList/rUpdateTemplateFiles',
+      payload: _.filter(template, value => value['id'] !== deletedFile['id']),
+    });
+  };
   close = () => {
     this.props.form.resetFields();
     this.props.dispatch({
@@ -50,6 +57,16 @@ class EditContractArchive extends React.Component {
         const fileList = getFieldValue('fileList');
         fileList.splice(fileList.indexOf(file), 1);
         setFieldsValue({ fileList });
+      },
+    };
+    const uploadTemplateConfig = {
+      multiple: true,
+      showUploadList: true,
+      beforeUpload: () => false,
+      onRemove: file => {
+        const templateList = getFieldValue('templateList');
+        templateList.splice(templateList.indexOf(file), 1);
+        setFieldsValue({ templateList });
       },
     };
     return (
@@ -112,13 +129,6 @@ class EditContractArchive extends React.Component {
               <InputNumber min={0} style={{ width: '100%' }}/>,
             )}
           </Form.Item>
-          <Form.Item label="差旅费（元）">
-            {form.getFieldDecorator('travel_cash', {
-              initialValue: editContractArchive['travel_cash'],
-            })(
-              <InputNumber min={0} style={{ width: '100%' }}/>,
-            )}
-          </Form.Item>
           <Form.Item label="结算情况">
             {form.getFieldDecorator('settlement', {
               initialValue: editContractArchive['settlement'] || '未结算',
@@ -143,7 +153,7 @@ class EditContractArchive extends React.Component {
           {
             isEditing &&
             <Form.Item label="已上传文件：">
-              <List itemLayout="horizontal" className="noPaddingList" size="small"
+              <List itemLayout="horizontal" className="noPaddingList" size="small" locale={{ emptyText: '暂无数据' }}
                     dataSource={editContractArchive['attachment']}
                     renderItem={(item, index) => (
                       <List.Item
@@ -164,6 +174,36 @@ class EditContractArchive extends React.Component {
               getValueFromEvent: ({ file, fileList }) => fileList,
             })(
               <Upload {...uploadConfig}>
+                <Button>
+                  选择文件 <Icon type="cloud-upload"/>
+                </Button>
+              </Upload>,
+            )}
+          </Form.Item>
+          {
+            isEditing &&
+            <Form.Item label="已上传模板：">
+              <List itemLayout="horizontal" className="noPaddingList" size="small" locale={{ emptyText: '暂无数据' }}
+                    dataSource={editContractArchive['template']}
+                    renderItem={(item, index) => (
+                      <List.Item
+                        key={item.id}
+                        actions={[<Button type="link" className="redButton" onClick={() => {
+                          this.deleteUploadedTemplateFile(item);
+                        }}>删除</Button>]}
+                      >
+                        <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+                      </List.Item>
+                    )}
+              />
+            </Form.Item>
+          }
+          <Form.Item label="合同模板">
+            {getFieldDecorator('templateList', {
+              valuePropName: 'fileList',
+              getValueFromEvent: ({ file, fileList }) => fileList,
+            })(
+              <Upload {...uploadTemplateConfig}>
                 <Button>
                   选择文件 <Icon type="cloud-upload"/>
                 </Button>
