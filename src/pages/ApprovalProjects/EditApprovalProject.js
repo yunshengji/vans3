@@ -58,34 +58,49 @@ class EditApprovalProject extends React.Component {
           </Breadcrumb>
         </div>
         <div className="contentWrapper">
-          {isEditing ?
-            <Tabs activeKey={activeKey} onChange={this.changeTab}>
-              <Tabs.TabPane tab="立项表" key="EditTableOrigin">
-                <EditTableOrigin/>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="项目合同" key="EditContract"
-                            disabled={level < 2 && !(department.name === '产品技术部' || department.name === '营销部')}>
-                <EditContract/>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="备案表" key="EditTableRecord">
-                <EditTableRecord/>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="营销实施情况表" key="EditTableExecute">
-                <EditTableExecute/>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="跟踪服务表" key="EditTableService">
-                <EditTableService/>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="项目流程" key="Process">
-                <ChooseProcess/>
-              </Tabs.TabPane>
-            </Tabs>
-            :
-            <Tabs activeKey={activeKey}>
-              <Tabs.TabPane tab="立项表" key="EditTableOrigin">
-                <EditTableOrigin/>
-              </Tabs.TabPane>
-            </Tabs>
+          {
+            isEditing ?
+              <Tabs activeKey={activeKey} onChange={this.changeTab}>
+                <Tabs.TabPane tab="立项表" key="EditTableOrigin">
+                  <EditTableOrigin/>
+                </Tabs.TabPane>
+                {
+                  (level > 1 || department.name === '产品技术部' || department.name === '营销部') &&
+                  <Tabs.TabPane tab="项目合同" key="EditContract">
+                    <EditContract/>
+                  </Tabs.TabPane>
+                }
+                {
+                  department.name === '营销部' &&
+                  <Tabs.TabPane tab="备案表" key="EditTableRecord">
+                    <EditTableRecord/>
+                  </Tabs.TabPane>
+                }
+                {
+                  department.name === '营销部' &&
+                  <Tabs.TabPane tab="营销实施情况表" key="EditTableExecute">
+                    <EditTableExecute/>
+                  </Tabs.TabPane>
+                }
+                {
+                  department.name === '营销部' &&
+                  <Tabs.TabPane tab="跟踪服务表" key="EditTableService">
+                    <EditTableService/>
+                  </Tabs.TabPane>
+                }
+                {
+                  ((department.name === '运营部' && level > 1) || level > 2) &&
+                  <Tabs.TabPane tab="项目流程" key="Process">
+                    <ChooseProcess/>
+                  </Tabs.TabPane>
+                }
+              </Tabs>
+              :
+              <Tabs activeKey={activeKey}>
+                <Tabs.TabPane tab="立项表" key="EditTableOrigin">
+                  <EditTableOrigin/>
+                </Tabs.TabPane>
+              </Tabs>
           }
         </div>
       </React.Fragment>);

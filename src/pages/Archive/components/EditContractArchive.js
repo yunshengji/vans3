@@ -13,20 +13,6 @@ class EditContractArchive extends React.Component {
       payload: { editContractArchiveVisible: false },
     });
   };
-  handleSearch = (content) => {
-    const { originList } = this.props;
-    if (content) {
-      this.props.dispatch({
-        type: 'contractArchiveList/rUpdateState',
-        payload: { options: _.filter(originList, value => value['name'].indexOf(content) > -1) },
-      });
-    } else {
-      this.props.dispatch({
-        type: 'contractArchiveList/rUpdateState',
-        payload: { options: originList },
-      });
-    }
-  };
   deleteUploadedFile = (deletedFile) => {
     const { editContractArchive: { attachment } } = this.props;
     this.props.dispatch({
@@ -54,7 +40,7 @@ class EditContractArchive extends React.Component {
   };
 
   render() {
-    const { form, uploadingContractArchive,updatingContractArchive, editContractArchiveVisible, editContractArchive, options, isEditing } = this.props;
+    const { form, uploadingContractArchive, updatingContractArchive, editContractArchiveVisible, editContractArchive, options, isEditing } = this.props;
     const { getFieldDecorator, getFieldValue, setFieldsValue } = form;
     const uploadConfig = {
       multiple: true,
@@ -67,7 +53,8 @@ class EditContractArchive extends React.Component {
       },
     };
     return (
-      <Modal title="合同档案" visible={editContractArchiveVisible} confirmLoading={uploadingContractArchive || updatingContractArchive} width={600}
+      <Modal title="合同档案" visible={editContractArchiveVisible}
+             confirmLoading={uploadingContractArchive || updatingContractArchive} width={600}
              afterClose={this.close}
              onOk={this.submitContractArchive}
              onCancel={this.hideUploadContractArchiveModal}>
@@ -87,19 +74,25 @@ class EditContractArchive extends React.Component {
               <Input.TextArea autoSize={{ minRows: 4 }} placeholder="请输入"/>,
             )}
           </Form.Item>
-          <Form.Item label="关联项目">
-            {form.getFieldDecorator('origin', {
-              initialValue: editContractArchive['origin'] && editContractArchive['origin']['id'],
-            })(
-              <Select showSearch onSearch={this.handleSearch} placeholder="请选择" allowClear>
-                {options.map((item, index) => {
-                  return (
-                    <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
-                  );
-                })}
-              </Select>,
-            )}
-          </Form.Item>
+          {
+            isEditing &&
+            <Form.Item label="关联项目">
+              {form.getFieldDecorator('origin', {
+                initialValue: editContractArchive['origin'] && editContractArchive['origin']['id'],
+              })(
+                <Select showSearch placeholder="请选择" allowClear
+                        filterOption={(input, option) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }>
+                  {options.map((item, index) => {
+                    return (
+                      <Select.Option key={index} value={item.id}>{item.name}</Select.Option>
+                    );
+                  })}
+                </Select>,
+              )}
+            </Form.Item>
+          }
           <Form.Item label="档案类型">
             {form.getFieldDecorator('category', {
               rules: [{ required: true, message: '请选择' }],
