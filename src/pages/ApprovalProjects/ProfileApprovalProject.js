@@ -223,15 +223,6 @@ class ProfileApprovalProject extends React.Component {
                   </Col>
                   <Col xl={8} md={12} sm={24}>
                     <div className={styles.itemContainer}>
-                      <p>差旅费：</p>
-                      {
-                        profileContract['travel_cash'] &&
-                        <p>profileContract['travel_cash'] 元</p>
-                      }
-                    </div>
-                  </Col>
-                  <Col xl={8} md={12} sm={24}>
-                    <div className={styles.itemContainer}>
                       <p>结算情况：</p>
                       <p>{profileContract['settlement']}</p>
                     </div>

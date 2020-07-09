@@ -20,6 +20,7 @@ export default {
     editProjectArchive: {},
 
     searchParams: {
+      num: undefined,
       name: undefined,
       category: undefined,
       settlement: undefined,
