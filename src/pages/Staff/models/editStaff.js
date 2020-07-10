@@ -3,8 +3,8 @@ import { message } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 import { UploadFile } from '@/services/files';
-import { GetDepartments } from '@/services/user';
-import { CreateStaff, EditStaff, GetStaff } from '@/services/staff';
+import { GetDepartments, GetUsersList } from '@/services/user';
+import { CreateStaff, EditStaff, GetStaffMe } from '@/services/staff';
 
 export default {
 
@@ -14,6 +14,7 @@ export default {
     routes: [{ breadcrumbName: '员工管理', path: '/staff' }, { breadcrumbName: '编辑员工信息' }],
 
     departments: [],
+    users: [],
     staff: {},
 
     uploadIDCardFrontFile: null,
@@ -37,6 +38,14 @@ export default {
       try {
         const { data: { list: departments } } = yield call(GetDepartments, payload);
         yield put({ type: 'rUpdateState', payload: { departments } });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    * eGetUsers({ payload }, { select, call, put }) {
+      try {
+        const { data: { list: users } } = yield call(GetUsersList, { page_size: 10000 });
+        yield put({ type: 'rUpdateState', payload: { users } });
       } catch (err) {
         console.log(err);
       }
@@ -184,7 +193,7 @@ export default {
     },
     * eGetStaff({ id, payload }, { select, call, put }) {
       try {
-        const { data } = yield call(GetStaff, id, payload);
+        const { data } = yield call(GetStaffMe, id, payload);
 
         const { department, recruit, status } = data;
         if (department) {

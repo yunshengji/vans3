@@ -54,7 +54,8 @@ class EditSpecialDebt extends React.Component {
             </Tabs.TabPane>
           </Tabs>
         </div>
-      </React.Fragment>);
+      </React.Fragment>
+    );
   }
 }
 

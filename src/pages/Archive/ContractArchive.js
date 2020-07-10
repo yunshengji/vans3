@@ -222,7 +222,6 @@ class ContractArchive extends React.Component {
             <Table.Column title="档案类型" dataIndex="category" width={150}/>
             <Table.Column title="结算情况" dataIndex="settlement" width={80}/>
             <Table.Column title="合同金额（元）" dataIndex="cash" width={110}/>
-            <Table.Column title="差旅费（元）" dataIndex="travel_cash" width={100}/>
             <Table.Column title="操作" dataIndex="action" width={120}
                           render={(text, record) => (
                             <div className="actionGroup">

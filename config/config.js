@@ -29,6 +29,7 @@ export default {
 
         { path: '/specialDebt', component: './Project/SpecialDebtList' },
         { path: '/specialDebt/edit/:id', component: './Project/EditSpecialDebt' },
+        { path: '/specialDebt/profile/:id', component: './Project/SpecialDebtProfile' },
 
 
         { path: '/originList', component: './ApprovalProjects/OriginList' },
@@ -49,6 +50,7 @@ export default {
         { path: '/experts', component: './Experts/Index' },
 
         { path: '/staff', component: './Staff/StaffList' },
+        { path: '/staff/me', component: './Staff/StaffProfile' },
         { path: '/staff/edit', component: './Staff/EditStaff' },
         { path: '/staff/edit/:id', component: './Staff/EditStaff' },
 

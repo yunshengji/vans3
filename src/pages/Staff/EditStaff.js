@@ -13,6 +13,7 @@ class EditStaff extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: 'editStaff/eGetDepartments' });
+    this.props.dispatch({ type: 'editStaff/eGetUsers' });
     const { match: { path, params } } = this.props;
     if (path === '/staff/edit/:id') {
       this.props.dispatch({
@@ -34,7 +35,7 @@ class EditStaff extends React.Component {
         uploadDiplomaFile: null,
         uploadDiplomaPreview: null,
         uploadedContractFiles: [],
-        uploadedCertificateFiles:[]
+        uploadedCertificateFiles: [],
       },
     });
   }
@@ -76,7 +77,7 @@ class EditStaff extends React.Component {
     const {
       form: { getFieldDecorator, getFieldValue, setFieldsValue }, match: { path }, dispatch, routes,
       loadingDepartments, loadingStaff, submittingCreatedStaff, submittingUpdatedStaff,
-      departments, staff, uploadIDCardFrontPreview, uploadIDCardBackPreview, uploadDiplomaPreview, uploadedContractFiles,uploadedCertificateFiles
+      departments, users, staff, uploadIDCardFrontPreview, uploadIDCardBackPreview, uploadDiplomaPreview, uploadedContractFiles, uploadedCertificateFiles,
     } = this.props;
 
     const generateUploadConfig = (fileName, filePreviewName) => {
@@ -226,6 +227,25 @@ class EditStaff extends React.Component {
                   <Form.Item label="入职时间">
                     {getFieldDecorator('entry_time', { initialValue: staff['entry_time'] && moment(staff['entry_time'] * 1000) })(
                       <DatePicker style={{ width: '100%' }}/>,
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={[150]}>
+                <Col xl={6} md={12} sm={24}>
+                  <Form.Item label="关联账户">
+                    {getFieldDecorator('user', { initialValue: staff.user && staff.user.id })(
+                      <Select placeholder="请选择" allowClear={true}
+                              showSearch
+                              filterOption={(input, option) =>
+                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                              }>
+                        {users.map(item => {
+                          return (
+                            <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                          );
+                        })}
+                      </Select>,
                     )}
                   </Form.Item>
                 </Col>
@@ -430,6 +450,7 @@ export default withRouter(connect(({ loading, common, editStaff }) => ({
   loadingStaff: loading.effects['editStaff/eGetStaff'],
   routes: editStaff.routes,
   departments: editStaff.departments,
+  users: editStaff.users,
   staff: editStaff.staff,
   uploadIDCardFrontPreview: editStaff.uploadIDCardFrontPreview,
   uploadIDCardBackPreview: editStaff.uploadIDCardBackPreview,

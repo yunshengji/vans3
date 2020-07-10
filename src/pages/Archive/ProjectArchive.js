@@ -43,6 +43,7 @@ class ProjectArchive extends React.Component {
   };
   resetSearch = e => {
     this.props.form.setFieldsValue({
+      num: undefined,
       name: undefined,
       category: undefined,
       settlement: undefined,
@@ -110,7 +111,16 @@ class ProjectArchive extends React.Component {
           <Form layout="horizontal" className="searchWrapper">
             <Row gutter={[80]}>
               <Col xl={6} md={12} sm={24}>
-                <Form.Item label="合同名称">
+                <Form.Item label="项目编号">
+                  {form.getFieldDecorator('num', {
+                    initialValue: searchParams['num'],
+                  })(
+                    <Input placeholder="请输入"/>,
+                  )}
+                </Form.Item>
+              </Col>
+              <Col xl={6} md={12} sm={24}>
+                <Form.Item label="项目名称">
                   {form.getFieldDecorator('name', {
                     initialValue: searchParams['name'],
                   })(
