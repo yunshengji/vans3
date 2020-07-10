@@ -33,6 +33,12 @@ class BasicHeader extends React.Component {
             <span className={styles.dropdownItem}>个人设置</span>
           </Link>
         </Menu.Item>
+        <Menu.Item>
+          <Link to="/staff/me">
+            <Icon type="profile" />
+            <span className={styles.dropdownItem}>员工信息</span>
+          </Link>
+        </Menu.Item>
         <Menu.Divider/>
         <Menu.Item>
           <div onClick={this.logout}>
@@ -82,7 +88,7 @@ class BasicHeader extends React.Component {
           <div>
             {
               (avatar) ?
-                <Dropdown overlay={menu}>
+                <Dropdown overlay={menu} trigger={['click']}>
                   <div className={styles.dropdown}>
                     <Avatar src={getFileURL(avatar)}/>
                     <Icon type="caret-down" className={styles.icon}/>

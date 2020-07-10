@@ -242,6 +242,20 @@ class ProfileApprovalProject extends React.Component {
                     </div>
                   </Col>
                 </Row>
+                <Row gutter={[80]}>
+                  <Col xl={8} md={12} sm={24}>
+                    <div className={styles.itemContainer}>
+                      <p>合同模板：</p>
+                      <List itemLayout="horizontal" className="noPaddingList" size="small"
+                            dataSource={profileContract['template']}
+                            renderItem={(item, index) => (
+                              <List.Item key={item.id}>
+                                <a href={getFileURL(item.id)} target="_blank">{item['file_name_local']}</a>
+                              </List.Item>
+                            )}/>
+                    </div>
+                  </Col>
+                </Row>
               </React.Fragment>
             }
             {

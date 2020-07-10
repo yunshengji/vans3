@@ -50,6 +50,7 @@ export default {
         { path: '/experts', component: './Experts/Index' },
 
         { path: '/staff', component: './Staff/StaffList' },
+        { path: '/staff/me', component: './Staff/StaffProfile' },
         { path: '/staff/edit', component: './Staff/EditStaff' },
         { path: '/staff/edit/:id', component: './Staff/EditStaff' },
 

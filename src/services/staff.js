@@ -21,7 +21,7 @@ export async function EditStaff(id, data) {
   });
 }
 
-export async function GetStaff(id, params) {
+export async function GetStaffMe(id, params) {
   return request(`/staff/${id}`, {
     method: 'GET',
     params,
