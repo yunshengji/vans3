@@ -134,7 +134,14 @@ class ProfileApprovalProject extends React.Component {
               </Col>
               <Col sm={24}>
                 <div className={styles.itemContainer}>
-                  <p>投标资料：</p>
+                  {
+                    mine.department.name === '运营部' ?
+                    <p>
+                      <a style={{ fontSize: '14px' }} href={`/approvalProject/edit/${id}?key=Process`}>投标资料：</a>
+                    </p>
+                      :
+                      <p>投标资料：</p>
+                  }
                   <p>{profileOrigin['bid_info']}</p>
                 </div>
               </Col>
@@ -529,7 +536,6 @@ class ProfileApprovalProject extends React.Component {
       </React.Fragment>);
   }
 }
-
 
 export default connect(({ loading, common, profileApprovalProject }) => ({
   loadingOrigin: loading.effects['profileApprovalProject/eGetOriginTable'],

@@ -19,6 +19,14 @@ class EditApprovalProject extends React.Component {
       const { id } = params;
       this.props.dispatch({ type: 'editApprovalProject/eGetOriginTable', id });
     }
+
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    if (urlSearchParams.has('key')) {
+      this.props.dispatch({
+        type: 'editApprovalProject/rUpdateState',
+        payload: { activeKey: urlSearchParams.get('key') },
+      });
+    }
   }
 
   changeTab = (activeKey) => {
@@ -89,7 +97,7 @@ class EditApprovalProject extends React.Component {
                   </Tabs.TabPane>
                 }
                 {
-                  ((department.name === '运营部' && level > 1) || level > 2) &&
+                  ((department.name === '运营部') || level > 2) &&
                   <Tabs.TabPane tab="项目流程" key="Process">
                     <ChooseProcess/>
                   </Tabs.TabPane>
@@ -111,4 +119,5 @@ class EditApprovalProject extends React.Component {
 export default connect(({ loading, common, editApprovalProject }) => ({
   mine: common.mine,
   activeKey: editApprovalProject.activeKey,
+  editOrigin: editApprovalProject.editOrigin,
 }))(EditApprovalProject);
