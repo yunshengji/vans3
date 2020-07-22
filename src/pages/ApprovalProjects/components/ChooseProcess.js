@@ -1,19 +1,25 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Row, Col, Button, Empty } from 'antd';
+import _ from 'lodash';
 import EditEasyProcess from '@/pages/ApprovalProjects/components/EditEasyProcess';
 import EditPurchaseProcess from '@/pages/ApprovalProjects/components/EditPurchaseProcess';
 
 class ChooseProcess extends React.Component {
   componentDidMount() {
-    const { editOrigin: { id, process } } = this.props;
-    this.props.dispatch({ type: 'editApprovalProject/rUpdateState', payload: { process } });
-    if (process === '简易流程') {
-      this.props.dispatch({ type: 'editApprovalProject/eGetEasyProcess', id });
-    }
-    if (process === '采购流程') {
-      this.props.dispatch({ type: 'editApprovalProject/eGetPurchaseProcess', id });
-    }
+    const interval = setInterval(() => {
+      if (Object.keys(this.props.editOrigin).length > 0) {
+        const { editOrigin: { id, process } } = this.props;
+        this.props.dispatch({ type: 'editApprovalProject/rUpdateState', payload: { process } });
+        if (process === '简易流程') {
+          this.props.dispatch({ type: 'editApprovalProject/eGetEasyProcess', id });
+        }
+        if (process === '采购流程') {
+          this.props.dispatch({ type: 'editApprovalProject/eGetPurchaseProcess', id });
+        }
+        clearInterval(interval);
+      }
+    }, 200);
   }
 
   chooseProcess = (process) => {
