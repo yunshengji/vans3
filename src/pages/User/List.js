@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'umi';
 import { connect } from 'dva';
-import { Button, Table, Pagination, Breadcrumb, Tag, Form, Row, Col, Select, Input } from 'antd';
+import { Button, Table, Pagination, Breadcrumb, Tag, Form, Row, Col, Avatar, Select, Input } from 'antd';
 import CreateUserModal from '@/pages/User/components/CreateUserModal';
 import EditUserModal from '@/pages/User/components/EditUserModal';
 import { USER_LEVEL } from '../../../config/constant';
+import { getFileURL } from '@/utils/transfer';
 
 class UsersList extends React.Component {
 
@@ -142,7 +143,10 @@ class UsersList extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="姓名" dataIndex="name"/>
+            <Table.Column title="头像" dataIndex="avatar" render={(text, record) => (
+              <Avatar shape="square" size={64} icon="user"  src={getFileURL(text)}/>
+            )} />
+            <Table.Column title="姓名" dataIndex="name" />
             <Table.Column title="部门" dataIndex="department" render={(text, record) => (
               <React.Fragment>
                 {text.name}

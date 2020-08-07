@@ -9,7 +9,14 @@ export default {
     'primary-color': '#3f78ff',
   },
   routes: [
-    { path: '/login', component: './User/Login' },
+    {
+      path: '/login',
+      component: '../layouts/ValidateLayout',
+      routes: [
+        { path: '/login', component: './User/Login' },
+        { path: '/login/forget', component: './User/ForgetPassword' },
+      ],
+    },
     {
       path: '/',
       component: '../layouts/BasicLayout',
