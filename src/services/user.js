@@ -7,6 +7,20 @@ export async function Login(data) {
   });
 }
 
+export async function GetValidateCode(data) {
+  return request('/forget_password', {
+    method: 'POST',
+    data,
+  });
+}
+
+export async function ChangePassword(data) {
+  return request('/verify_code', {
+    method: 'PUT',
+    data,
+  });
+}
+
 export async function GetDepartments(params) {
   return request('/department', {
     method: 'GET',
