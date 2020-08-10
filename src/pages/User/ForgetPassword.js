@@ -30,6 +30,9 @@ class ForgetPassword extends React.Component {
             disabled: true,
           });
           let number = 60;
+          this.setState({
+            message: number + '秒后重发',
+          });
           const timer = setInterval(() => {
             if (number > 0) {
               number--;
@@ -94,8 +97,7 @@ class ForgetPassword extends React.Component {
   };
 
   render() {
-    const { submitting, form } = this.props;
-    const { getFieldDecorator } = form;
+    const { form: { getFieldDecorator } } = this.props;
     return (
       <div className={styles.formWrap}>
         <Form onSubmit={this.handleSubmit}>
@@ -156,12 +158,13 @@ class ForgetPassword extends React.Component {
             )}
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Spin spinning={Boolean(submitting)}>
-              <Button size="large" type="primary" htmlType="submit" block
-                      style={{ width: '70%', marginTop: '4em', borderRadius: '20px' }}>
-                完成
-              </Button>
-            </Spin>
+            <Button size="large" type="primary" htmlType="submit" block
+                    style={{ width: '70%', marginTop: '4em', borderRadius: '20px' }}>
+              完成
+            </Button>
+            <p>
+              已有账号，<a href="/login">去登录</a>
+            </p>
           </Form.Item>
         </Form>
       </div>
@@ -169,8 +172,6 @@ class ForgetPassword extends React.Component {
   }
 }
 
-const WrappedForm = Form.create({ name: 'login' })(ForgetPassword);
+const WrappedForm = Form.create({ name: 'ForgetPassword' })(ForgetPassword);
 
-export default connect(({ loading }) => ({
-  submitting: loading.effects['login/eLogin'],
-}))(WrappedForm);
+export default connect(({ loading }) => ({}))(WrappedForm);

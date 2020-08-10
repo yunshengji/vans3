@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../config/constant';
 import moment from 'moment';
+import styles from './OriginList.less';
 
 class OriginList extends React.Component {
   componentDidMount() {
@@ -155,7 +156,15 @@ class OriginList extends React.Component {
               </span>
             )}/>
             <Table.Column title="项目名称" dataIndex="name" render={(name, record) => {
-              return <a target="_blank" href={`/approvalProject/profile/${record.id}`}>{name}</a>;
+              return (
+                <React.Fragment>
+                  <a target="_blank" href={`/approvalProject/profile/${record.id}`}
+                     className={!record['is_confirm'] && styles.confirm}>
+                    {name}
+                    {!record['is_confirm'] && <Tag color="orange" style={{ marginLeft: '.5em' }}>去确认</Tag>}
+                  </a>
+                </React.Fragment>
+              );
             }}/>
             <Table.Column title="项目类别" dataIndex="category" width={200}/>
             <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
