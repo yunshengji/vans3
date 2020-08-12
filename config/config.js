@@ -22,7 +22,7 @@ export default {
       component: '../layouts/BasicLayout',
       Routes: ['src/components/AuthToken'],
       routes: [
-        { path: '/', redirect: '/gossip' },
+        { path: '/', redirect: '/originList' },
         { path: '/403', component: './Exception/403' },
         { path: '/404', component: './Exception/404' },
         { path: '/500', component: './Exception/500' },

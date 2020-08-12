@@ -84,7 +84,7 @@ class ForgetPassword extends React.Component {
           if (access_token) {
             notification.info({ message: '修改成功' });
             Cookies.set('token', access_token, { expires: 6 });
-            window.location.href = '/gossip';
+            window.location.href = '/originList';
           } else {
             notification.warn({ message: msg });
           }
