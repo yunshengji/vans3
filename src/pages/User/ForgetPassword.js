@@ -40,11 +40,11 @@ class ForgetPassword extends React.Component {
                 message: number + '秒后重发',
               });
             } else {
-              clearInterval(timer);
-              this.state = {
+              this.setState({
                 message: '发送验证码',
                 disabled: false,
-              };
+              });
+              clearInterval(timer);
             }
           }, 1000);
         }
@@ -116,7 +116,7 @@ class ForgetPassword extends React.Component {
                 },
               ],
             })(
-              <Input size="large" placeholder="请输入您的手机号码"/>,
+              <Input size="large" prefix="手机号码" placeholder="请输入您的手机号码"/>,
             )}
           </Form.Item>
           <Button style={{ marginBottom: '2em' }} onClick={this.getCode} disabled={this.state.disabled}>
@@ -126,7 +126,7 @@ class ForgetPassword extends React.Component {
             {getFieldDecorator('code', {
               rules: [{ required: true, message: '请输入验证码！' }],
             })(
-              <Input size="large" placeholder="请输入验证码"/>,
+              <Input size="large" prefix="验证码" placeholder="请输入验证码"/>,
             )}
           </Form.Item>
           <Form.Item>
@@ -140,7 +140,7 @@ class ForgetPassword extends React.Component {
                 },
               ],
             })(
-              <Input.Password size="large" type="password" placeholder="设置新密码"/>,
+              <Input.Password size="large" prefix="新密码" type="password" placeholder="设置新密码"/>,
             )}
           </Form.Item>
           <Form.Item>
@@ -154,7 +154,7 @@ class ForgetPassword extends React.Component {
                 },
               ],
             })(
-              <Input.Password size="large" type="password" placeholder="再次输入新密码"/>,
+              <Input.Password size="large" prefix="确认密码" type="password" placeholder="再次输入新密码"/>,
             )}
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
