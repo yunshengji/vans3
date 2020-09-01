@@ -4,15 +4,32 @@ import styles from './ValidateLayout.less';
 
 class ValidateLayout extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { isMobile: true };
+  }
+
   componentDidMount() {
+    const isMobile = function() {
+      let info = navigator.userAgent;
+      let agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPod', 'iPad'];
+      for (let i = 0; i < agents.length; i++) {
+        if (info.indexOf(agents[i]) >= 0) return true;
+      }
+      return false;
+    }();
+    this.setState({ isMobile });
   }
 
   render() {
     return (
       <div className={styles.root}>
-        <video autoPlay="autoplay" muted preload="auto" className={styles.video}>
-          <source src="https://wanmingcrm.oss-cn-shanghai.aliyuncs.com/static/staffs.mp4" type="video/mp4"/>
-        </video>
+        {
+          !this.state.isMobile &&
+          <video autoPlay="autoplay" muted preload="auto" className={styles.video}>
+            <source src="https://wanmingcrm.oss-cn-shanghai.aliyuncs.com/static/staffs.mp4" type="video/mp4"/>
+          </video>
+        }
         <div className={styles.content}>
           <div className={styles.imageWrapper}>
             <img src="/system-welcome.png" alt=""/>
