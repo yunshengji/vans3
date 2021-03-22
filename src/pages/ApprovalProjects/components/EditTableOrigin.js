@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import { Spin, Col, InputNumber, Form, DatePicker, Input, Row, Select, Button, Icon } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
-import { limitDecimals } from '@/utils/transfer';
 import { TABLE_FOR_MAKING_PROJECT_CATEGORIES } from '../../../../config/constant';
 import styles from './EditTableOrigin.less';
 
@@ -42,20 +41,21 @@ class EditTableOrigin extends React.Component {
           const { keys } = values;
           const origin_outer = [];
           if (keys.length > 0) {
-            const { company_name, price, contact } = values;
+            const { company_name, price, contact, memo } = values;
             keys.forEach(item => {
               origin_outer.push({
                 company_name: company_name[item],
                 price: price[item],
                 contact: contact[item],
+                memo: memo[item],
               });
             });
             values.origin_outer = origin_outer;
           }
-          delete values['keys']
-          delete values['company_name']
-          delete values['price']
-          delete values['contact']
+          delete values['keys'];
+          delete values['company_name'];
+          delete values['price'];
+          delete values['contact'];
           this.props.dispatch({ type: 'editApprovalProject/eUpdateOriginTable', id, payload: { ...values } });
         }
       });
@@ -68,20 +68,21 @@ class EditTableOrigin extends React.Component {
           const { keys } = values;
           const origin_outer = [];
           if (keys.length > 0) {
-            const { company_name, price, contact } = values;
+            const { company_name, price, contact, memo } = values;
             keys.forEach(item => {
               origin_outer.push({
                 company_name: company_name[item],
                 price: price[item],
                 contact: contact[item],
+                memo: memo[item],
               });
             });
             values.origin_outer = origin_outer;
           }
-          delete values['keys']
-          delete values['company_name']
-          delete values['price']
-          delete values['contact']
+          delete values['keys'];
+          delete values['company_name'];
+          delete values['price'];
+          delete values['contact'];
           this.props.dispatch({ type: 'editApprovalProject/eCreateOriginTable', payload: { ...values } });
         }
       });
@@ -109,7 +110,7 @@ class EditTableOrigin extends React.Component {
     const keys = getFieldValue('keys');
     const companyOuterFormItems = keys.map((key) => (
       <Row gutter={[150]} type="flex" align="middle" key={`origin_outer${key}`}>
-        <Col xl={6} md={10} sm={24}>
+        <Col xl={5} md={10} sm={24}>
           <Form.Item label="外包公司名称">
             {getFieldDecorator(`company_name[${key}]`, {
               initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].company_name,
@@ -119,7 +120,7 @@ class EditTableOrigin extends React.Component {
             )}
           </Form.Item>
         </Col>
-        <Col xl={6} md={10} sm={24}>
+        <Col xl={5} md={10} sm={24}>
           <Form.Item label="价格（万元）">
             {getFieldDecorator(`price[${key}]`, {
               initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].price,
@@ -129,7 +130,7 @@ class EditTableOrigin extends React.Component {
             )}
           </Form.Item>
         </Col>
-        <Col xl={6} md={10} sm={24}>
+        <Col xl={5} md={10} sm={24}>
           <Form.Item label="联系人">
             {getFieldDecorator(`contact[${key}]`, {
               initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].contact,
@@ -138,7 +139,16 @@ class EditTableOrigin extends React.Component {
             )}
           </Form.Item>
         </Col>
-        <Col xl={6} md={4} sm={24}>
+        <Col xl={5} md={10} sm={24}>
+          <Form.Item label="备注">
+            {getFieldDecorator(`memo[${key}]`, {
+              initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].memo,
+            })(
+              <Input placeholder="请输入"/>,
+            )}
+          </Form.Item>
+        </Col>
+        <Col xl={4} md={4} sm={24}>
           {
             keys.length > 0 ?
               <Icon type="minus-circle-o" style={{ marginTop: '14px', fontSize: '1.5rem' }}
@@ -154,15 +164,7 @@ class EditTableOrigin extends React.Component {
         <Form layout="horizontal">
           <h3>基础信息</h3>
           <Row gutter={[80]}>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="序号">
-                {getFieldDecorator('num', { initialValue: editOrigin['num'] })(
-                  <InputNumber min={1} formatter={limitDecimals} parser={limitDecimals} style={{ width: '100%' }}
-                               placeholder="请输入"/>,
-                )}
-              </Form.Item>
-            </Col>
-            <Col xl={12} md={12} sm={24}>
+            <Col xl={8} md={12} sm={24}>
               <Form.Item label="项目名称">
                 {getFieldDecorator('name', {
                   initialValue: editOrigin['name'],
@@ -172,33 +174,12 @@ class EditTableOrigin extends React.Component {
                 )}
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={[80]}>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="实施机构">
-                {getFieldDecorator('act_org', { initialValue: editOrigin['act_org'] })(
-                  <Input placeholder="请输入"/>,
-                )}
-              </Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="签约时间">
+            <Col xl={8} md={12} sm={24}>
+              <Form.Item label="项目完成时间">
                 {getFieldDecorator('sign_date', { initialValue: editOrigin['sign_date'] && moment(editOrigin['sign_date'] * 1000) })(
-                  <DatePicker style={{ width: '100%' }}/>,
-                )}
-              </Form.Item>
-            </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="项目状态">
-                {getFieldDecorator('status', {
-                  initialValue: editOrigin['status'] ? editOrigin['status'] : '执行中',
-                  rules: [{ required: true, message: '请选择' }],
-                })(
-                  <Select placeholder="请选择">
-                    <Select.Option key="执行中" value="执行中">执行中</Select.Option>
-                    <Select.Option key="已完结" value="已完结">已完结</Select.Option>
-                    <Select.Option key="已废弃" value="已废弃">已废弃</Select.Option>
-                  </Select>,
+                  <DatePicker
+                    format="YYYY-MM-DD HH"
+                    showTime={{ format: 'HH' }} style={{ width: '100%' }}/>,
                 )}
               </Form.Item>
             </Col>
@@ -221,13 +202,8 @@ class EditTableOrigin extends React.Component {
                 )}
               </Form.Item>
             </Col>
-            <Col xl={6} md={12} sm={24}>
-              <Form.Item label="项目金额（万元）">
-                {getFieldDecorator('cash', { initialValue: editOrigin['cash'] })(
-                  <InputNumber min={0} style={{ width: '100%' }} placeholder="请输入"/>,
-                )}
-              </Form.Item>
-            </Col>
+          </Row>
+          <Row gutter={[80]}>
             <Col xl={6} md={12} sm={24}>
               <Spin spinning={Boolean(loadingUsers)}>
                 <Form.Item label="项目组成员">
@@ -243,11 +219,33 @@ class EditTableOrigin extends React.Component {
                 </Form.Item>
               </Spin>
             </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Spin spinning={Boolean(loadingUsers)}>
+                <Form.Item label="通知成员">
+                  {getFieldDecorator('tongzhi', { initialValue: editOrigin['tongzhi'] })(
+                    <Select mode="multiple" style={{ width: '100%' }} placeholder="请选择">
+                      {usersList.map(item => {
+                        return (
+                          <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                        );
+                      })}
+                    </Select>,
+                  )}
+                </Form.Item>
+              </Spin>
+            </Col>
           </Row>
           <Row gutter={[80]}>
             <Col xl={12} md={12} sm={24}>
-              <Form.Item label="金额明细">
+              <Form.Item label="项目基本情况">
                 {getFieldDecorator('cash_detail', { initialValue: editOrigin['cash_detail'] })(
+                  <Input.TextArea placeholder="请输入" autoSize={{ minRows: 4 }}/>,
+                )}
+              </Form.Item>
+            </Col>
+            <Col xl={6} md={12} sm={24}>
+              <Form.Item label="项目组成员备注">
+                {getFieldDecorator('memo', { initialValue: editOrigin['memo'] })(
                   <Input.TextArea placeholder="请输入" autoSize={{ minRows: 4 }}/>,
                 )}
               </Form.Item>
