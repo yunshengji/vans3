@@ -118,6 +118,12 @@ class ProfileApprovalProject extends React.Component {
               </Col>
               <Col sm={24}>
                 <div className={styles.itemContainer}>
+                  <p>实施费用：</p>
+                  <p>{profileOrigin['act_fee']}</p>
+                </div>
+              </Col>
+              <Col sm={24}>
+                <div className={styles.itemContainer}>
                   {
                     mine.department.name === '运营部' ?
                     <p>
@@ -139,12 +145,7 @@ class ProfileApprovalProject extends React.Component {
                   </div>
                 </Col>
               }
-              <Col sm={24}>
-                <div className={styles.itemContainer}>
-                  <p>实施费用：</p>
-                  <p>{profileOrigin['act_fee']}</p>
-                </div>
-              </Col>
+
               <Col sm={24}>
                 <div className={styles.itemContainer}>
                   <p>外包公司：</p>
