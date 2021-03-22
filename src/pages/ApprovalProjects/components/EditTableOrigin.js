@@ -116,7 +116,6 @@ class EditTableOrigin extends React.Component {
           <Form.Item label="外包公司名称">
             {getFieldDecorator(`company_name[${key}]`, {
               initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].company_name,
-              rules: [{ required: true, message: '请填写' }],
             })(
               <Input placeholder="请输入"/>,
             )}
@@ -126,7 +125,7 @@ class EditTableOrigin extends React.Component {
           <Form.Item label="价格（万元）">
             {getFieldDecorator(`price[${key}]`, {
               initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].price,
-              rules: [{ required: true, message: '请填写' }],
+
             })(
               <InputNumber min={0} style={{ width: '100%' }}/>,
             )}
