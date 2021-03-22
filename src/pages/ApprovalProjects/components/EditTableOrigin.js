@@ -35,19 +35,19 @@ class EditTableOrigin extends React.Component {
       const { id } = params;
       this.props.form.validateFields((err, values) => {
         if (!err) {
-          if (values['sign_date']) {
-            values['sign_date'] = moment(values['sign_date']).valueOf() / 1000;
+          if (values['project_finish_time']) {
+            values['project_finish_time'] = moment(values['project_finish_time']).valueOf() / 1000;
           }
           const { keys } = values;
           const origin_outer = [];
           if (keys.length > 0) {
-            const { company_name, price, contact, memo } = values;
+            const { company_name, price, contact, company_memo } = values;
             keys.forEach(item => {
               origin_outer.push({
                 company_name: company_name[item],
                 price: price[item],
                 contact: contact[item],
-                memo: memo[item],
+                company_memo: company_memo[item],
               });
             });
             values.origin_outer = origin_outer;
@@ -56,25 +56,26 @@ class EditTableOrigin extends React.Component {
           delete values['company_name'];
           delete values['price'];
           delete values['contact'];
+          delete values['company_memo'];
           this.props.dispatch({ type: 'editApprovalProject/eUpdateOriginTable', id, payload: { ...values } });
         }
       });
     } else {
       this.props.form.validateFields((err, values) => {
         if (!err) {
-          if (values['sign_date']) {
-            values['sign_date'] = moment(values['sign_date']).valueOf() / 1000;
+          if (values['project_finish_time']) {
+            values['project_finish_time'] = moment(values['project_finish_time']).valueOf() / 1000;
           }
           const { keys } = values;
           const origin_outer = [];
           if (keys.length > 0) {
-            const { company_name, price, contact, memo } = values;
+            const { company_name, price, contact, company_memo } = values;
             keys.forEach(item => {
               origin_outer.push({
                 company_name: company_name[item],
                 price: price[item],
                 contact: contact[item],
-                memo: memo[item],
+                company_memo: company_memo[item],
               });
             });
             values.origin_outer = origin_outer;
@@ -83,6 +84,7 @@ class EditTableOrigin extends React.Component {
           delete values['company_name'];
           delete values['price'];
           delete values['contact'];
+          delete values['company_memo']
           this.props.dispatch({ type: 'editApprovalProject/eCreateOriginTable', payload: { ...values } });
         }
       });
@@ -141,8 +143,8 @@ class EditTableOrigin extends React.Component {
         </Col>
         <Col xl={5} md={10} sm={24}>
           <Form.Item label="备注">
-            {getFieldDecorator(`memo[${key}]`, {
-              initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].memo,
+            {getFieldDecorator(`company_memo[${key}]`, {
+              initialValue: editOrigin['origin_outer'] && editOrigin['origin_outer'][key] && editOrigin['origin_outer'][key].company_memo,
             })(
               <Input placeholder="请输入"/>,
             )}
@@ -176,7 +178,7 @@ class EditTableOrigin extends React.Component {
             </Col>
             <Col xl={8} md={12} sm={24}>
               <Form.Item label="项目完成时间">
-                {getFieldDecorator('sign_date', { initialValue: editOrigin['sign_date'] && moment(editOrigin['sign_date'] * 1000) })(
+                {getFieldDecorator('project_finish_time', { initialValue: editOrigin['project_finish_time'] && moment(editOrigin['project_finish_time'] * 1000) })(
                   <DatePicker
                     format="YYYY-MM-DD HH"
                     showTime={{ format: 'HH' }} style={{ width: '100%' }}/>,
@@ -245,7 +247,7 @@ class EditTableOrigin extends React.Component {
             </Col>
             <Col xl={6} md={12} sm={24}>
               <Form.Item label="项目组成员备注">
-                {getFieldDecorator('memo', { initialValue: editOrigin['memo'] })(
+                {getFieldDecorator('team_memo', { initialValue: editOrigin['team_memo'] })(
                   <Input.TextArea placeholder="请输入" autoSize={{ minRows: 4 }}/>,
                 )}
               </Form.Item>

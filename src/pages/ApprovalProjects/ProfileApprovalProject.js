@@ -145,23 +145,23 @@ class ProfileApprovalProject extends React.Component {
                   </div>
                 </Col>
               }
-
-              <Col sm={24}>
-                <div className={styles.itemContainer}>
-                  <p>外包公司：</p>
-                  <div>
-                    {_.map(profileOrigin['origin_outer'], item => (
-                      <p>{item.company_name} {item.price}万元 {item.contact} 备注：{}</p>
-                    ))}
-                  </div>
-                </div>
-              </Col>
               <Col sm={24}>
                 <div className={styles.itemContainer}>
                   <p>备注：</p>
                   <p>{profileOrigin['memo']}</p>
                 </div>
               </Col>
+              <Col sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>外包公司：</p>
+                  <div>
+                    {_.map(profileOrigin['origin_outer'], item => (
+                      <p>{item.company_name} {item.price}万元 {item.contact} 公司备注：{item.company_memo}</p>
+                    ))}
+                  </div>
+                </div>
+              </Col>
+
             </Row>
             <Row gutter={[80]}>
               <Col xl={8} md={12} sm={24}>

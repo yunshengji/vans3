@@ -149,9 +149,12 @@ class OriginList extends React.Component {
                 </React.Fragment>
               );
             }}/>
-            <Table.Column title="基本情况" dataIndex="cash_detail" width={200}/>
             <Table.Column title="项目类别" dataIndex="category" width={200}/>
-            <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
+            <Table.Column title="基本情况" dataIndex="cash_detail" width={200}/>
+            <Table.Column title="项目完成时间" dataIndex="project_finish_time" render={text => {
+              return <span>{moment(1000 * text).format('YYYY年MM月DD日HH点')}</span>;
+            }}/>
+            {/* <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
               (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
                 <Dropdown trigger={['click']} overlay={
                   <Menu>
@@ -170,7 +173,7 @@ class OriginList extends React.Component {
                   {status === '已废弃' && <Tag color="orange">{status}</Tag>}
                   {status === '已完结' && <Tag color="green">{status}</Tag>}
                 </React.Fragment>
-            )}/>
+            )}/> */}
             <Table.Column title="执行流程" dataIndex="process" width={100} render={status => (
               <React.Fragment>
                 {
