@@ -208,7 +208,10 @@ class EditTableOrigin extends React.Component {
             <Col xl={6} md={12} sm={24}>
               <Spin spinning={Boolean(loadingUsers)}>
                 <Form.Item label="项目组成员">
-                  {getFieldDecorator('members', { initialValue: editOrigin['members'] })(
+                  {getFieldDecorator('members', { 
+                    initialValue: editOrigin['members'],
+                    rules: [{ required: true, message: '请选择项目组成员' }]
+                    })(
                     <Select mode="multiple" style={{ width: '100%' }} placeholder="请选择">
                       {usersList.map(item => {
                         return (
