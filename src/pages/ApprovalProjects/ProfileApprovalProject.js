@@ -71,25 +71,7 @@ class ProfileApprovalProject extends React.Component {
             </Row>
             <h3>基础信息</h3>
             <Row gutter={[80]}>
-              <Col xl={8} md={12} sm={24}>
-                <div className={styles.itemContainer}>
-                  <p>项目序号：</p>
-                  <p>{profileOrigin['num']}</p>
-                </div>
-              </Col>
-              <Col xl={8} md={12} sm={24}>
-                <div className={styles.itemContainer}>
-                  <p>签约时间：</p>
-                  <p>{profileOrigin['sign_date'] && moment(profileOrigin['sign_date'] * 1000).format('YYYY-MM-DD')}</p>
-                </div>
-              </Col>
-              <Col xl={8} md={12} sm={24}>
-                <div className={styles.itemContainer}>
-                  <p>实施机构：</p>
-                  <p>{profileOrigin['act_org']}</p>
-                </div>
-              </Col>
-              <Col sm={24}>
+            <Col sm={24}>
                 <div className={styles.itemContainer}>
                   <p>项目名称：</p>
                   <p>{profileOrigin['name']}</p>
@@ -97,12 +79,8 @@ class ProfileApprovalProject extends React.Component {
               </Col>
               <Col xl={8} md={12} sm={24}>
                 <div className={styles.itemContainer}>
-                  <p>项目状态：</p>
-                  <p>
-                    {profileOrigin['status'] === '执行中' && <Tag color="blue">执行中</Tag>}
-                    {profileOrigin['status'] === '已废弃' && <Tag color="orange">已废弃</Tag>}
-                    {profileOrigin['status'] === '已完结' && <Tag color="green">已完结</Tag>}
-                  </p>
+                  <p>项目完成时间：</p>
+                  <p>{profileOrigin['project_finish_time'] && moment(profileOrigin['project_finish_time'] * 1000).format('YYYY-MM-DD   HH点')}</p>
                 </div>
               </Col>
             </Row>
@@ -116,20 +94,32 @@ class ProfileApprovalProject extends React.Component {
               </Col>
               <Col xl={8} md={12} sm={24}>
                 <div className={styles.itemContainer}>
-                  <p>项目金额：</p>
-                  <p>{profileOrigin['cash']} {profileOrigin['cash'] && '万元'}</p>
-                </div>
-              </Col>
-              <Col xl={8} md={12} sm={24}>
-                <div className={styles.itemContainer}>
                   <p>项目组成员：</p>
                   <p>{_.join(_.map(profileOrigin['members'], 'name'), '、')}</p>
                 </div>
               </Col>
               <Col sm={24}>
                 <div className={styles.itemContainer}>
-                  <p>金额明细：</p>
+                  <p>项目基本情况：</p>
                   <p>{profileOrigin['cash_detail']}</p>
+                </div>
+              </Col>
+              <Col sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>项目组成员备注：</p>
+                  <p>{profileOrigin['team_memo']}</p>
+                </div>
+              </Col>
+              <Col sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>收款情况：</p>
+                  <p>{profileOrigin['receipt_status']}</p>
+                </div>
+              </Col>
+              <Col sm={24}>
+                <div className={styles.itemContainer}>
+                  <p>实施费用：</p>
+                  <p>{profileOrigin['act_fee']}</p>
                 </div>
               </Col>
               <Col sm={24}>
@@ -145,12 +135,7 @@ class ProfileApprovalProject extends React.Component {
                   <p>{profileOrigin['bid_info']}</p>
                 </div>
               </Col>
-              <Col sm={24}>
-                <div className={styles.itemContainer}>
-                  <p>收款情况：</p>
-                  <p>{profileOrigin['receipt_status']}</p>
-                </div>
-              </Col>
+
               {
                 mine.level > 1 &&
                 <Col sm={24}>
@@ -162,8 +147,8 @@ class ProfileApprovalProject extends React.Component {
               }
               <Col sm={24}>
                 <div className={styles.itemContainer}>
-                  <p>实施费用：</p>
-                  <p>{profileOrigin['act_fee']}</p>
+                  <p>备注：</p>
+                  <p>{profileOrigin['memo']}</p>
                 </div>
               </Col>
               <Col sm={24}>
@@ -171,17 +156,12 @@ class ProfileApprovalProject extends React.Component {
                   <p>外包公司：</p>
                   <div>
                     {_.map(profileOrigin['origin_outer'], item => (
-                      <p>{item.company_name} {item.price}万元 {item.contact}</p>
+                      <p>{item.company_name} {item.price}万元 {item.contact} 公司备注：{item.company_memo}</p>
                     ))}
                   </div>
                 </div>
               </Col>
-              <Col sm={24}>
-                <div className={styles.itemContainer}>
-                  <p>备注：</p>
-                  <p>{profileOrigin['memo']}</p>
-                </div>
-              </Col>
+
             </Row>
             <Row gutter={[80]}>
               <Col xl={8} md={12} sm={24}>

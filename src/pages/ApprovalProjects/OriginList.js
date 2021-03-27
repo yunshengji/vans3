@@ -112,13 +112,6 @@ class OriginList extends React.Component {
                 </Form.Item>
               </Col>
               <Col xl={6} md={12} sm={24}>
-                <Form.Item label="项目地区">
-                  {getFieldDecorator('area', { initialValue: searchParams['area'] })(
-                    <Input placeholder="请输入"/>,
-                  )}
-                </Form.Item>
-              </Col>
-              <Col xl={6} md={12} sm={24}>
                 <Form.Item label="项目类别">
                   {getFieldDecorator('category', { initialValue: searchParams['category'] })(
                     <Select placeholder="请选择" allowClear>
@@ -145,16 +138,6 @@ class OriginList extends React.Component {
                      return 'zebraHighlight';
                    }
                  }}>
-            <Table.Column title="编号" dataIndex="num" width={100} render={(text, record) => (
-              <span>
-                {
-                  text ?
-                    record.sign_date ? moment(record.sign_date * 1000).get('year') + '-' + text : text
-                    :
-                    record.sign_date ? moment(record.sign_date * 1000).get('year') + '-' : ''
-                }
-              </span>
-            )}/>
             <Table.Column title="项目名称" dataIndex="name" render={(name, record) => {
               return (
                 <React.Fragment>
@@ -167,7 +150,11 @@ class OriginList extends React.Component {
               );
             }}/>
             <Table.Column title="项目类别" dataIndex="category" width={200}/>
-            <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
+            <Table.Column title="基本情况" dataIndex="cash_detail" width={200}/>
+            <Table.Column title="项目完成时间" dataIndex="project_finish_time" render={text => {
+              return <span>{moment(1000 * text).format('YYYY年MM月DD日HH点')}</span>;
+            }}/>
+            {/* <Table.Column title="立项状态" dataIndex="status" width={100} render={(status, record) => (
               (mine.department.name === '营销部' || (mine.level > 1 && mine.department.name === '运营部') || mine.level > 2) ?
                 <Dropdown trigger={['click']} overlay={
                   <Menu>
@@ -186,7 +173,7 @@ class OriginList extends React.Component {
                   {status === '已废弃' && <Tag color="orange">{status}</Tag>}
                   {status === '已完结' && <Tag color="green">{status}</Tag>}
                 </React.Fragment>
-            )}/>
+            )}/> */}
             <Table.Column title="执行流程" dataIndex="process" width={100} render={status => (
               <React.Fragment>
                 {
