@@ -80,7 +80,7 @@ class ProfileApprovalProject extends React.Component {
               <Col xl={8} md={12} sm={24}>
                 <div className={styles.itemContainer}>
                   <p>项目完成时间：</p>
-                  <p>{profileOrigin['project_finish_time'] && moment(profileOrigin['project_finish_time'] * 1000).format('YYYY-MM-DD')}</p>
+                  <p>{profileOrigin['project_finish_time'] && moment(profileOrigin['project_finish_time'] * 1000).format('YYYY-MM-DD   HH点')}</p>
                 </div>
               </Col>
             </Row>
