@@ -94,6 +94,7 @@ class CreateUserModal extends React.Component {
               {getFieldDecorator('email', {
                 rules: [
                   { type: 'email', message: '请填写符合格式的邮箱地址' },
+                  { required: true, message: '邮箱为必填' },
                 ],
               })(
                 <Input placeholder="请输入"/>,
